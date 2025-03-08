@@ -15,11 +15,18 @@
 
 #include "ft_printf.h"
 
-typedef	struct	s_map
+# define MALLOC_ERR "malloc()"
+# define DUP2_ERR "dup2()"
+# define FORK_ERR "fork()"
+# define PIPE_ERR "pipe()"
+# define FD_ERR "invalid fd"
+# define CLOSE_ERR "close()"
+
+
+typedef	struct	s_coord
 {
 	int	x;
-	int	y;
 	int	z;
-}	t_map;
+}	t_coord;
 
 #endif
