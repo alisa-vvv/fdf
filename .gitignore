@@ -1,9 +1,6 @@
 test_maps/
 test_maps/.
 test.c
-pipex
-infile
-outfile
 a.out
 main.c
 ./test_files/*
@@ -19,3 +16,4 @@ tags
 imgui.ini
 .cache
 tester/.
+fdf
