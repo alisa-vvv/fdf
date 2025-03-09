@@ -34,7 +34,7 @@ RM	= rm -f
 
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/42.fdf
+INPUT	= test_maps/mars.fdf
 
 clangd:
 	$(MAKE) fclean

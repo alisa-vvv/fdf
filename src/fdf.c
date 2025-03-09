@@ -9,14 +9,6 @@
 // probably, feels the easiest since it's the order in which string is read.
 // left to right, up to down
 //
-//int		get_z(
-//{
-//	"ft_split"
-//	x = -1;
-//	while ("++x")
-//		z = "ft_atoi each splitted part"
-//		t_map->x = x;
-//}
 
 void	free_string_array(char **arr)
 {
@@ -26,7 +18,7 @@ void	free_string_array(char **arr)
 	{
 		i = -1;
 		while (arr[++i])
-			free((arr[i]));
+			free(arr[i]);
 		free(arr);
 	}
 }
@@ -37,17 +29,13 @@ int	*funny_recursive_allocate_x(int *coord, char **values, int x, int *max_x)
 		coord = funny_recursive_allocate_x(coord, values, x + 1, max_x);
 	else
 	{
-		ft_printf("x: %d\n", x);
 		coord = (int *) malloc(sizeof(int) * x);
 		if (!coord)
 			return (NULL);
 		*max_x = x - 1;
 		return (coord);
 	}
-	ft_printf("step: %d\n", x);
-	ft_printf("val: %s\n", values[x]);
 	coord[x] = ft_atoi(values[x]);
-	x--;
 	return (coord);
 }
 
@@ -63,9 +51,6 @@ int	get_x_z(int **coord, char *line)
 		// ADD ERROR MANAGEMENT
 		coord = NULL;
 	}
-	int x = -1;
-	while (values[++x])
-		ft_printf("wtf: %s\n", values[x]);
 	max_x = 0;
 	*coord = funny_recursive_allocate_x(*coord, values, 0, &max_x);
 	free_string_array(values);
@@ -92,6 +77,7 @@ int	**funny_recursive_map_read(int map_fd, int *y, int *max_x)
 	}
 	*max_x = get_x_z(&coord[*y], next_line);
 	(*y)++;
+	free(next_line);
 	return (coord);
 }
 
@@ -132,7 +118,7 @@ void	parse_map(char *filename)
 	y = 0;
 	coord = funny_recursive_map_read(map_fd, &y, &max_x);
 	test_recursive_print_map(coord, y, max_x);
-	free(coord);
+	free_coord(coord);
 }
 
 int	main(int argc, char *argv[])
