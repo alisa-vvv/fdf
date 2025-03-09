@@ -13,6 +13,8 @@
 MAKEFLAGS	= -s
 
 CFILES	=	fdf.c\
+			parsing.c\
+			fdf_utils.c
 
 OBJDIR = obj
 SRCDIR = src

@@ -1,36 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   fdf.h                                             :+:    :+:             */
+/*   utils.c                                           :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
-/*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/07 18:38:52 by avaliull     ########   odam.nl          */
+/*   Created: 2025/03/09 19:26:24 by avaliull     #+#    #+#                  */
+/*   Updated: 2025/03/09 19:27:38 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FDF_H
-# define FDF_H
+#include "fdf.h"
+#include <stdlib.h>
 
-#include "ft_printf.h"
-
-# define MALLOC_ERR "malloc()"
-# define DUP2_ERR "dup2()"
-# define FORK_ERR "fork()"
-# define PIPE_ERR "pipe()"
-# define FD_ERR "invalid fd"
-# define CLOSE_ERR "close()"
-
-
-typedef	struct	s_map
+void	free_2d_arr(void **arr)
 {
-	int	**coord;
-	int	max_x;
-	int	max_y;
-}	t_map;
+	int	i;
 
-void	free_2d_arr(void **arr);
-t_map	parse_map(char *filename);
+	if (arr)
+	{
+		i = -1;
+		while (arr[++i])
+			free(arr[i]);
+		free(arr);
+	}
+}
 
-#endif
