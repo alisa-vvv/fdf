@@ -10,23 +10,6 @@
 // left to right, up to down
 //
 
-void	test_recursive_print_map(int **coord, int y, int max_x)
-{
-	int	x;
-
-	while (y--)
-	{
-		x = 0;
-		while(x <= max_x)
-		{
-			ft_printf("%d ", coord[y][x]);
-			ft_putchar_fd(' ', STDOUT_FILENO);
-			x++;
-		}
-		ft_putchar_fd('\n', STDOUT_FILENO);
-	}
-}
-
 int	main(int argc, char *argv[])
 {
 	t_map	map;
@@ -35,7 +18,7 @@ int	main(int argc, char *argv[])
 		return (1);
 	ft_printf("testrun: argc: %d, argv[1]: %s\n", argc, argv[1]);
 	map = parse_map(argv[1]);
-	test_recursive_print_map(map.coord, map.max_y, map.max_x);
+	//test_recursive_print_map(map.coord, map.max_y, map.max_x);
 	free_2d_arr((void **) map.coord);
 	exit(0);
 }

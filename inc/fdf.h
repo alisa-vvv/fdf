@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/07 18:38:52 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/03/13 14:15:36 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,8 @@ typedef	struct	s_map
 
 void	free_2d_arr(void **arr);
 t_map	parse_map(char *filename);
+
+/*	TEST (COMMENT THEM OUT)	*/
+void	test_recursive_print_map(int **coord, int y, int max_x);
 
 #endif

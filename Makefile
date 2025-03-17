@@ -10,11 +10,13 @@
 #                                                                              #
 # **************************************************************************** #
 
-MAKEFLAGS	= -s
+.DEFAULT_GOAL := all
+MAKEFLAGS =
 
 CFILES	=	fdf.c\
 			parsing.c\
-			fdf_utils.c
+			fdf_utils.c\
+			test_funcs.c
 
 OBJDIR = obj
 SRCDIR = src
@@ -24,6 +26,7 @@ OFILES	= $(addprefix $(OBJDIR)/,$(CFILES:.c=.o))
 
 VPATH	= $(INCLUDE) $(SRCDIRS)
 
+MLX	= $(SRCDIR)/libmlx42.a
 LIBFT_PRINTF	= $(SRCDIR)/libft_printf/libftprintf.a
 LIBFT_PRINTF_DIR = $(SRCDIR)/libft_printf
 
@@ -38,10 +41,6 @@ CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
 INPUT	= test_maps/mars.fdf
 
-clangd:
-	$(MAKE) fclean
-	intercept-build-14 make all
-
 $(OBJDIR):
 	mkdir $@
 $(OBJDIR)/%.o: %.c $(INCLUDEFILES) | $(OBJDIR)
@@ -54,26 +53,27 @@ $(LIBFT_PRINTF):
 $(NAME): $(OFILES) $(LIBFT_PRINTF)
 	$(CC) $(CFLAGS) -o $@ $^ $(addprefix -I,$(INCLUDE))
 
+#Base/project requirements
 all: $(NAME)
-
-libs_clean:
-	$(MAKE) clean -C $(LIBFT_PRINTF_DIR)
 clean: libs_clean
 	$(RM) $(OFILES)
 fclean:	clean
 	$(RM) $(NAME)
-
 re:	fclean all
 
+#LSP connection for neovim
+clangd:
+	$(MAKE) fclean
+	intercept-build-14 make all
+#debugging
+libs_clean:
+	$(MAKE) clean -C $(LIBFT_PRINTF_DIR)
 debug: CFLAGS += -g
 debug: re
-
 gdb: debug
 	gdb ./$(NAME)
-
 test:	$(NAME)
 	./$< $(INPUT)
-
 leak:	debug
 	valgrind -s --leak-check=full --show-leak-kinds=all \
 	--track-fds=yes ./$(NAME) $(INPUT)
