@@ -1,0 +1,3 @@
+[submodule "lib/libft_printf"]
+	path = lib/libft_printf
+	url = git@github.com:alisa-vvv/ft_printf.git
