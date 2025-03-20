@@ -13,36 +13,34 @@
 .DEFAULT_GOAL := all
 MAKEFLAGS =
 
+NAME	= fdf
 CFILES	=	fdf.c\
 			parsing.c\
 			fdf_utils.c\
 			test_funcs.c
-
-OBJDIR = obj
-SRCDIR = src
-SRCDIRS = $(SRCDIR)
-
+INCLUDEFILES = fdf.h
 OFILES	= $(addprefix $(OBJDIR)/,$(CFILES:.c=.o))
 
 VPATH	= $(INCLUDE) $(SRCDIRS)
-
-MLX	= $(SRCDIR)/libmlx42.a
-LIBFT_PRINTF	= $(SRCDIR)/libft_printf/libftprintf.a
-LIBFT_PRINTF_DIR = $(SRCDIR)/libft_printf
-
-INCLUDEFILES = fdf.h
+OBJDIR = obj
+SRCDIR = src
+LIBDIR = lib
+SRCDIRS = $(SRCDIR)
+$(LIBDIR):
+	mkdir $@
+$(OBJDIR):
+	mkdir $@
+MLX	= $(LIBDIR)/libmlx42.a
+MLXDIR = $(LIBDIR)/mlx42
+LIBFT_PRINTF	= $(LIBDIR)/libft_printf/libftprintf.a
+LIBFT_PRINTF_DIR = $(LIBDIR)/libft_printf
 INCLUDE = inc $(LIBFT_PRINTF_DIR)
 
-NAME	= fdf
-
 RM	= rm -f
-
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
 INPUT	= test_maps/mars.fdf
 
-$(OBJDIR):
-	mkdir $@
 $(OBJDIR)/%.o: %.c $(INCLUDEFILES) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
 
@@ -50,7 +48,12 @@ $(LIBFT_PRINTF):
 	export CFLAGS
 	$(MAKE) all -C $(LIBFT_PRINTF_DIR)
 
-$(NAME): $(OFILES) $(LIBFT_PRINTF)
+$(MLX):
+	cd $(MLXDIR) ; cmake -B build ; cmake --build build  -j4
+	chmod 777 $(MLXDIR)/build/libmlx42.a
+	mv $(MLXDIR)/build/libmlx42.a $(LIBDIR)
+
+$(NAME): $(OFILES) $(LIBFT_PRINTF) $(MLX)
 	$(CC) $(CFLAGS) -o $@ $^ $(addprefix -I,$(INCLUDE))
 
 #Base/project requirements
@@ -66,8 +69,6 @@ clangd:
 	$(MAKE) fclean
 	intercept-build-14 make all
 #debugging
-libs_clean:
-	$(MAKE) clean -C $(LIBFT_PRINTF_DIR)
 debug: CFLAGS += -g
 debug: re
 gdb: debug

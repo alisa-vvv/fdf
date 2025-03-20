@@ -1,3 +1,6 @@
 [submodule "lib/libft_printf"]
 	path = lib/libft_printf
 	url = git@github.com:alisa-vvv/ft_printf.git
+[submodule "lib/mlx42"]
+	path = lib/mlx42
+	url = https://github.com/codam-coding-college/MLX42.git
