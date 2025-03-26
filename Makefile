@@ -76,7 +76,7 @@ gdb: debug
 test:	$(NAME)
 	./$< $(INPUT)
 leak:	debug
-	valgrind -s --leak-check=full --show-leak-kinds=all \
-	--track-fds=yes ./$(NAME) $(INPUT)
+	valgrind  --suppressions=MLX42.supp -s --leak-check=full \
+	--show-leak-kinds=all --track-fds=yes ./$(NAME) $(INPUT)
 
 .PHONY:	clangd all clean fclean re libs_clean test leak debug gdb
