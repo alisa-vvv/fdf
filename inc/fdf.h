@@ -24,6 +24,15 @@
 # define CLOSE_ERR "close()"
 
 
+typedef enum	e_action
+{
+	draw,
+	up,
+	down,
+	left,
+	right,
+}	e_action;
+
 typedef	struct	s_map
 {
 	int	**coord;
@@ -33,14 +42,19 @@ typedef	struct	s_map
 
 typedef struct	s_fdf
 {
-	mlx_t	*window;
 	t_map	map;
+	mlx_t	*window;
+	mlx_image_t	*img;
+	int		x_zero;
+	int		y_zero;
 }	t_fdf;
 
 void	free_2d_arr(void **arr);
 void	clean_exit(t_fdf *fdf);
 t_map	parse_map(char *filename);
 void	fdf_key_hook(mlx_key_data_t keydata, void *param);
+void	img_test(t_fdf *fdf);
+void	move_square(t_fdf *fdf, e_action action);
 
 /*	TEST (COMMENT THEM OUT)	*/
 void	test_recursive_print_map(int **coord, int y, int max_x);

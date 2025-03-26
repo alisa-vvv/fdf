@@ -23,32 +23,54 @@
 // left to right, up to down
 //
 
-mlx_image_t	*img_test(mlx_t	*mlx)
-{
-	mlx_image_t	*test_img;
+#ifndef	SQUARE_SIZE
+# define SQUARE_SIZE 70
+#endif
 
-	test_img = mlx_new_image(mlx, 256, 256);
-	if (!test_img)
-		return (NULL);
+void	move_square(t_fdf *fdf, e_action action)
+{
+	const int	step = 1;
+	int	i;
+	i = 1;
+	if (action == up)
+	{
+		while (i++ <= step)
+			fdf->img->instances[0].y -= 1;
+	}
+	else if (action == down)
+		fdf->img->instances[0].y += 10;
+	else if (action == left)
+		fdf->img->instances[0].x -= 10;
+	else if (action == right)
+		fdf->img->instances[0].x += 10;
+}
+
+void	img_test(t_fdf *fdf)
+{
 	int	x = 30;
 	int	y = 30;
-	while (y <= 100)
+
+	fdf->img = mlx_new_image(fdf->window, 256, 256);
+	if (!fdf->img)
 	{
-		while (x <= 100)
-		{
-			mlx_put_pixel(test_img, x, y, 0x008080FF);
-			x++;
-		}
-		x = 30;
-		y++;
+		fdf->img = NULL;
+		return ;
 	}
-	return (test_img);
+		while (y <= 100)
+		{
+			while (x <= 100)
+			{
+				mlx_put_pixel(fdf->img, x, y, 0x008080FF);
+				x++;
+			}
+			x = 30;
+			y++;
+		}
 }
 
 int	main(int argc, char *argv[])
 {
 	t_fdf	*fdf;
-	mlx_image_t	*test_img;
 
 	if (argc != 2)
 		return (1);
@@ -63,10 +85,12 @@ int	main(int argc, char *argv[])
 	mlx_key_hook(fdf->window, &fdf_key_hook, fdf);
 	if (!fdf->window)
 		clean_exit(fdf);
-	test_img = img_test(fdf->window);
-	if (!test_img)
+	img_test(fdf);
+	if (!fdf->img)
 		clean_exit(fdf);
-	mlx_image_to_window(fdf->window, test_img, 0, 0);
+	fdf->x_zero = 0;
+	fdf->y_zero = 0;
+	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
 	mlx_loop(fdf->window);
 	clean_exit(fdf);
 }
