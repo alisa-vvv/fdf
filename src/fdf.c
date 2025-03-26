@@ -28,7 +28,14 @@ mlx_image_t	*img_test(mlx_t	*mlx)
 	mlx_image_t	*test_img;
 
 	test_img = mlx_new_image(mlx, 256, 256);
-	mlx_put_pixel(test_img, 30, 30, 0xFF0000FF);
+	int	x = 30;
+	int	y = 30;
+	while (x <= 100 && y <= 100)
+	{
+		mlx_put_pixel(test_img, x, y, 0x008080);
+		x++;
+		y++;
+	}
 	return (test_img);
 }
 
