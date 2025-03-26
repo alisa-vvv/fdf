@@ -13,6 +13,7 @@
 #ifndef FDF_H
 # define FDF_H
 
+#include "MLX42/MLX42.h"
 #include "ft_printf.h"
 
 # define MALLOC_ERR "malloc()"
@@ -31,6 +32,7 @@ typedef	struct	s_map
 }	t_map;
 
 void	free_2d_arr(void **arr);
+void	error_close(mlx_t *window);
 t_map	parse_map(char *filename);
 
 /*	TEST (COMMENT THEM OUT)	*/
