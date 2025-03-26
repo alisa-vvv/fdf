@@ -13,10 +13,31 @@
 #include "fdf.h"
 #include "MLX42/MLX42.h"
 #include <stdio.h>
+#include <errno.h>
+#include <string.h>
 
-void	error_close(mlx_t *window)
+void	clean_exit(t_fdf *fdf)
 {
+	int	exit_status;
+
 	if (mlx_errno != 0)
+	{
 		perror(mlx_strerror(mlx_errno));
-	mlx_terminate(window);
+		exit_status = EXIT_FAILURE;
+	}
+	else
+		exit_status = EXIT_SUCCESS;
+	if (fdf)
+	{
+		mlx_terminate(fdf->window);
+		free_2d_arr((void **) fdf->map.coord);
+		free(fdf);
+	}
+	exit(exit_status);
+}
+
+void	fdf_key_hook(mlx_key_data_t keydata, void *param)
+{
+	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+		clean_exit(param);
 }

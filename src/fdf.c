@@ -36,7 +36,7 @@ mlx_image_t	*img_test(mlx_t	*mlx)
 	{
 		while (x <= 100)
 		{
-			mlx_put_pixel(test_img, x, y, 0xF008080F);
+			mlx_put_pixel(test_img, x, y, 0x008080FF);
 			x++;
 		}
 		x = 30;
@@ -47,32 +47,26 @@ mlx_image_t	*img_test(mlx_t	*mlx)
 
 int	main(int argc, char *argv[])
 {
-	t_map	map;
-	mlx_t	*main_window;
+	t_fdf	*fdf;
 	mlx_image_t	*test_img;
 
 	if (argc != 2)
 		return (1);
 	ft_printf("testrun: argc: %d, argv[1]: %s\n", argc, argv[1]);
-	map = parse_map(argv[1]);
+	fdf = (t_fdf *) malloc(sizeof (t_fdf));
+	if (!fdf)
+		clean_exit(fdf);
+	fdf->map = parse_map(argv[1]);
 	//test_recursive_print_map(map.coord, map.max_y, map.max_x);
 	mlx_set_setting(MLX_STRETCH_IMAGE, 0);
-	main_window = mlx_init(2048, 1536, argv[1], false);
-	if (!main_window)
-	{
-		free_2d_arr((void **) map.coord);
-		error_close(main_window);
-		exit (EXIT_FAILURE);
-	}
-	test_img = img_test(main_window);
+	fdf->window = mlx_init(2048, 1536, argv[1], false);
+	mlx_key_hook(fdf->window, &fdf_key_hook, fdf);
+	if (!fdf->window)
+		clean_exit(fdf);
+	test_img = img_test(fdf->window);
 	if (!test_img)
-	{
-		error_close(main_window);
-		exit (EXIT_FAILURE);
-	}
-	mlx_image_to_window(main_window, test_img, 0, 0);
-	mlx_loop(main_window);
-	mlx_terminate(main_window);
-	free_2d_arr((void **) map.coord);
-	exit(EXIT_SUCCESS);
+		clean_exit(fdf);
+	mlx_image_to_window(fdf->window, test_img, 0, 0);
+	mlx_loop(fdf->window);
+	clean_exit(fdf);
 }

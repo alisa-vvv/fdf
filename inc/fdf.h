@@ -31,9 +31,16 @@ typedef	struct	s_map
 	int	max_y;
 }	t_map;
 
+typedef struct	s_fdf
+{
+	mlx_t	*window;
+	t_map	map;
+}	t_fdf;
+
 void	free_2d_arr(void **arr);
-void	error_close(mlx_t *window);
+void	clean_exit(t_fdf *fdf);
 t_map	parse_map(char *filename);
+void	fdf_key_hook(mlx_key_data_t keydata, void *param);
 
 /*	TEST (COMMENT THEM OUT)	*/
 void	test_recursive_print_map(int **coord, int y, int max_x);
