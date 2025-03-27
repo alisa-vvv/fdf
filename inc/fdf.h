@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/13 14:15:36 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/03/27 17:23:29 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,22 @@
 # define CLOSE_ERR "close()"
 
 
-typedef enum	e_action
+//typedef enum	e_action
+//{
+//	draw,
+//	up,
+//	down,
+//	left,
+//	right,
+//}	e_action;
+//
+typedef enum	e_direction
 {
-	draw,
 	up,
 	down,
 	left,
 	right,
-}	e_action;
+}	e_direction;
 
 typedef	struct	s_map
 {
@@ -52,11 +60,10 @@ typedef struct	s_fdf
 void	free_2d_arr(void **arr);
 void	clean_exit(t_fdf *fdf);
 t_map	parse_map(char *filename);
-void	fdf_key_hook(mlx_key_data_t keydata, void *param);
-void	img_test(t_fdf *fdf);
-void	move_square(t_fdf *fdf, e_action action);
 
 /*	TEST (COMMENT THEM OUT)	*/
-void	test_recursive_print_map(int **coord, int y, int max_x);
+void	test_print_map(int **coord, int max_x, int max_y);
+void	test_fdf_key_hook(mlx_key_data_t keydata, void *param);
+//void	test_move_square(t_fdf *fdf, e_action action);
 
 #endif

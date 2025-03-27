@@ -1,5 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
+/* ************************************************************************** */ /*                                                                            */
 /*                                                       ::::::::             */
 /*   fdf.c                                             :+:    :+:             */
 /*                                                    +:+                     */
@@ -23,49 +22,66 @@
 // left to right, up to down
 //
 
-#ifndef	SQUARE_SIZE
-# define SQUARE_SIZE 70
-#endif
-
-void	move_square(t_fdf *fdf, e_action action)
+void	draw_red_line(t_fdf *fdf, int cur_pixel[2], int end_x)
 {
-	const int	step = 1;
-	int	i;
-	i = 1;
-	if (action == up)
+	while (cur_pixel[0] <= end_x)
 	{
-		while (i++ <= step)
-			fdf->img->instances[0].y -= 1;
+		mlx_put_pixel(fdf->img, cur_pixel[0], cur_pixel[1], 0xFF0000FF);
+		cur_pixel[0]++;
 	}
-	else if (action == down)
-		fdf->img->instances[0].y += 10;
-	else if (action == left)
-		fdf->img->instances[0].x -= 10;
-	else if (action == right)
-		fdf->img->instances[0].x += 10;
+}
+void	draw_horizontal_line(t_fdf *fdf, int cur_pixel[2], int end_x)
+{
+	while (cur_pixel[0] <= end_x)
+	{
+		mlx_put_pixel(fdf->img, cur_pixel[0], cur_pixel[1], 0x008080FF);
+		cur_pixel[0]++;
+	}
 }
 
-void	img_test(t_fdf *fdf)
+void	test_draw_2d_map(t_fdf *fdf, const int step)
 {
-	int	x = 30;
-	int	y = 30;
+	int	x;
+	int	y;
+	int	z;
 
-	fdf->img = mlx_new_image(fdf->window, 256, 256);
+	y = 0;
+	while (y <= fdf->map.max_y)
+	{
+		ft_printf("y? %d\n", y);
+		x = 0;
+		while (x <= fdf->map.max_x)
+		{
+			z = 0;
+			while (z <= fdf->map.coord[y][x] * 2)
+			{
+				draw_red_line(fdf, (int[2]) {x * step, (y * step) + z}, (x * step) + fdf->map.coord[y][x] * 2);
+				z++;
+			}
+			if (x < fdf->map.max_x)
+				draw_horizontal_line(fdf, (int[2]) {x * step, y * step}, (x + 1) * step);
+			x++;
+		}
+		y++;
+	}
+	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
+}
+
+void	create_window(t_fdf *fdf, char *map_file)
+{
+	mlx_set_setting(MLX_STRETCH_IMAGE, 0);
+	fdf->window = mlx_init(2048, 1536, map_file, false);
+	if (!fdf->window)
+		clean_exit(fdf);
+	fdf->img = mlx_new_image(fdf->window, 2048, 1536);
 	if (!fdf->img)
 	{
 		fdf->img = NULL;
 		return ;
 	}
-		while (y <= 100)
-		{
-			while (x <= 100)
-			{
-				mlx_put_pixel(fdf->img, x, y, 0x008080FF);
-				x++;
-			}
-			x = 30;
-			y++;
-		}
+	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
+	test_draw_2d_map(fdf, 50);
+	mlx_loop(fdf->window);
 }
 
 int	main(int argc, char *argv[])
@@ -79,18 +95,7 @@ int	main(int argc, char *argv[])
 	if (!fdf)
 		clean_exit(fdf);
 	fdf->map = parse_map(argv[1]);
-	//test_recursive_print_map(map.coord, map.max_y, map.max_x);
-	mlx_set_setting(MLX_STRETCH_IMAGE, 0);
-	fdf->window = mlx_init(2048, 1536, argv[1], false);
-	mlx_key_hook(fdf->window, &fdf_key_hook, fdf);
-	if (!fdf->window)
-		clean_exit(fdf);
-	img_test(fdf);
-	if (!fdf->img)
-		clean_exit(fdf);
-	fdf->x_zero = 0;
-	fdf->y_zero = 0;
-	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
-	mlx_loop(fdf->window);
+	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
+	create_window(fdf, argv[1]);
 	clean_exit(fdf);
 }

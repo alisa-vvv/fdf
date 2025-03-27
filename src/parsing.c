@@ -48,26 +48,22 @@ static int	get_x_z(int **coord, char *line)
 	return (max_x);
 }
 
-static int	**funny_recursive_map_read(int map_fd, int *y, int *max_x)
+static int	**funny_recursive_map_read(int map_fd, int y, int *max_x, int *max_y)
 {
 	char	*next_line;
 	int		**coord;
 
 	next_line = get_next_line(map_fd);
 	if (next_line != NULL)
-	{
-		(*y)++;
-		coord = funny_recursive_map_read(map_fd, y, max_x);
-	}
+		coord = funny_recursive_map_read(map_fd, y + 1, max_x, max_y);
 	else
 	{
-		coord = (int **) malloc((*y + 1) * sizeof(int *));
-		coord[*y] = NULL;
-		*y = 0;
+		coord = (int **) malloc((y + 1) * sizeof(int *));
+		coord[y] = NULL;
+		*max_y = y;
 		return (coord);
 	}
-	*max_x = get_x_z(&coord[*y], next_line);
-	(*y)++;
+	*max_x = get_x_z(&coord[y], next_line);
 	free(next_line);
 	return (coord);
 }
@@ -81,7 +77,7 @@ t_map	parse_map(char *filename)
 	map.max_y = 0;
 	map.max_x = 0;
 	// this is how bloatware is created
-	coord = funny_recursive_map_read(map_fd, &(map.max_y), &(map.max_x));
+	coord = funny_recursive_map_read(map_fd, 0, &(map.max_x), &(map.max_y));
 	map.max_y--;
 	map.coord = coord;
 	close(map_fd);

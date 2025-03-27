@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/26 14:30:24 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/26 14:39:33 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/03/27 16:29:15 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,3 @@ void	clean_exit(t_fdf *fdf)
 	exit(exit_status);
 }
 
-void	fdf_key_hook(mlx_key_data_t keydata, void *param)
-{
-	t_fdf	*fdf = (t_fdf *) param;
-
-	const int	step = 10;
-	int	i;
-	i = 1;
-	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-		clean_exit(param);
-	if (keydata.key == MLX_KEY_UP && (keydata.action == MLX_PRESS
-	|| keydata.action == MLX_REPEAT))
-	{
-		while (i++ <= step)
-			move_square(fdf, up);
-	}
-	if (keydata.key == MLX_KEY_DOWN && (keydata.action == MLX_PRESS
-	|| keydata.action == MLX_REPEAT))
-		move_square(fdf, down);
-	if (keydata.key == MLX_KEY_LEFT && (keydata.action == MLX_PRESS
-	|| keydata.action == MLX_REPEAT))
-		move_square(fdf, left);
-	if (keydata.key == MLX_KEY_RIGHT && (keydata.action == MLX_PRESS
-	|| keydata.action == MLX_REPEAT))
-		move_square(fdf, right);
-}
