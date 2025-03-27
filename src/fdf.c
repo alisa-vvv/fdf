@@ -30,12 +30,22 @@ void	draw_red_line(t_fdf *fdf, int cur_pixel[2], int end_x)
 		cur_pixel[0]++;
 	}
 }
+
 void	draw_horizontal_line(t_fdf *fdf, int cur_pixel[2], int end_x)
 {
 	while (cur_pixel[0] <= end_x)
 	{
 		mlx_put_pixel(fdf->img, cur_pixel[0], cur_pixel[1], 0x008080FF);
 		cur_pixel[0]++;
+	}
+}
+
+void	draw_vertical_line(t_fdf *fdf, int cur_pixel[2], int end_y)
+{
+	while (cur_pixel[1] <= end_y)
+	{
+		mlx_put_pixel(fdf->img, cur_pixel[0], cur_pixel[1], 0x008080FF);
+		cur_pixel[1]++;
 	}
 }
 
@@ -48,7 +58,6 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 	y = 0;
 	while (y <= fdf->map.max_y)
 	{
-		ft_printf("y? %d\n", y);
 		x = 0;
 		while (x <= fdf->map.max_x)
 		{
@@ -60,6 +69,8 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 			}
 			if (x < fdf->map.max_x)
 				draw_horizontal_line(fdf, (int[2]) {x * step, y * step}, (x + 1) * step);
+			if (y < fdf->map.max_y)
+				draw_vertical_line(fdf, (int[2]) {x * step, y * step}, (y + 1) * step);
 			x++;
 		}
 		y++;
