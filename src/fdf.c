@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                       ::::::::             */
+/*   fdf.c                                             :+:    :+:             */
+/*                                                    +:+                     */
+/*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
+/*                                                  +#+                       */
+/*   Created: 2025/03/28 16:49:32 by avaliull     #+#    #+#                  */
+/*   Updated: 2025/03/28 17:11:23 by avaliull     ########   odam.nl          */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* ************************************************************************** */ /*                                                                            */
 /*                                                       ::::::::             */
 /*   fdf.c                                             :+:    :+:             */
@@ -22,30 +34,31 @@
 // left to right, up to down
 //
 
-void	draw_red_line(t_fdf *fdf, int cur_pixel[2], int end_x)
+void	draw_line(t_fdf *fdf, t_dot start, t_dot end, int color)
 {
-	while (cur_pixel[0] <= end_x)
-	{
-		mlx_put_pixel(fdf->img, cur_pixel[0], cur_pixel[1], 0xFF0000FF);
-		cur_pixel[0]++;
-	}
-}
+	const int	dx = end.x - start.x;
+	const int	dy = end.y - start.y;
+	int	p;
+	int	x;
+	int	y;
 
-void	draw_horizontal_line(t_fdf *fdf, int cur_pixel[2], int end_x)
-{
-	while (cur_pixel[0] <= end_x)
+	x = start.x;
+	y = start.y;
+	p = 2 * dy - dx;
+	while (x < end.x || y < end.y)
 	{
-		mlx_put_pixel(fdf->img, cur_pixel[0], cur_pixel[1], 0x008080FF);
-		cur_pixel[0]++;
-	}
-}
-
-void	draw_vertical_line(t_fdf *fdf, int cur_pixel[2], int end_y)
-{
-	while (cur_pixel[1] <= end_y)
-	{
-		mlx_put_pixel(fdf->img, cur_pixel[0], cur_pixel[1], 0x008080FF);
-		cur_pixel[1]++;
+		if (p >= 0)
+		{
+			mlx_put_pixel(fdf->img, x, y, color);
+			y++;
+			p = p + 2 * dy - 2 * dx;
+		}
+		else
+		{
+			mlx_put_pixel(fdf->img, x, y, color);
+			p = p + 2 * dy;
+			x++;
+		}
 	}
 }
 
@@ -62,15 +75,19 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 		while (x <= fdf->map.max_x)
 		{
 			z = 0;
-			while (z <= fdf->map.coord[y][x] * 2)
+			while (z < fdf->map.coord[y][x] * 2)
 			{
-				draw_red_line(fdf, (int[2]) {x * step, (y * step) + z}, (x * step) + fdf->map.coord[y][x] * 2);
+				draw_line(fdf, (t_dot) {x * step, (y * step) + z},
+			  (t_dot) { (x * step) + fdf->map.coord[y][x] * 2, (y * step) + z},
+			  0xFF0000FF);
 				z++;
 			}
 			if (x < fdf->map.max_x)
-				draw_horizontal_line(fdf, (int[2]) {x * step, y * step}, (x + 1) * step);
+				draw_line(fdf, (t_dot) {x * step, y * step},
+			  (t_dot) {(x + 1) * step, (y * step)}, 0x008080FF);
 			if (y < fdf->map.max_y)
-				draw_vertical_line(fdf, (int[2]) {x * step, y * step}, (y + 1) * step);
+				draw_line(fdf, (t_dot) {x * step, y * step},
+			  (t_dot) {x * step, (y + 1) * step}, 0x008080FF);
 			x++;
 		}
 		y++;

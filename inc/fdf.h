@@ -33,6 +33,12 @@
 //	right,
 //}	e_action;
 //
+typedef struct	s_dot
+{
+	int	x;
+	int	y;
+}	t_dot;
+
 typedef enum	e_direction
 {
 	up,
