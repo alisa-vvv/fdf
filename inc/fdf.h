@@ -23,7 +23,6 @@
 # define FD_ERR "invalid fd"
 # define CLOSE_ERR "close()"
 
-
 //typedef enum	e_action
 //{
 //	draw,

@@ -5,19 +5,8 @@
 /*                                                    +:+                     */
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
-/*   Created: 2025/03/28 16:49:32 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/28 17:11:23 by avaliull     ########   odam.nl          */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */ /*                                                                            */
-/*                                                       ::::::::             */
-/*   fdf.c                                             :+:    :+:             */
-/*                                                    +:+                     */
-/*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
-/*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/21 14:51:43 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/03/28 19:54:23 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,27 +25,27 @@
 
 void	draw_line(t_fdf *fdf, t_dot start, t_dot end, int color)
 {
-	const int	dx = end.x - start.x;
-	const int	dy = end.y - start.y;
+	const int	len_x = end.x - start.x;
+	const int	len_y = end.y - start.y;
 	int	p;
 	int	x;
 	int	y;
 
 	x = start.x;
 	y = start.y;
-	p = 2 * dy - dx;
+	p = 2 * len_y - len_x;
 	while (x < end.x || y < end.y)
 	{
 		if (p >= 0)
 		{
 			mlx_put_pixel(fdf->img, x, y, color);
 			y++;
-			p = p + 2 * dy - 2 * dx;
+			p = p + 2 * len_y - 2 * len_x;
 		}
 		else
 		{
 			mlx_put_pixel(fdf->img, x, y, color);
-			p = p + 2 * dy;
+			p = p + 2 * len_y;
 			x++;
 		}
 	}
@@ -108,7 +97,7 @@ void	create_window(t_fdf *fdf, char *map_file)
 		return ;
 	}
 	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
-	test_draw_2d_map(fdf, 50);
+	test_draw_2d_map(fdf, 100);
 	mlx_loop(fdf->window);
 }
 
@@ -123,7 +112,7 @@ int	main(int argc, char *argv[])
 	if (!fdf)
 		clean_exit(fdf);
 	fdf->map = parse_map(argv[1]);
-	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
+	///test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
 	create_window(fdf, argv[1]);
 	clean_exit(fdf);
 }
