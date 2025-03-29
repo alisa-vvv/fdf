@@ -38,6 +38,15 @@ typedef struct	s_dot
 	int	y;
 }	t_dot;
 
+typedef struct	s_vector_4
+{
+	int	x;
+	int	y;
+	int	z;
+	int	i;
+}	t_vector_4;
+
+
 typedef enum	e_direction
 {
 	up,
