@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/30 20:22:01 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/03/30 21:25:25 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ typedef struct	s_dot
 	int	y;
 }	t_dot;
 
-typedef struct	s_vector_4
+typedef struct	s_four_vector
 {
-	int	x;
-	int	y;
-	int	z;
-	int	i;
-}	t_vector_4;
+	float	x;
+	float	y;
+	float	z;
+	float	i;
+}	t_four_vector;
 
 
 typedef enum	e_direction

@@ -45,65 +45,66 @@ t_dot	transform_vector(int x, int y, int width, int height)
 	return (new_dot);
 }
 
-void	create_vector(int **coord, int y, int x, int *vec)
+#define START_OFFSET 150
+
+void	map_to_range(t_map *map, t_four_vector vector, int range[2])
 {
-	vec[0] = x;
-	vec[1] = y;
-	vec[2] = coord[y][x];
-	vec[3] = 1;
+	const int	max_z = 9; // THIS NEEDS TO BE REMOVED.
+	const float	new_range = range[1] - range[0];
+	float		new_x;
+	float		new_y;
+	float		new_z;
+
+	new_x = range[0] + new_range / map->max_x * vector.x;
+	new_y = range[0] + new_range / map->max_y * vector.y;
+	new_z = range[0] + new_range / max_z * vector.z;
+	vector.x = new_x;
+	vector.y = new_y;
+	vector.z = new_z;
+	vector.i = 1;
 }
 
-#define START_OFFSET 100
+void	allocate_four_vector(t_four_vector vector, int x, int y, int z)
+{
+	vector.x = x;
+	vector.y = y;
+	vector.z = z;
+	vector.i = 1;
+}
 
-//void	test_draw_2d_map(t_fdf *fdf, const int step)
-//{
-//	int	x;
-//	int	y;
-//	int	z;
-//	//int	vec[4];
-//
-//	y = 0;
-//	while (y <= fdf->map.max_y)
-//	{
-//		x = 0;
-//		while (x <= fdf->map.max_x)
-//		{
-//		//	z = 0;
-//		//	while (z < fdf->map.coord[y][x] * 2)
-//		//	{
-//		//		draw_line(fdf, (t_dot) {x * step, (y * step) + z},
-//		//	  (t_dot) { (x * step) + fdf->map.coord[y][x] * 2, (y * step) + z},
-//		//	  0xFF0000FF);
-//		//		z++;
-//		//	}
-//			//create_vector(fdf->map.coord, y, x, vec);
-//			
-//			//z = fdf->map.coord[y][x];
-//			z = step; 
-//			if (x < fdf->map.max_x)
-//				draw_line(fdf,
-//			  transform_vector(x * step + START_OFFSET,
-//					  y * step, step, z),
-//			  transform_vector((x + 1) * step + START_OFFSET,
-//					  y * step, step, z),
-//			  0x008080FF);
-//			//	draw_line(fdf, (t_dot) {x * step, y * step},
-//			//  (t_dot) {(x + 1) * step, (y * step)}, 0x008080FF);
-//			if (y < fdf->map.max_y)
-//				draw_line(fdf,
-//			  transform_vector(x * step + START_OFFSET,
-//					  y * step, step, z),
-//			  transform_vector(x * step + START_OFFSET,
-//					  (y + 1) * step, step, z),
-//			  0x008080FF);
-//			//	draw_line(fdf, (t_dot) {x * step, y * step},
-//			//  (t_dot) {x * step, (y + 1) * step}, 0x008080FF);
-//			x++;
-//		}
-//		y++;
-//	}
-//	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
-//}
+void	test_draw_2d_map(t_fdf *fdf, const int step)
+{
+	int	x;
+	int	y;
+	int	z;
+
+	y = 0;
+	while (y <= fdf->map.max_y)
+	{
+		x = 0;
+		while (x <= fdf->map.max_x)
+		{
+			z = step;
+			if (x < fdf->map.max_x)
+				draw_line(fdf,
+			  transform_vector(x * step + START_OFFSET,
+					  y * step, step, z),
+			  transform_vector((x + 1) * step + START_OFFSET,
+					  y * step, step, z),
+			  0x008080FF);
+			if (y < fdf->map.max_y)
+				draw_line(fdf,
+			  transform_vector(x * step + START_OFFSET,
+					  y * step, step, z),
+			  transform_vector(x * step + START_OFFSET,
+					  (y + 1) * step, step, z),
+			  0x008080FF);
+			x++;
+		}
+		y++;
+	}
+	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
+}
 
 void	create_window(t_fdf *fdf, char *map_file)
 {
@@ -118,8 +119,8 @@ void	create_window(t_fdf *fdf, char *map_file)
 		return ;
 	}
 	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
-	//test_draw_2d_map(fdf, 12);
-	draw_line(fdf, (t_dot) {30, 30}, (t_dot) {20, 25}, 0x008080FF);
+	test_draw_2d_map(fdf, 12);
+	//draw_line(fdf, (t_dot) {30, 30}, (t_dot) {20, 25}, 0x008080FF);
 	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
 	mlx_loop(fdf->window);
 }
