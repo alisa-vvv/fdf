@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/28 19:54:23 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/03/31 15:48:42 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_dot	transform_vector(int x, int y, int width, int height)
 	int			new_x[2];
 	int			new_y[2];
 
-	height ++;
 	//new_x[0] = x * width * 0.5;
 	//new_x[1] = y * -width * 0.5;
 	//new_y[0] = x * height * 0.25;
@@ -40,43 +39,59 @@ t_dot	transform_vector(int x, int y, int width, int height)
 	new_x[1] = -y * width * 0.5;
 	new_y[0] = x * 0.5 * height * 0.5;
 	new_y[1] = y * 0.5 * height * 0.5;
-	new_dot.x = new_x[0] + new_x[1];
-	new_dot.y = new_y[0] + new_y[1];
+	new_dot.x = new_x[0] + new_x[1] + OFFSET_2;
+	new_dot.y = new_y[0] + new_y[1] + OFFSET_2;
+	ft_printf("new_dot.x: %d\n", new_dot.x);
+	ft_printf("new_dot.y: %d\n", new_dot.y);
 	return (new_dot);
 }
 
 #define START_OFFSET 150
 
-void	map_to_range(t_map *map, t_four_vector vector, int range[2])
+// Formula for mapping ranges:
+// X is for current range values, X' for desired
+// X' = X'min + (X'max - X'min) / (Xmax - Xmin) * X - Xmin
+
+void	map_to_range(t_map *map, t_four_vector *vector,
+				  int new_range[2], int old_range[2])
 {
-	const int	max_z = 9; // THIS NEEDS TO BE REMOVED.
-	const float	new_range = range[1] - range[0];
+	//const int	max_z = 9; // THIS NEEDS TO BE REMOVED.
+	(void) map;
+	const float	new_range_len = new_range[1] - new_range[0];
+	const float	old_range_len = old_range[1] - old_range[0];
 	float		new_x;
 	float		new_y;
 	float		new_z;
 
-	new_x = range[0] + new_range / map->max_x * vector.x;
-	new_y = range[0] + new_range / map->max_y * vector.y;
-	new_z = range[0] + new_range / max_z * vector.z;
-	vector.x = new_x;
-	vector.y = new_y;
-	vector.z = new_z;
-	vector.i = 1;
+	printf("old x: %d\n", (int) vector->x);
+	printf("old y: %d\n", (int) vector->y);
+	printf("old z: %d\n", (int) vector->z);
+	new_x = new_range[0] + new_range_len / old_range_len * (vector->x - old_range[0]);
+	new_y = new_range[0] + new_range_len / old_range_len * (vector->y - old_range[0]);
+	new_z = new_range[0] + new_range_len / old_range_len * (vector->z - old_range[0]);
+	vector->x = new_x;
+	vector->y = new_y;
+	vector->z = new_z;
+	vector->i = 1;
+ 	printf("new x: %f\n", vector->x);
+ 	printf("new y: %f\n", vector->y);
+ 	printf("new z: %f\n", vector->z);
 }
 
-void	allocate_four_vector(t_four_vector vector, int x, int y, int z)
+void	allocate_four_vector(t_four_vector *vector, int x, int y, int z)
 {
-	vector.x = x;
-	vector.y = y;
-	vector.z = z;
-	vector.i = 1;
+	vector->x = x;
+	vector->y = y;
+	vector->z = z;
+	vector->i = 1;
 }
 
 void	test_draw_2d_map(t_fdf *fdf, const int step)
 {
-	int	x;
-	int	y;
-	int	z;
+	int				x;
+	int				y;
+	//int				z;
+	t_four_vector 	vec;
 
 	y = 0;
 	while (y <= fdf->map.max_y)
@@ -84,23 +99,43 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 		x = 0;
 		while (x <= fdf->map.max_x)
 		{
-			z = step;
+		//	z = step;
+			ft_printf("checking inital x: %d\n", x);
+			ft_printf("checking inital y: %d\n", y);
+			ft_printf("checking inital z: %d\n", fdf->map.coord[y][x]);
+			allocate_four_vector(&vec, x, y, fdf->map.coord[y][x]);
+			map_to_range(&fdf->map, &vec, (int[2]) {-1, 1}, (int[2]) {0, 2048});
+			map_to_range(&fdf->map, &vec, (int[2]) {0, 2048}, (int[2]) {-1, 1});
 			if (x < fdf->map.max_x)
+			//	draw_line(fdf,
+			//  transform_vector(x * step + START_OFFSET,
+			//		  y * step, step, z),
+			//  transform_vector((x + 1) * step + START_OFFSET,
+			//		  y * step, step, z),
+			//  0x008080FF);
 				draw_line(fdf,
-			  transform_vector(x * step + START_OFFSET,
-					  y * step, step, z),
-			  transform_vector((x + 1) * step + START_OFFSET,
-					  y * step, step, z),
+			  transform_vector((int) vec.x * step + START_OFFSET,
+					  (int) vec.y * step, step, step),
+			  transform_vector((int) (vec.x + 1) * step + START_OFFSET,
+					  (int) vec.y * step, step, step),
 			  0x008080FF);
+
 			if (y < fdf->map.max_y)
+		//		draw_line(fdf,
+		//	  transform_vector(x * step + START_OFFSET,
+		//			  y * step, step, z),
+		//	  transform_vector(x * step + START_OFFSET,
+		//			  (y + 1) * step, step, z),
+		//	  0x008080FF);
 				draw_line(fdf,
-			  transform_vector(x * step + START_OFFSET,
-					  y * step, step, z),
-			  transform_vector(x * step + START_OFFSET,
-					  (y + 1) * step, step, z),
+			  transform_vector((int) vec.x * step + START_OFFSET,
+					  (int) vec.y * step, step, step),
+			  transform_vector((int) vec.x * step + START_OFFSET,
+					  (int) (vec.y + 1) * step, step, step),
 			  0x008080FF);
 			x++;
 		}
+		ft_printf("where?\n");
 		y++;
 	}
 	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
