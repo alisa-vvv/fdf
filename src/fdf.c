@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/31 19:49:20 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/03/31 20:20:36 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,12 +114,12 @@ void	orthogonal_projection_matrix(t_four_vector *vector, t_map *map,
 void	try_simple_isometric(t_four_vector *vector)
 {
 	t_four_vector	new_vector;
-	float const			scalar = 1 / sqrt(6);
+	float const		scalar = 1 / sqrt(6);
 	float			dot_product;
 
-	dot_product = vector->x * scalar * sqrt(3) + scalar;
+	dot_product = vector->x * scalar * sqrt(3);
 	dot_product += vector->y * scalar;
-	dot_product += vector->z * sqrt(2);
+	dot_product += vector->z * scalar * sqrt(2);
 	new_vector.x = dot_product;
 	dot_product = vector->y * scalar * 2;
 	dot_product += vector->z * scalar * -sqrt(2);
@@ -147,6 +147,8 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 	int				y;
 	//int				z;
 	t_four_vector 	vec;
+	t_four_vector 	next_vec_x;
+	t_four_vector 	next_vec_y;
 
 	y = 0;
 	while (y <= fdf->map.max_y)
@@ -159,14 +161,26 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 			ft_printf("checking inital y: %d\n", y);
 			ft_printf("checking inital z: %d\n", fdf->map.coord[y][x]);
 			allocate_four_vector(&vec, x, y, fdf->map.coord[y][x]);
-			//map_to_range(&fdf->map, &vec, (int[2]) {-1, 1}, (int[2]) {0, 2048});
-			//orthogonal_projection_matrix(&vec, &fdf->map, step);
-			try_simple_isometric(&vec);
-			//map_to_range(&fdf->map, &vec, (int[2]) {0, 2048}, (int[2]) {-1, 1});
+			if (x < fdf->map.max_x)
+				allocate_four_vector(&next_vec_x, x + 1, y, fdf->map.coord[y][x + 1]);
+			if (y < fdf->map.max_y)
+				allocate_four_vector(&next_vec_y, x, y + 1, fdf->map.coord[y + 1][x]);
+			map_to_range(&fdf->map, &vec, (int[2]) {-1, 1}, (int[2]) {0, 2048});
+			map_to_range(&fdf->map, &next_vec_x, (int[2]) {-1, 1}, (int[2]) {0, 2048});
+			map_to_range(&fdf->map, &next_vec_y, (int[2]) {-1, 1}, (int[2]) {0, 2048});
+		//	try_simple_isometric(&vec);
+		//	try_simple_isometric(&next_vec_x);
+		//	try_simple_isometric(&next_vec_y);
+			orthogonal_projection_matrix(&vec, &fdf->map, step);
+			orthogonal_projection_matrix(&next_vec_x, &fdf->map, step);
+			orthogonal_projection_matrix(&next_vec_y, &fdf->map, step);
+			map_to_range(&fdf->map, &vec, (int[2]) {0, 2048}, (int[2]) {-1, 1});
+			map_to_range(&fdf->map, &next_vec_x, (int[2]) {0, 2048}, (int[2]) {-1, 1});
+			map_to_range(&fdf->map, &next_vec_y, (int[2]) {0, 2048}, (int[2]) {-1, 1});
 			if (x < fdf->map.max_x)
 				draw_line(fdf,
 			  (t_dot) {(int) vec.x * step + START_OFFSET, (int) vec.y * step},
-			  (t_dot) {(int) (vec.x + 1) * step + START_OFFSET, (int) vec.y * step}, 0x008080FF);
+			  (t_dot) {(int) next_vec_x.x * step + START_OFFSET, (int) next_vec_x.y * step}, 0x008080FF);
 //				draw_line(fdf,
 //			  transform_vector((int) vec.x * step + START_OFFSET,
 //					  (int) vec.y * step, step, step),
@@ -177,7 +191,7 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 			if (y < fdf->map.max_y)
 				draw_line(fdf,
 			  (t_dot) {(int) vec.x * step + START_OFFSET, (int) vec.y * step},
-			  (t_dot) {(int) vec.x * step + START_OFFSET, (int) (vec.y + 1) * step}, 0x008080FF);
+			  (t_dot) {(int) next_vec_y.x * step + START_OFFSET, (int) next_vec_y.y * step}, 0x008080FF);
 			//	draw_line(fdf,
 			//  transform_vector((int) vec.x * step + START_OFFSET,
 			//		  (int) vec.y * step, step, step),
@@ -204,7 +218,7 @@ void	create_window(t_fdf *fdf, char *map_file)
 		return ;
 	}
 	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
-	test_draw_2d_map(fdf, 12);
+	test_draw_2d_map(fdf, 100);
 	//draw_line(fdf, (t_dot) {30, 30}, (t_dot) {20, 25}, 0x008080FF);
 	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
 	mlx_loop(fdf->window);
