@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/05 16:03:38 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/05 18:45:42 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	map_to_range(t_map *map, t_four_vector *vector,
 	new_z = new_range[0] + new_range_len / old_range_len * (vector->z - old_range[0]);
 	vector->x = new_x;
 	vector->y = new_y;
-	vector->z = new_z;
+	vector->z = new_z / sqrt(50);
 	vector->i = 1;
  	printf("new x: %f\n", vector->x);
  	printf("new y: %f\n", vector->y);
@@ -109,7 +109,6 @@ void	orthogonal_projection_matrix(t_four_vector *vector, t_map *map,
 	max_val = map_point_to_range(9 * step, (int[2]) {-1, 1}, (int[2]) {0, 9 * step});
 	printf("max_val z: %f\n", max_val);
 	new_vector.z = vector->z * -2 / (max_val - min_val);
-	new_vector.z = 1;
 	vector->x = new_vector.x;
 	vector->y = new_vector.y;
 	vector->z = new_vector.z;
@@ -159,7 +158,7 @@ void	vector_by_scalar(t_four_vector *vector, const float scalar)
 void	allocate_four_vector(t_four_vector *vector, int x, int y, int z)
 {
 	const int	step = 50;
-	const int	height_step = -sqrt(step);
+	const int	height_step = sqrt(step);
 
 	vector->x = x * step;
 	vector->y = y * step;
@@ -218,16 +217,7 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 				print_four_vector(&next_vec_y, "next_vec_y");
 			}
 			(void) step;
-//			rotate_along_z(&next_vec_x, -180);
-//			rotate_along_z(&next_vec_y, -180);
-//			rotate_along_z(&vec, -180);
 			//
-			//rotate_along_x(&vec, 35.264);
-			//rotate_along_x(&next_vec_x, 35.264);
-			//rotate_along_x(&next_vec_y, 35.264);
-			//rotate_along_y(&vec, 45);
-			//rotate_along_y(&next_vec_x, 45);
-			//rotate_along_y(&next_vec_y, 45);
 			//
 			//rotate_along_x(&vec, 30);
 			//rotate_along_x(&next_vec_x, 30);
@@ -236,21 +226,52 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 			//rotate_along_y(&next_vec_x, 30);
 			//rotate_along_y(&next_vec_y, 30);
 			//
-			rotate_along_x(&vec, 45);
-			rotate_along_x(&next_vec_x, 45);
-			rotate_along_x(&next_vec_y, 45);
-			rotate_along_y(&vec, 30);
-			rotate_along_y(&next_vec_x, 30);
-			rotate_along_y(&next_vec_y, 30);
-		//	map_to_range(&fdf->map, &vec, (int[2]) {0, 2048}, (int[2]) {-1, 1});
-		//	map_to_range(&fdf->map, &next_vec_x, (int[2]) {0, 2048}, (int[2]) {-1, 1});
-		//	map_to_range(&fdf->map, &next_vec_y, (int[2]) {0, 2048}, (int[2]) {-1, 1});
+			//map_to_range(&fdf->map, &vec, (int[2]) {-1, 1}, (int[2]) {0, 22});
+			//map_to_range(&fdf->map, &next_vec_x, (int[2]) {-1, 1}, (int[2]) {0, 22});
+			//map_to_range(&fdf->map, &next_vec_y, (int[2]) {-1, 1}, (int[2]) {0, 522});
+			//
+		//	rotate_along_y(&vec, -45);
+		//	rotate_along_y(&next_vec_x, -45);
+		//	rotate_along_y(&next_vec_y, -45);
+		//	rotate_along_x(&vec, -30);
+		//	rotate_along_x(&next_vec_x, -30);
+		//	rotate_along_x(&next_vec_y, -30);
+			//
+			//int	step = 50;
+			//int new_max_y = fdf->map.max_y * step;
+			//map_to_range(&fdf->map, &vec, (int[2]) {-new_max_y / 2, new_max_y / 2}, (int[2]) {0, fdf->map.max_y});
+			//map_to_range(&fdf->map, &next_vec_x, (int[2]) {-new_max_y / 2, new_max_y / 2}, (int[2]) {0, fdf->map.max_y});
+			//map_to_range(&fdf->map, &next_vec_y, (int[2]) {-new_max_y / 2, new_max_y / 2}, (int[2]) {0, fdf->map.max_y});
+
+		//	rotate_along_x(&vec, 30);
+		//	rotate_along_x(&next_vec_x, 30);
+		//	rotate_along_x(&next_vec_y, 30);
+		//	rotate_along_y(&vec, 30);
+		//	rotate_along_y(&next_vec_x, 30);
+		//	rotate_along_y(&next_vec_y, 30);
+
+			//rotate_along_z(&vec, 15);
+			//rotate_along_z(&next_vec_x, 15);
+			//rotate_along_z(&next_vec_y, 15);
+
+			rotate_along_x(&vec, 35.264);
+			rotate_along_x(&next_vec_x, 35.264);
+			rotate_along_x(&next_vec_y, 35.264);
+			//rotate_along_x(&vec, 45);
+			//rotate_along_x(&next_vec_x, 45);
+			//rotate_along_x(&next_vec_y, 45);
+			rotate_along_y(&vec, 45);
+			rotate_along_y(&next_vec_x, 45);
+			rotate_along_y(&next_vec_y, 45);
+			//rotate_along_x(&vec, 35.264);
+			//rotate_along_x(&next_vec_x, 35.264);
+			//rotate_along_x(&next_vec_y, 35.264);
+			//rotate_along_y(&vec, 45);
+			//rotate_along_y(&next_vec_x, 45);
+			//rotate_along_y(&next_vec_y, 45);
 //			even_simpler_isometric(&vec, step, step);
 //			even_simpler_isometric(&next_vec_x, step, step / 2);
 //			even_simpler_isometric(&next_vec_y, step, step / 2);
-		//	orthogonal_projection_matrix(&vec, &fdf->map, step);
-		//	orthogonal_projection_matrix(&next_vec_x, &fdf->map, step);
-		//	orthogonal_projection_matrix(&next_vec_y, &fdf->map, step);
 			if (x < fdf->map.max_x)
 				draw_line(fdf,
 			  (t_dot) {(int) vec.x + START_OFFSET, (int) vec.y + START_OFFSET},
