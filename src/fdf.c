@@ -115,6 +115,14 @@ void	orthogonal_projection_matrix(t_four_vector *vector, t_map *map,
 	vector->z = new_vector.z;
 }
 
+void	three_rotations_isometric(t_four_vector *vector)
+{
+	t_four_vector	new_vector;
+	float			dot_product;
+	
+	dot_product = vector->x;
+}
+
 void	try_simple_isometric(t_four_vector *vector)
 {
 	//const int		step = 100;
