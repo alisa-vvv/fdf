@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/30 21:25:25 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/05 13:58:56 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,9 @@ void	free_2d_arr(void **arr);
 void	clean_exit(t_fdf *fdf);
 t_map	parse_map(char *filename);
 void	draw_line(t_fdf *fdf, t_dot start, t_dot end, int color);
+void	rotate_along_x(t_four_vector *vector, float angle);
+void	rotate_along_y(t_four_vector *vector, float angle);
+void	rotate_along_z(t_four_vector *vector, float angle);
 
 /*	TEST (COMMENT THEM OUT)	*/
 void	test_print_map(int **coord, int max_x, int max_y);

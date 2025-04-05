@@ -6,7 +6,7 @@
 #    By: avaliull <avaliull@student.codam.nl>        +#+                       #
 #                                                   +#+                        #
 #    Created: 2025/03/07 18:02:14 by avaliull     #+#    #+#                   #
-#    Updated: 2025/03/30 20:22:15 by avaliull     ########   odam.nl           #
+#    Updated: 2025/04/05 13:59:55 by avaliull     ########   odam.nl           #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ CFILES	=	fdf.c\
 			fdf_utils.c\
 			window_controls.c\
 			line_drawing.c\
+			rotations.c\
 			test_funcs.c
 OFILES	= $(addprefix $(OBJDIR)/,$(CFILES:.c=.o))
 
