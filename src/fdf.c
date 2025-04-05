@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/05 15:14:56 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/05 16:03:38 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,42 +218,27 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 				print_four_vector(&next_vec_y, "next_vec_y");
 			}
 			(void) step;
-			//rotate_along_z(&vec, 90);
-			//rotate_along_z(&next_vec_x, 90);
-			//rotate_along_z(&next_vec_y, 90);
-			//rotate_along_z(&vec, 90);
-			//rotate_along_z(&next_vec_x, 90);
-			//rotate_along_z(&next_vec_y, 90);
-			//rotate_along_z(&vec, 90);
-			//rotate_along_z(&next_vec_x, 90);
-			//rotate_along_z(&next_vec_y, 90);
-			//rotate_along_z(&vec, 90);
-			//rotate_along_z(&next_vec_x, 90);
-			//rotate_along_z(&next_vec_y, 90);
-			//rotate_along_z(&vec, 90);
-			//rotate_along_z(&next_vec_x, 90);
-			//rotate_along_z(&next_vec_y, 90);
-			//rotate_along_z(&vec, 90);
-			//rotate_along_z(&next_vec_x, 90);
-			//rotate_along_z(&next_vec_y, 90);
-			//rotate_along_z(&vec, 90);
-			//rotate_along_z(&next_vec_x, 90);
-			//rotate_along_z(&next_vec_y, 90);
-			//rotate_along_z(&vec, 90);
-			//rotate_along_z(&next_vec_x, 90);
-			//rotate_along_z(&next_vec_y, 90);
-			//rotate_along_z(&vec, 90);
-			//rotate_along_z(&next_vec_x, 90);
-			//rotate_along_z(&next_vec_y, 90);
-			//rotate_along_z(&vec, 90);
-			//rotate_along_z(&next_vec_x, 90);
-			//rotate_along_z(&next_vec_y, 90);
-			rotate_along_z(&vec, -180);
-			rotate_along_z(&next_vec_x, -180);
-			rotate_along_z(&next_vec_y, -180);
-			rotate_along_x(&vec, 30);
-			rotate_along_x(&next_vec_x, 30);
-			rotate_along_x(&next_vec_y, 30);
+//			rotate_along_z(&next_vec_x, -180);
+//			rotate_along_z(&next_vec_y, -180);
+//			rotate_along_z(&vec, -180);
+			//
+			//rotate_along_x(&vec, 35.264);
+			//rotate_along_x(&next_vec_x, 35.264);
+			//rotate_along_x(&next_vec_y, 35.264);
+			//rotate_along_y(&vec, 45);
+			//rotate_along_y(&next_vec_x, 45);
+			//rotate_along_y(&next_vec_y, 45);
+			//
+			//rotate_along_x(&vec, 30);
+			//rotate_along_x(&next_vec_x, 30);
+			//rotate_along_x(&next_vec_y, 30);
+			//rotate_along_y(&vec, 30);
+			//rotate_along_y(&next_vec_x, 30);
+			//rotate_along_y(&next_vec_y, 30);
+			//
+			rotate_along_x(&vec, 45);
+			rotate_along_x(&next_vec_x, 45);
+			rotate_along_x(&next_vec_y, 45);
 			rotate_along_y(&vec, 30);
 			rotate_along_y(&next_vec_x, 30);
 			rotate_along_y(&next_vec_y, 30);
