@@ -14,6 +14,32 @@
 #include <stdio.h>
 #include <fcntl.h>
 
+void	get_max_min_z(int **coord, int *max_min_z,
+					const int max_x, const int max_y)
+{
+	int	x;
+	int	y;
+	int	max_z;
+	int	min_z;
+
+	max_z = coord[0][0];
+	min_z = coord[0][0];
+	y = -1;
+	while (++y <= max_y)
+	{
+		x = -1;
+		while(++x <= max_x)
+		{
+			if (coord[y][x] > max_z)
+				max_z = coord[y][x];
+			if (coord[y][x] < min_z)
+				min_z = coord[y][x];
+		}
+	}
+	max_min_z[0] = min_z;
+	max_min_z[1] = max_z;
+}
+
 static int	*funny_recursive_allocate_x(int *coord, char **values, int x, int *max_x)
 {
 	if (values[x])
@@ -60,7 +86,7 @@ static int	**funny_recursive_map_read(int map_fd, int y, int *max_x, int *max_y)
 	{
 		coord = (int **) malloc((y + 1) * sizeof(int *));
 		coord[y] = NULL;
-		*max_y = y;
+		*max_y = y - 1;
 		return (coord);
 	}
 	*max_x = get_x_z(&coord[y], next_line);
@@ -73,13 +99,20 @@ t_map	parse_map(char *filename)
 	const int	map_fd = open(filename, O_RDONLY);
 	int			**coord;
 	t_map		map;
+	int			max_min_z[2];
 
 	map.max_y = 0;
 	map.max_x = 0;
+	map.max_z = 0;
+	map.min_z = 0;
 	// this is how bloatware is created
 	coord = funny_recursive_map_read(map_fd, 0, &(map.max_x), &(map.max_y));
-	map.max_y--;
 	map.coord = coord;
+	get_max_min_z(coord, max_min_z, map.max_x, map.max_y);
+	map.min_z = max_min_z[0];
+	map.max_z = max_min_z[1];
+	ft_printf("map.min_z: %d\n", map.min_z);
+	ft_printf("map.max_z: %d\n", map.max_z);
 	close(map_fd);
 	return (map);
 }

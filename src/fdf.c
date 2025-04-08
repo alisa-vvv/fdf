@@ -56,7 +56,6 @@ t_dot	transform_vector(int x, int y, int width, int height)
 void	map_to_range(t_map *map, t_four_vector *vector,
 				  int new_range[2], int old_range[2])
 {
-	//const int	max_z = 9; // THIS NEEDS TO BE REMOVED.
 	(void) map;
 	const float	new_range_len = new_range[1] - new_range[0];
 	const float	old_range_len = old_range[1] - old_range[0];
@@ -64,13 +63,13 @@ void	map_to_range(t_map *map, t_four_vector *vector,
 	float		new_y;
 	float		new_z;
 
-	printf("old x: %d\n", (int) vector->x);
-	printf("x - old_range[0]: %f\n", vector->x - old_range[0]);
-	printf("old y: %d\n", (int) vector->y);
-	printf("old z: %d\n", (int) vector->z);
-	printf("new_range_len: %f\n", new_range_len);
-	printf("old_range_len: %f\n", old_range_len);
-	printf("new_range[0]: %d\n", new_range[0]);
+//	printf("old x: %d\n", (int) vector->x);
+//	printf("x - old_range[0]: %f\n", vector->x - old_range[0]);
+//	printf("old y: %d\n", (int) vector->y);
+//	printf("old z: %d\n", (int) vector->z);
+//	printf("new_range_len: %f\n", new_range_len);
+//	printf("old_range_len: %f\n", old_range_len);
+//	printf("new_range[0]: %d\n", new_range[0]);
 	new_x = new_range[0] + new_range_len / old_range_len * (vector->x - old_range[0]);
 	new_y = new_range[0] + new_range_len / old_range_len * (vector->y - old_range[0]);
 	new_z = new_range[0] + new_range_len / old_range_len * (vector->z - old_range[0]);
@@ -78,9 +77,49 @@ void	map_to_range(t_map *map, t_four_vector *vector,
 	vector->y = new_y;
 	vector->z = new_z / sqrt(50);
 	vector->i = 1;
- 	printf("new x: %f\n", vector->x);
- 	printf("new y: %f\n", vector->y);
- 	printf("new z: %f\n", vector->z);
+// 	printf("new x: %f\n", vector->x);
+// 	printf("new y: %f\n", vector->y);
+// 	printf("new z: %f\n", vector->z);
+}
+
+int	get_new_max(t_map *map, int *max_point, int *min_point, const int step)
+{
+	int	maximum_distance;
+
+	if (*max_point < map->max_x * step)
+		*max_point = map->max_x * step;
+	if (*max_point < map->max_y * step)
+		*max_point = map->max_y * step;
+	if (*min_point > 0)
+		*min_point = 0;
+	ft_printf("min_point: %d\n", *min_point);
+	ft_printf("max_point: %d\n", *max_point);
+	maximum_distance = *max_point - *min_point + 1;
+	return (maximum_distance);
+}
+
+void	align_vec_to_center(t_map *map, t_four_vector *vector, const int step)
+{
+	int	min_point;
+	int	max_point;
+	int	new_max_distance;
+	int	old_range[2];
+	int	new_range[2];
+
+	min_point = map->min_z * step;
+	max_point = map->max_z * step;
+	ft_printf("min_point: %d\n", min_point);
+	ft_printf("max_point: %d\n", max_point);
+	new_max_distance = get_new_max(map, &max_point, &min_point, step);
+	old_range[0] = min_point;
+	old_range[1] = max_point;
+	new_range[0] = -new_max_distance / 2;
+	new_range[1] = new_max_distance / 2;
+	ft_printf("old_range[0]: %d\n", old_range[0]);
+	ft_printf("old_range[1]: %d\n", old_range[1]);
+	ft_printf("new_range[0]: %d\n", new_range[0]);
+	ft_printf("new_range[1]: %d\n", new_range[1]);
+	map_to_range(map, vector, new_range, old_range);
 }
 
 float	map_point_to_range(int point, int new_range[2], int old_range[2])
@@ -157,12 +196,12 @@ void	vector_by_scalar(t_four_vector *vector, const float scalar)
 
 void	allocate_four_vector(t_four_vector *vector, int x, int y, int z)
 {
-	const int	step = 1;
-	const int	height_step = sqrt(step);
+	const int	step = 50;
+	//const int	height_step = sqrt(step);
 
 	vector->x = x * step;
 	vector->y = y * step;
-	vector->z = z * height_step;
+	vector->z = z * step;
 	vector->i = 1;
 }
 
@@ -208,15 +247,16 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 			print_four_vector(&vec, "vec");
 			if (x < fdf->map.max_x)
 			{
-				allocate_four_vector(&next_vec_x, x + 1, y, fdf->map.coord[y][x + 1]);
+				allocate_four_vector(&next_vec_x,
+						 x + 1, y, fdf->map.coord[y][x + 1]);
 				print_four_vector(&next_vec_x, "next_vec_x");
 			}
 			if (y < fdf->map.max_y)
 			{
-				allocate_four_vector(&next_vec_y, x, y + 1, fdf->map.coord[y + 1][x]);
+				allocate_four_vector(&next_vec_y,
+						 x, y + 1, fdf->map.coord[y + 1][x]);
 				print_four_vector(&next_vec_y, "next_vec_y");
 			}
-			(void) step;
 			//
 			//
 			//rotate_along_x(&vec, 30);
@@ -237,11 +277,17 @@ void	test_draw_2d_map(t_fdf *fdf, const int step)
 		//	rotate_along_x(&next_vec_x, -30);
 		//	rotate_along_x(&next_vec_y, -30);
 			
-			int	step = 50;
-			int new_max_y = fdf->map.max_y * step;
-			map_to_range(&fdf->map, &vec, (int[2]) {-new_max_y / 2, new_max_y / 2}, (int[2]) {0, fdf->map.max_y});
-			map_to_range(&fdf->map, &next_vec_x, (int[2]) {-new_max_y / 2, new_max_y / 2}, (int[2]) {0, fdf->map.max_y});
-			map_to_range(&fdf->map, &next_vec_y, (int[2]) {-new_max_y / 2, new_max_y / 2}, (int[2]) {0, fdf->map.max_y});
+	//		int	step = 50;
+	//		int new_max_y = fdf->map.max_y * step;
+			align_vec_to_center(&fdf->map, &vec, step);
+			print_four_vector(&vec, "vec after align");
+			align_vec_to_center(&fdf->map, &next_vec_x, step);
+			print_four_vector(&next_vec_x, "next_vec_x after align");
+			align_vec_to_center(&fdf->map, &next_vec_y, step);
+			print_four_vector(&next_vec_y, "next_vec_y after align");
+//			map_to_range(&fdf->map, &vec, (int[2]) {-new_max_y / 2, new_max_y / 2}, (int[2]) {0, fdf->map.max_y});
+//			map_to_range(&fdf->map, &next_vec_x, (int[2]) {-new_max_y / 2, new_max_y / 2}, (int[2]) {0, fdf->map.max_y});
+//			map_to_range(&fdf->map, &next_vec_y, (int[2]) {-new_max_y / 2, new_max_y / 2}, (int[2]) {0, fdf->map.max_y});
 
 		//	rotate_along_x(&vec, 30);
 		//	rotate_along_x(&next_vec_x, 30);

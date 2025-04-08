@@ -60,6 +60,8 @@ typedef	struct	s_map
 	int	**coord;
 	int	max_x;
 	int	max_y;
+	int	max_z;
+	int	min_z;
 }	t_map;
 
 typedef struct	s_fdf
