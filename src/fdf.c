@@ -206,7 +206,7 @@ void	even_simpler_isometric(t_four_vector *vector, int height, int width)
 }
 
 void	test_draw_2d_map(t_fdf *fdf, const int step,
-					  int centered_range[2], int old_range[2])
+					  int *centered_range, int *old_range)
 {
 	int				x;
 	int				y;
@@ -329,8 +329,7 @@ void	create_window(t_fdf *fdf, char *map_file)
 	ft_printf("fdf->img->width: %d\n", fdf->img->width);
 	ft_printf("fdf->img->height: %d\n", fdf->img->height);
 	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
-	test_draw_2d_map(fdf, 100);
-	//draw_line(fdf, (t_dot) {309, 30}, (t_dot) {3, 18}, 0x008080FF);
+	test_draw_2d_map(fdf, 100, centered_range, old_range);
 	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
 	mlx_loop(fdf->window);
 }
@@ -359,9 +358,10 @@ void	calculate_map_ranges(t_map *map, const int step,
 
 int	main(int argc, char *argv[])
 {
-	t_fdf	*fdf;
-	int		old_range[2];
-	int		centered_range[2];
+	t_fdf		*fdf;
+	int			old_range[2];
+	int			centered_range[2];
+	const int	step = 50;
 
 	if (argc != 2)
 		return (1);
@@ -370,7 +370,7 @@ int	main(int argc, char *argv[])
 	if (!fdf)
 		clean_exit(fdf);
 	fdf->map = parse_map(argv[1]);
-	calculate_map_ranges(&fdf->map, centered_range, old_range);
+	calculate_map_ranges(&fdf->map, step, centered_range, old_range);
 	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
 	create_window(fdf, argv[1]);
 	clean_exit(fdf);
