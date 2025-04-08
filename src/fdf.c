@@ -53,10 +53,9 @@ t_dot	transform_vector(int x, int y, int width, int height)
 // X is for current range values, X' for desired
 // X' = X'min + (X'max - X'min) / (Xmax - Xmin) * X - Xmin
 
-void	map_to_range(t_map *map, t_four_vector *vector,
+void	map_to_range(t_four_vector *vector,
 				  int new_range[2], int old_range[2])
 {
-	(void) map;
 	const float	new_range_len = new_range[1] - new_range[0];
 	const float	old_range_len = old_range[1] - old_range[0];
 	float		new_x;
@@ -75,8 +74,8 @@ void	map_to_range(t_map *map, t_four_vector *vector,
 	new_z = new_range[0] + new_range_len / old_range_len * (vector->z - old_range[0]);
 	vector->x = new_x;
 	vector->y = new_y;
-	vector->z = new_z / sqrt(50);
-	vector->i = 1;
+	vector->z = new_z;
+	vector->w = 1;
 // 	printf("new x: %f\n", vector->x);
 // 	printf("new y: %f\n", vector->y);
 // 	printf("new z: %f\n", vector->z);
@@ -100,26 +99,7 @@ int	get_new_max(t_map *map, int *max_point, int *min_point, const int step)
 
 void	align_vec_to_center(t_map *map, t_four_vector *vector, const int step)
 {
-	int	min_point;
-	int	max_point;
-	int	new_max_distance;
-	int	old_range[2];
-	int	new_range[2];
-
-	min_point = map->min_z * step;
-	max_point = map->max_z * step;
-	ft_printf("min_point: %d\n", min_point);
-	ft_printf("max_point: %d\n", max_point);
-	new_max_distance = get_new_max(map, &max_point, &min_point, step);
-	old_range[0] = min_point;
-	old_range[1] = max_point;
-	new_range[0] = -new_max_distance / 2;
-	new_range[1] = new_max_distance / 2;
-	ft_printf("old_range[0]: %d\n", old_range[0]);
-	ft_printf("old_range[1]: %d\n", old_range[1]);
-	ft_printf("new_range[0]: %d\n", new_range[0]);
-	ft_printf("new_range[1]: %d\n", new_range[1]);
-	map_to_range(map, vector, new_range, old_range);
+	map_to_range(vector, new_range, old_range);
 }
 
 float	map_point_to_range(int point, int new_range[2], int old_range[2])
@@ -201,8 +181,8 @@ void	allocate_four_vector(t_four_vector *vector, int x, int y, int z)
 
 	vector->x = x * step;
 	vector->y = y * step;
-	vector->z = z * step;
-	vector->i = 1;
+	vector->z = z * sqrt(step);
+	vector->w = 1;
 }
 
 void	print_four_vector(t_four_vector *vector, char *vec_name)
@@ -225,7 +205,8 @@ void	even_simpler_isometric(t_four_vector *vector, int height, int width)
 	*vector = new_vector;
 }
 
-void	test_draw_2d_map(t_fdf *fdf, const int step)
+void	test_draw_2d_map(t_fdf *fdf, const int step,
+					  int centered_range[2], int old_range[2])
 {
 	int				x;
 	int				y;
@@ -345,6 +326,8 @@ void	create_window(t_fdf *fdf, char *map_file)
 		fdf->img = NULL;
 		return ;
 	}
+	ft_printf("fdf->img->width: %d\n", fdf->img->width);
+	ft_printf("fdf->img->height: %d\n", fdf->img->height);
 	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
 	test_draw_2d_map(fdf, 100);
 	//draw_line(fdf, (t_dot) {309, 30}, (t_dot) {3, 18}, 0x008080FF);
@@ -352,9 +335,33 @@ void	create_window(t_fdf *fdf, char *map_file)
 	mlx_loop(fdf->window);
 }
 
+void	calculate_map_ranges(t_map *map, const int step,
+						  int *centered_range, int *old_range)
+{
+	int	min_point;
+	int	max_point;
+	int	new_max_distance;
+
+	min_point = map->min_z * step;
+	max_point = map->max_z * step;
+	ft_printf("min_point: %d\n", min_point);
+	ft_printf("max_point: %d\n", max_point);
+	new_max_distance = get_new_max(map, &max_point, &min_point, step);
+	old_range[0] = min_point;
+	old_range[1] = max_point;
+	centered_range[0] = -new_max_distance / 2;
+	centered_range[1] = new_max_distance / 2;
+	ft_printf("old_range[0]: %d\n", old_range[0]);
+	ft_printf("old_range[1]: %d\n", old_range[1]);
+	ft_printf("new_range[0]: %d\n", centered_range[0]);
+	ft_printf("new_range[1]: %d\n", centered_range[1]);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_fdf	*fdf;
+	int		old_range[2];
+	int		centered_range[2];
 
 	if (argc != 2)
 		return (1);
@@ -363,6 +370,7 @@ int	main(int argc, char *argv[])
 	if (!fdf)
 		clean_exit(fdf);
 	fdf->map = parse_map(argv[1]);
+	calculate_map_ranges(&fdf->map, centered_range, old_range);
 	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
 	create_window(fdf, argv[1]);
 	clean_exit(fdf);

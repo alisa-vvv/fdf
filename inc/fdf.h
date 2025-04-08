@@ -43,7 +43,7 @@ typedef struct	s_four_vector
 	float	x;
 	float	y;
 	float	z;
-	float	i;
+	float	w;
 }	t_four_vector;
 
 
