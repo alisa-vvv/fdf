@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/09 17:30:01 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/09 19:48:20 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,19 @@
 // left to right, up to down
 //
 
-#define OFFSET_2 10
-
-#define START_OFFSET 1000
-
-int	get_new_max(t_map *map, int *max_point, int *min_point, const int step)
+void	draw_connected_dots(t_fdf *fdf, int range_len,
+						 t_four_vector vec, t_four_vector next_vec)
 {
-	int	maximum_distance;
+	const int	width_offset = (fdf->img->width - range_len) / 2;
+	const int	height_offset = (fdf->img->height - range_len) / 2;
+	t_dot		start_dot;
+	t_dot		end_dot;
 
-	if (*max_point < map->max_x * step)
-		*max_point = map->max_x * step;
-	if (*max_point < map->max_y * step)
-		*max_point = map->max_y * step;
-	if (*min_point > 0)
-		*min_point = 0;
-	maximum_distance = *max_point - *min_point + 1;
-	return (maximum_distance);
+	start_dot.x = vec.x + width_offset;
+	start_dot.y = vec.y + height_offset;
+	end_dot.x = next_vec.x + width_offset;
+	end_dot.y = next_vec.y + height_offset;
+	draw_line(fdf, start_dot, end_dot, 0x008080FF);
 }
 
 void	test_draw_2d_map(t_fdf *fdf, const int step,
@@ -58,18 +55,15 @@ void	test_draw_2d_map(t_fdf *fdf, const int step,
 		while (x <= fdf->map.max_x)
 		{
 			allocate_four_vector(&vec, x, y, fdf->map.coord[y][x]);
-			test_print_four_vector(&vec, "vec");
 			if (x < fdf->map.max_x)
 			{
 				allocate_four_vector(&next_vec_x,
 						 x + 1, y, fdf->map.coord[y][x + 1]);
-				test_print_four_vector(&next_vec_x, "next_vec_x");
 			}
 			if (y < fdf->map.max_y)
 			{
 				allocate_four_vector(&next_vec_y,
 						 x, y + 1, fdf->map.coord[y + 1][x]);
-				test_print_four_vector(&next_vec_y, "next_vec_y");
 			}
 
 			(void) step;
@@ -85,13 +79,11 @@ void	test_draw_2d_map(t_fdf *fdf, const int step,
 			rotate_along_y(&next_vec_y, -45);
 
 			if (x < fdf->map.max_x)
-				draw_line(fdf,
-			  (t_dot) {(int) vec.x + START_OFFSET, (int) vec.y + START_OFFSET},
-			  (t_dot) {(int) next_vec_x.x + START_OFFSET, (int) next_vec_x.y + START_OFFSET}, 0x008080FF);
+				draw_connected_dots(fdf, centered_range[1] - centered_range[0],
+						vec, next_vec_x);
 			if (y < fdf->map.max_y)
-				draw_line(fdf,
-			  (t_dot) {(int) vec.x + START_OFFSET, (int) vec.y + START_OFFSET},
-			  (t_dot) {(int) next_vec_y.x + START_OFFSET, (int) next_vec_y.y + START_OFFSET}, 0x008080FF);
+				draw_connected_dots(fdf, centered_range[1] - centered_range[0],
+					vec, next_vec_y);
 			x++;
 		}
 		y++;
@@ -99,23 +91,54 @@ void	test_draw_2d_map(t_fdf *fdf, const int step,
 	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
 }
 
-void	create_window(t_fdf *fdf, char *map_file,
-				   int centered_range[2], int old_range[2])
+void	create_map_image(t_fdf *fdf, const int step,
+					  int centered_range[2], int old_range[2])
 {
-	mlx_set_setting(MLX_STRETCH_IMAGE, 0);
-	fdf->window = mlx_init(2048, 1536, map_file, false);
-	if (!fdf->window)
-		clean_exit(fdf);
-	fdf->img = mlx_new_image(fdf->window, 2048, 2048);
+	const int	image_size_iterator = 512;
+	const int	range_len = (old_range[1] - old_range[0]);
+	int			image_size;
+	int			height_diff;
+	int			width_diff;
+
+	ft_printf("range_len: %d\n", range_len);
+	ft_printf("range_len / step: %d\n", range_len / step);
+	image_size = 2048;
+	while (image_size < range_len + step * 2)
+		image_size += image_size_iterator;
+	height_diff = (fdf->window->height - image_size) / 2;
+	width_diff = (fdf->window->width - image_size) / 2;
+	ft_printf("image_size: %d\n, height_diff: %d\n, width_diff: %d\n", image_size, height_diff, width_diff);
+	(void) centered_range;
+	(void) old_range;
+	fdf->img = mlx_new_image(fdf->window, image_size, image_size);
 	if (!fdf->img)
 	{
 		fdf->img = NULL;
 		return ;
 	}
 	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
-	test_draw_2d_map(fdf, 100, centered_range, old_range);
-	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
-	mlx_loop(fdf->window);
+}
+
+void	create_window(t_fdf *fdf, char *map_file)
+{
+	mlx_set_setting(MLX_STRETCH_IMAGE, 0);
+	fdf->window = mlx_init(2048, 1536, map_file, false);
+	if (!fdf->window)
+		clean_exit(fdf);
+}
+
+int	get_new_max(t_map *map, int *max_point, int *min_point, const int step)
+{
+	int	maximum_distance;
+
+	if (*max_point < map->max_x * step)
+		*max_point = map->max_x * step;
+	if (*max_point < map->max_y * step)
+		*max_point = map->max_y * step;
+	if (*min_point > 0)
+		*min_point = 0;
+	maximum_distance = *max_point - *min_point + 1;
+	return (maximum_distance);
 }
 
 void	calculate_map_ranges(t_map *map, const int step,
@@ -139,7 +162,7 @@ int	main(int argc, char *argv[])
 	t_fdf		*fdf;
 	int			old_range[2];
 	int			centered_range[2];
-	const int	step = 50;
+	const int	step = 100;
 
 	if (argc != 2)
 		return (1);
@@ -149,7 +172,10 @@ int	main(int argc, char *argv[])
 		clean_exit(fdf);
 	fdf->map = parse_map(argv[1]);
 	calculate_map_ranges(&fdf->map, step, centered_range, old_range);
-	//test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
-	create_window(fdf, argv[1], centered_range, old_range);
+	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
+	create_window(fdf, argv[1]);
+	create_map_image(fdf, step, centered_range, old_range);
+	test_draw_2d_map(fdf, step, centered_range, old_range);
+	mlx_loop(fdf->window);
 	clean_exit(fdf);
 }
