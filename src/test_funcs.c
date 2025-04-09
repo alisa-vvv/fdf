@@ -6,11 +6,12 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/27 16:33:58 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/27 16:42:34 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/09 17:28:35 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include <stdio.h>
 
 void	test_print_map(int **coord, int max_x, int max_y)
 {
@@ -31,6 +32,17 @@ void	test_print_map(int **coord, int max_x, int max_y)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	}
 }
+
+void	test_print_four_vector(t_four_vector *vector, char *vec_name)
+{
+	printf("\n");
+	printf("vector: %s\n", vec_name);
+	printf("x: %f\n", vector->x);
+	printf("y: %f\n", vector->y);
+	printf("z: %f\n", vector->z);
+	printf("\n\n");
+}
+
 //
 //
 //#ifndef	SQUARE_SIZE

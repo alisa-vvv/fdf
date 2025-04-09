@@ -20,6 +20,7 @@ CFILES	=	fdf.c\
 			window_controls.c\
 			line_drawing.c\
 			rotations.c\
+			vector_matrix_math.c\
 			test_funcs.c
 OFILES	= $(addprefix $(OBJDIR)/,$(CFILES:.c=.o))
 
