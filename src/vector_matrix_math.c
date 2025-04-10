@@ -11,19 +11,12 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include <math.h>
-
-// Formula for mapping ranges:
-// X is for current range values, X' for desired
-// X' = X'min + (X'max - X'min) / (Xmax - Xmin) * X - Xmin
 
 void	allocate_four_vector(t_four_vector *vector, int x, int y, int z)
 {
-	const int	step = 50;
-
-	vector->x = x * step;
-	vector->y = y * step;
-	vector->z = z * sqrt(step);
+	vector->x = x;
+	vector->y = y;
+	vector->z = z;
 	vector->w = 1;
 }
 
@@ -34,6 +27,10 @@ void	vector_by_scalar(t_four_vector *vector, const float scalar)
 	vector->z *= scalar;
 }
 
+/*	Formula for mapping ranges:
+*	X is for current range values, X' for desired
+*	X' = X'min + (X'max - X'min) / (Xmax - Xmin) * X - Xmin
+*/
 void	map_to_range(t_four_vector *vector, int new_range[2], int old_range[2])
 {
 	const float	new_len = new_range[1] - new_range[0];

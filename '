@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/10 18:01:14 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/10 17:34:56 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@
 void	draw_connected_dots(t_fdf *fdf, int range_len,
 						 t_four_vector vec, t_four_vector next_vec)
 {
-	const int	width_offset = (fdf->img->width - range_len) / 2;
-	const int	height_offset = (fdf->img->height - range_len) / 2;
-	//(void) range_len;
-	//const int	width_offset = 0;
-	//const int	height_offset = 0;
+	//const int	width_offset = (fdf->img->width - range_len) / 2;
+	//const int	height_offset = (fdf->img->height - range_len) / 2;
+	(void) range_len;
+	const int	width_offset = 0;
+	const int	height_offset = 0;
 	t_dot		start_dot;
 	t_dot		end_dot;
 
@@ -46,7 +46,7 @@ void	adjust_coordinates_for_step(t_four_vector *vector, const int step)
 {
 	vector->x *= step;
 	vector->y *= step;
-	vector->z = vector->z * step / 8;
+	vector->z *= sqrt(step);
 }
 
 //void	isometric_projection(t_four_vector *vec, t_four_vector *next_vec_x,
@@ -96,12 +96,6 @@ void	isometric_rotate_left(t_four_vector *vec, t_four_vector *next_vec_x,
 	rotate_along_z(next_vec_y, -90);
 }
 
-void	put_aligned_image_to_window(t_fdf *fdf, const int range_len)
-{
-	const int	width_offset = (fdf->img->width - range_len) / 4;
-	const int	height_offset = (fdf->img->height - range_len) / 2;
-	mlx_image_to_window(fdf->window, fdf->img, -width_offset, -height_offset);
-}
 void	test_draw_2d_map(t_fdf *fdf, const int step,
 					  int centered_range[2], int old_range[2])
 {
@@ -134,7 +128,10 @@ void	test_draw_2d_map(t_fdf *fdf, const int step,
 			map_to_range(&vec, centered_range, old_range);
 			map_to_range(&next_vec_x, centered_range, old_range);
 			map_to_range(&next_vec_y, centered_range, old_range);
-			//isometric_rotate_right(&vec, &next_vec_x, &next_vec_y);
+			isometric_rotate_right(&vec, &next_vec_x, &next_vec_y);
+			isometric_rotate_right(&vec, &next_vec_x, &next_vec_y);
+			isometric_rotate_right(&vec, &next_vec_x, &next_vec_y);
+			isometric_rotate_right(&vec, &next_vec_x, &next_vec_y);
 			//isometric_rotate_left(&vec, &next_vec_x, &next_vec_y);
 			isometric_projection(&vec, &next_vec_x, &next_vec_y);
 			map_to_range(&vec, old_range, centered_range);
@@ -150,7 +147,7 @@ void	test_draw_2d_map(t_fdf *fdf, const int step,
 		}
 		y++;
 	}
-	put_aligned_image_to_window(fdf, centered_range[1] - centered_range[0]);
+	mlx_image_to_window(fdf->window, fdf->img, 0, 0);
 }
 
 void	create_map_image(t_fdf *fdf, const int step, int old_range[2])
