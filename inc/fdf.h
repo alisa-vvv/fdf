@@ -38,6 +38,12 @@ typedef struct	s_four_vector
 	float	w;
 }	t_four_vector;
 
+typedef struct	s_edges
+{
+	t_four_vector	vec;
+	t_four_vector	*next;
+	t_four_vector	*prev;
+}	t_edges;
 
 typedef enum	e_direction
 {

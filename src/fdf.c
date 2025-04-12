@@ -17,16 +17,40 @@
 #include <fcntl.h>
 #include <stdio.h>
 
+void	find_edges(t_fdf *fdf, const int rotation_count, t_four_vector *edges)
+{
+	int				i;
+	const int		max_x = fdf->map.max_x;
+	const int		max_y = fdf->map.max_y;
+
+	if (i < 0)
+	allocate_four_vector(&edges[i], 0, 0, fdf->map.coord[0][0]);
+	i++;
+	if (i == 4)
+		i = 0;
+	allocate_four_vector(&edges[i], max_x, 0, fdf->map.coord[max_x][0]);
+	i++;
+	if (i == 4)
+		i = 0;
+	allocate_four_vector(&edges[i], max_x, max_y, fdf->map.coord[max_x][max_y]);
+	i++;
+	if (i == 4)
+		i = 0;
+	allocate_four_vector(&edges[i], 0, max_y, fdf->map.coord[0][max_y]);
+	i++;
+	if (i == 4)
+		i = 0;
+}
 /*	The magic numbers for centering were arrived at through
  *	guesswork/approximation
 */
-void	draw_connected_dots(t_fdf *fdf, const int step,
+void	draw_connected_dots(t_fdf *fdf, const int rotation_count,
 						 t_four_vector vec, t_four_vector next_vec)
 {
-	//(void) step;
+	(void) rotation_count;
 
-	const int	width_offset = (int) fdf->map.max_x * step * 1.13;
-	const int	height_offset = (int) fdf->map.max_y * step * 2.05;
+	const int	width_offset = (int) fdf->map.max_x * 50 * 1.13;
+	const int	height_offset = (int) fdf->map.max_y * 50 * 2.05;
 	//const int	width_offset = 0;
 	//const int	height_offset = 0;
 	t_dot		start_dot;
@@ -64,19 +88,24 @@ void	isometric_projection(t_four_vector *vec, t_four_vector *next_vec_x,
 }
 
 void	isometric_rotate_right(t_four_vector *vec, t_four_vector *next_vec_x,
-						t_four_vector *next_vec_y)
-{
-	rotate_along_z(vec, 90);
+						t_four_vector *next_vec_y, int *rotation_count)
+{ rotate_along_z(vec, 90);
 	rotate_along_z(next_vec_x, 90);
 	rotate_along_z(next_vec_y, 90);
+	(*rotation_count)++;
+	if ((*rotation_count) > 4)
+		(*rotation_count) = 0;
 }
 
 void	isometric_rotate_left(t_four_vector *vec, t_four_vector *next_vec_x,
-						t_four_vector *next_vec_y)
+						t_four_vector *next_vec_y, int *rotation_count)
 {
 	rotate_along_z(vec, -90);
 	rotate_along_z(next_vec_x, -90);
 	rotate_along_z(next_vec_y, -90);
+	(*rotation_count)--;
+	if ((*rotation_count) < 0)
+		(*rotation_count) = 4;
 }
 
 void	put_aligned_image_to_window(t_fdf *fdf)
@@ -105,7 +134,9 @@ void	main_drawing_loop(t_fdf *fdf, const int step)
 	t_four_vector 	vec;
 	t_four_vector 	next_vec_x;
 	t_four_vector 	next_vec_y;
+	int				rotation_count;
 
+	rotation_count = 0;
 	y = 0;
 	while (y <= fdf->map.max_y)
 	{
@@ -132,9 +163,9 @@ void	main_drawing_loop(t_fdf *fdf, const int step)
 			//isometric_rotate_right(&vec, &next_vec_x, &next_vec_y);
 			isometric_projection(&vec, &next_vec_x, &next_vec_y);
 			if (x < fdf->map.max_x)
-				draw_connected_dots(fdf, step, vec, next_vec_x);
+				draw_connected_dots(fdf, rotation_count, vec, next_vec_x);
 			if (y < fdf->map.max_y)
-				draw_connected_dots(fdf, step, vec, next_vec_y);
+				draw_connected_dots(fdf, rotation_count, vec, next_vec_y);
 			x++;
 		}
 		y++;
