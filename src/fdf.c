@@ -17,19 +17,16 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-// question: use struct for each individual coordinate point? feels wrong.
-// alternative: use a single 3d array. then points can be found by coordinates.
-// question: what is x=0? what is y=0? is it the top of the map?
-// probably, feels the easiest since it's the order in which string is read.
-// left to right, up to down
-//
-
-void	draw_connected_dots(t_fdf *fdf, int range_len,
+/*	The magic numbers for centering were arrived at through
+ *	guesswork/approximation
+*/
+void	draw_connected_dots(t_fdf *fdf, const int step,
 						 t_four_vector vec, t_four_vector next_vec)
 {
-	const int	width_offset = (fdf->img->width - range_len) / 2;
-	const int	height_offset = (fdf->img->height - range_len) / 2;
-	//(void) range_len;
+	//(void) step;
+
+	const int	width_offset = (int) fdf->map.max_x * step * 1.13;
+	const int	height_offset = (int) fdf->map.max_y * step * 2.05;
 	//const int	width_offset = 0;
 	//const int	height_offset = 0;
 	t_dot		start_dot;
@@ -48,20 +45,6 @@ void	adjust_coordinates_for_step(t_four_vector *vector, const int step)
 	vector->y *= step;
 	vector->z = vector->z * step / 8;
 }
-
-//void	isometric_projection(t_four_vector *vec, t_four_vector *next_vec_x,
-//						t_four_vector *next_vec_y)
-//{
-//	vec->z = -vec->z;
-//	next_vec_x->z = -next_vec_x->z;
-//	next_vec_y->z = -next_vec_y->z;
-//	rotate_along_x(vec, -45);
-//	rotate_along_x(next_vec_x, -45);
-//	rotate_along_x(next_vec_y, -45);
-//	rotate_along_y(vec, 35.3644);
-//	rotate_along_y(next_vec_x, 35.3644);
-//	rotate_along_y(next_vec_y, 35.3644);
-//}
 
 void	isometric_projection(t_four_vector *vec, t_four_vector *next_vec_x,
 						t_four_vector *next_vec_y)
@@ -96,14 +79,26 @@ void	isometric_rotate_left(t_four_vector *vec, t_four_vector *next_vec_x,
 	rotate_along_z(next_vec_y, -90);
 }
 
-void	put_aligned_image_to_window(t_fdf *fdf, const int range_len)
+void	put_aligned_image_to_window(t_fdf *fdf)
 {
-	const int	width_offset = (fdf->img->width - range_len) / 4;
-	const int	height_offset = (fdf->img->height - range_len) / 2;
-	mlx_image_to_window(fdf->window, fdf->img, -width_offset, -height_offset);
+	int	width_offset;
+	int	height_offset;
+	width_offset = (int) (fdf->window->width - fdf->img->width) / 2;
+	height_offset = (int) (fdf->window->height - fdf->img->height) / 2;
+	ft_printf("windowheight: %d\n", fdf->window->height);
+	ft_printf("image height: %d\n", fdf->img->height);
+	ft_printf("width_offset: %d\n", width_offset);
+	ft_printf("height_offset: %d\n", height_offset);
+	mlx_image_to_window(fdf->window, fdf->img, width_offset, height_offset);
 }
-void	test_draw_2d_map(t_fdf *fdf, const int step,
-					  int centered_range[2], int old_range[2])
+
+void	center_vector_xy(t_map *map, t_four_vector *vec, const int step)
+{
+	vec->x -= map->max_x / 2 * step;
+	vec->y -= map->max_y / 2 * step;
+}
+
+void	main_drawing_loop(t_fdf *fdf, const int step)
 {
 	int				x;
 	int				y;
@@ -131,26 +126,25 @@ void	test_draw_2d_map(t_fdf *fdf, const int step,
 						 x, y + 1, fdf->map.coord[y + 1][x]);
 				adjust_coordinates_for_step(&next_vec_y, step);
 			}
-			map_to_range(&vec, centered_range, old_range);
-			map_to_range(&next_vec_x, centered_range, old_range);
-			map_to_range(&next_vec_y, centered_range, old_range);
+			center_vector_xy(&fdf->map, &vec, step);
+			center_vector_xy(&fdf->map, &next_vec_x, step);
+			center_vector_xy(&fdf->map, &next_vec_y, step);
 			//isometric_rotate_right(&vec, &next_vec_x, &next_vec_y);
-			//isometric_rotate_left(&vec, &next_vec_x, &next_vec_y);
 			isometric_projection(&vec, &next_vec_x, &next_vec_y);
-			map_to_range(&vec, old_range, centered_range);
-			map_to_range(&next_vec_x, old_range, centered_range);
-			map_to_range(&next_vec_y, old_range, centered_range);
 			if (x < fdf->map.max_x)
-				draw_connected_dots(fdf, centered_range[1] - centered_range[0],
-						vec, next_vec_x);
+				draw_connected_dots(fdf, step, vec, next_vec_x);
 			if (y < fdf->map.max_y)
-				draw_connected_dots(fdf, centered_range[1] - centered_range[0],
-					vec, next_vec_y);
+				draw_connected_dots(fdf, step, vec, next_vec_y);
 			x++;
 		}
 		y++;
 	}
-	put_aligned_image_to_window(fdf, centered_range[1] - centered_range[0]);
+}
+
+void	test_draw_2d_map (t_fdf *fdf, const int step)
+{
+	main_drawing_loop(fdf, step);
+	put_aligned_image_to_window(fdf);
 }
 
 void	create_map_image(t_fdf *fdf, const int step, int old_range[2])
@@ -234,7 +228,7 @@ int	main(int argc, char *argv[])
 	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
 	create_window(fdf, argv[1]);
 	create_map_image(fdf, step, old_range);
-	test_draw_2d_map(fdf, step, centered_range, old_range);
+	test_draw_2d_map(fdf, step);
 	mlx_loop(fdf->window);
 	clean_exit(fdf);
 }
