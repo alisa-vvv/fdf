@@ -24,6 +24,7 @@ void	draw_connected_dots(t_fdf *fdf, const int rotation_count,
 						 t_four_vector vec, t_four_vector next_vec)
 {
 	(void) rotation_count;
+	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
 
 	const int	width_offset = (int) fdf->map.max_x * 50 * 1.13;
 	const int	height_offset = (int) fdf->map.max_y * 50 * 2.05;
@@ -54,44 +55,6 @@ void	isometric_transform(t_four_vector *vec)
 	rotate_along_z(vec, 30);
 }
 
-//void	isometric_projection(t_four_vector *vec, t_four_vector *next_vec_x,
-//						t_four_vector *next_vec_y)
-//{
-//	vec->z = -vec->z;
-//	next_vec_x->z = -next_vec_x->z;
-//	next_vec_y->z = -next_vec_y->z;
-//	rotate_along_x(vec, -45);
-//	rotate_along_x(next_vec_x, -45);
-//	rotate_along_x(next_vec_y, -45);
-//	rotate_along_y(vec, 35.3644);
-//	rotate_along_y(next_vec_x, 35.3644);
-//	rotate_along_y(next_vec_y, 35.3644);
-//	rotate_along_z(vec, 30);
-//	rotate_along_z(next_vec_x, 30);
-//	rotate_along_z(next_vec_y, 30);
-//}
-
-void	isometric_rotate_right(t_four_vector *vec, t_four_vector *next_vec_x,
-						t_four_vector *next_vec_y, int *rotation_count)
-{ rotate_along_z(vec, 90);
-	rotate_along_z(next_vec_x, 90);
-	rotate_along_z(next_vec_y, 90);
-	(*rotation_count)++;
-	if ((*rotation_count) > 4)
-		(*rotation_count) = 0;
-}
-
-void	isometric_rotate_left(t_four_vector *vec, t_four_vector *next_vec_x,
-						t_four_vector *next_vec_y, int *rotation_count)
-{
-	rotate_along_z(vec, -90);
-	rotate_along_z(next_vec_x, -90);
-	rotate_along_z(next_vec_y, -90);
-	(*rotation_count)--;
-	if ((*rotation_count) < 0)
-		(*rotation_count) = 4;
-}
-
 void	put_aligned_image_to_window(t_fdf *fdf)
 {
 	int	width_offset;
@@ -115,7 +78,7 @@ t_four_vector		*allocate_vector_array(int size)
 {
 	t_four_vector	*new_array;
 
-	new_array = malloc(sizeof(t_four_vector) * size);
+	new_array = ft_calloc(size, sizeof(t_four_vector));
 	ft_printf("checking size x: %d\n", size);
 	if (!new_array)
 	{
@@ -131,18 +94,18 @@ t_transformed_map	*alloc_transofrmed_map(t_fdf *fdf)
 	t_four_vector		**new_vector_array;
 	int					y;
 
-	new_vector_array = malloc(sizeof(*new_vector_array) * fdf->map.max_y + 1);
-	ft_printf("checking size y: %d\n", fdf->map.max_y + 1);
+	new_vector_array = ft_calloc(fdf->map.max_y + 1, sizeof(*new_vector_array));
 	if (!new_vector_array)
 	{
 		// ADD ERROR MANAGEMENT
 		return (NULL);
 	}
-	new_map = malloc(sizeof(t_transformed_map));
+	new_map = ft_calloc(1, sizeof(t_transformed_map));
 	if (!new_map)
 	{
 		free(new_vector_array);
 		return (NULL);
+		// ADD ERROR MANAGEMENT
 	}
 	new_map->coord = new_vector_array;
 	y = -1;
@@ -165,12 +128,33 @@ void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
 	vec = &new_map->coord[y][x];
 	allocate_four_vector(vec, x, y, fdf->map.coord[y][x]);
 	adjust_coordinates_for_step(vec, fdf->step);
-	center_vector_xy(&fdf->map, vec, fdf->step);
-	isometric_transform(vec);
-	test_print_four_vector(vec, "cur");
 }
 
-t_transformed_map	*transform_map(t_fdf *fdf)
+void	rotate_and_project(t_transformed_map *map,
+						t_four_vector *vec, int *rotation_count)
+{
+	int	local_rotation_count;
+
+	if (*rotation_count == 3)
+		rotate_along_z(vec, -90);
+	else if (*rotation_count)
+	{
+		local_rotation_count = *rotation_count;
+		while (local_rotation_count--)
+			rotate_along_z(vec, 90);
+	}
+	isometric_transform(vec);
+	if (vec->x < map->min_x)
+		map->min_x = vec->x;
+	if (vec->x > map->max_x)
+		map->max_x = vec->x;
+	if (vec->y < map->min_y)
+		map->min_y = vec->y;
+	if (vec->y > map->max_y)
+		map->max_y = vec->y;
+}
+
+t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count)
 {
 	int					x;
 	int					y;
@@ -185,6 +169,8 @@ t_transformed_map	*transform_map(t_fdf *fdf)
 		while (x <= fdf->map.max_x)
 		{
 			add_vector_to_map(fdf, x, y, transformed_map);
+			rotate_and_project(transformed_map, &transformed_map->coord[y][x],
+					  rotation_count);
 			if (x < fdf->map.max_x)
 				add_vector_to_map(fdf, x + 1, y, transformed_map);
 			if (y < fdf->map.max_y)
@@ -196,36 +182,34 @@ t_transformed_map	*transform_map(t_fdf *fdf)
 	return (transformed_map);
 }
 
-void	main_drawing_loop(t_fdf *fdf)
+void	draw_map(t_fdf *fdf, t_transformed_map *map, int *rotation_count)
 {
 	int					x;
 	int					y;
-	int					rotation_count;
-	t_transformed_map	*map;
-
-	rotation_count = 0;
 	y = 0;
-	map = transform_map(fdf);
 	while (y <= fdf->map.max_y)
 	{
 		x = 0;
 		while (x <= fdf->map.max_x)
 		{
 			if (x < fdf->map.max_x)
-				draw_connected_dots(fdf, rotation_count, map->coord[y][x], map->coord[y][x + 1]);
+				draw_connected_dots(fdf, *rotation_count, map->coord[y][x], map->coord[y][x + 1]);
 			if (y < fdf->map.max_y)
-				draw_connected_dots(fdf, rotation_count, map->coord[y][x], map->coord[y + 1][x]);
+				draw_connected_dots(fdf, *rotation_count, map->coord[y][x], map->coord[y + 1][x]);
 			x++;
 		}
 		y++;
 	}
-	//		//isometric_rotate_right(&vec, &next_vec_x, &next_vec_y);
-	//		isometric_projection(&vec, &next_vec_x, &next_vec_y);
 }
 
-void	test_draw_2d_map (t_fdf *fdf)
+void	main_drawing_loop(t_fdf *fdf)
 {
-	main_drawing_loop(fdf);
+	int					rotation_count;
+	t_transformed_map	*map;
+
+	rotation_count = 0;
+	map = transform_map(fdf, &rotation_count);
+	draw_map(fdf, map, &rotation_count);
 	put_aligned_image_to_window(fdf);
 }
 
@@ -251,13 +235,13 @@ void	create_map_image(t_fdf *fdf, const int step, int old_range[2])
 		fdf->img = NULL;
 		return ;
 	}
-	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
 }
 
 void	create_window(t_fdf *fdf, char *map_file)
 {
 	mlx_set_setting(MLX_STRETCH_IMAGE, 0);
 	fdf->window = mlx_init(2048, 1536, map_file, false);
+	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
 	if (!fdf->window)
 		clean_exit(fdf);
 }
@@ -311,7 +295,7 @@ int	main(int argc, char *argv[])
 	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
 	create_window(fdf, argv[1]);
 	create_map_image(fdf, step, old_range);
-	test_draw_2d_map(fdf);
+	main_drawing_loop(fdf);
 	mlx_loop(fdf->window);
 	clean_exit(fdf);
 }
