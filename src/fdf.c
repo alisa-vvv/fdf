@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/13 20:40:51 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/13 20:43:27 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ void	draw_segment(t_fdf *fdf, t_transformed_map *map,
 
 //	const int	width_offset = (int) fdf->map.max_x * 50 * 1.13;
 //	const int	height_offset = (int) fdf->map.max_y * 50 * 2.05;
-	int	width_offset;
-	int	height_offset;
-	t_dot		start_dot;
-	t_dot		end_dot;
+	int		width_offset;
+	int		height_offset;
+	t_dot	start_dot;
+	t_dot	end_dot;
 
 	width_offset = (fdf->img->width - map->max_x - map->min_x) / 2;
 	height_offset = (fdf->img->height - map->max_y - map->min_y) / 2;
