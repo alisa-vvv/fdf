@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 20:04:34 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/09 20:06:47 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/13 17:07:43 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,6 @@ t_map	parse_map(char *filename)
 	get_max_min_z(coord, max_min_z, map.max_x, map.max_y);
 	map.min_z = max_min_z[0];
 	map.max_z = max_min_z[1];
-	ft_printf("map.min_z: %d\n", map.min_z);
-	ft_printf("map.max_z: %d\n", map.max_z);
 	close(map_fd);
 	return (map);
 }

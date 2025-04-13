@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/09 17:28:44 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/13 18:17:16 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,15 @@ typedef	struct	s_map
 	int	max_z;
 	int	min_z;
 }	t_map;
+
+typedef struct	s_transformed_map
+{
+	t_four_vector	**coord;
+	float	min_x;
+	float	max_x;
+	float	min_y;
+	float	max_y;
+}	t_transformed_map;
 
 typedef struct	s_fdf
 {
