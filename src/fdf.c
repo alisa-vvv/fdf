@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/13 18:29:52 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/13 20:40:51 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,20 @@
 /*	The magic numbers for centering were arrived at through
  *	guesswork/approximation
 */
-void	draw_connected_dots(t_fdf *fdf, const int rotation_count,
-						 t_four_vector vec, t_four_vector next_vec)
+void	draw_segment(t_fdf *fdf, t_transformed_map *map,
+				  t_four_vector vec, t_four_vector next_vec)
 {
-	(void) rotation_count;
 	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
 
-	const int	width_offset = (int) fdf->map.max_x * 50 * 1.13;
-	const int	height_offset = (int) fdf->map.max_y * 50 * 2.05;
-	//const int	width_offset = 0;
-	//const int	height_offset = 0;
+//	const int	width_offset = (int) fdf->map.max_x * 50 * 1.13;
+//	const int	height_offset = (int) fdf->map.max_y * 50 * 2.05;
+	int	width_offset;
+	int	height_offset;
 	t_dot		start_dot;
 	t_dot		end_dot;
 
+	width_offset = (fdf->img->width - map->max_x - map->min_x) / 2;
+	height_offset = (fdf->img->height - map->max_y - map->min_y) / 2;
 	start_dot.x = vec.x + width_offset;
 	start_dot.y = vec.y + height_offset;
 	end_dot.x = next_vec.x + width_offset;
@@ -68,11 +69,11 @@ void	put_aligned_image_to_window(t_fdf *fdf)
 	mlx_image_to_window(fdf->window, fdf->img, width_offset, height_offset);
 }
 
-void	center_vector_xy(t_map *map, t_four_vector *vec, const int step)
-{
-	vec->x -= map->max_x / 2 * step;
-	vec->y -= map->max_y / 2 * step;
-}
+//void	center_vector_xy(t_map *map, t_four_vector *vec, const int step)
+//{
+//	vec->x -= map->max_x / 2 * step;
+//	vec->y -= map->max_y / 2 * step;
+//}
 
 t_four_vector		*allocate_vector_array(int size)
 {
@@ -119,6 +120,32 @@ t_transformed_map	*alloc_transofrmed_map(t_fdf *fdf)
 		}
 	}
 	return (new_map);
+}
+
+void	create_map_image(t_fdf *fdf, t_transformed_map *transformed_map)
+{
+	int	image_width;
+	int	image_height;
+	int	map_height;
+	int	map_width;
+
+	image_width = 2048;
+	image_height = 2048;
+	map_width = (int) (transformed_map->max_x - transformed_map->min_x);
+	map_width = abs(map_width);
+	map_height = (int) (transformed_map->max_y - transformed_map->min_y);
+	map_height = abs(map_height);
+	if (image_width < map_width + fdf->step * 4)
+		image_width = map_width + fdf->step * 4;
+	if (image_height < map_height + fdf->step * 4)
+		image_height = map_height + fdf->step * 4;
+	fdf->img = mlx_new_image(fdf->window, image_width, image_height);
+	if (!fdf->img)
+	{
+		fdf->img = NULL;
+		// ADD ERROR MANAGEMENT
+		return ;
+	}
 }
 
 void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
@@ -182,10 +209,12 @@ t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count)
 	return (transformed_map);
 }
 
-void	draw_map(t_fdf *fdf, t_transformed_map *map, int *rotation_count)
+void	draw_map(t_fdf *fdf, t_transformed_map *map)
 {
 	int					x;
 	int					y;
+
+	create_map_image(fdf, map);
 	y = 0;
 	while (y <= fdf->map.max_y)
 	{
@@ -193,9 +222,9 @@ void	draw_map(t_fdf *fdf, t_transformed_map *map, int *rotation_count)
 		while (x <= fdf->map.max_x)
 		{
 			if (x < fdf->map.max_x)
-				draw_connected_dots(fdf, *rotation_count, map->coord[y][x], map->coord[y][x + 1]);
+				draw_segment(fdf, map, map->coord[y][x], map->coord[y][x + 1]);
 			if (y < fdf->map.max_y)
-				draw_connected_dots(fdf, *rotation_count, map->coord[y][x], map->coord[y + 1][x]);
+				draw_segment(fdf, map, map->coord[y][x], map->coord[y + 1][x]);
 			x++;
 		}
 		y++;
@@ -209,32 +238,8 @@ void	main_drawing_loop(t_fdf *fdf)
 
 	rotation_count = 0;
 	map = transform_map(fdf, &rotation_count);
-	draw_map(fdf, map, &rotation_count);
+	draw_map(fdf, map);
 	put_aligned_image_to_window(fdf);
-}
-
-void	create_map_image(t_fdf *fdf, const int step, int old_range[2])
-{
-	const int	image_size_iterator = 512;
-	const int	range_len = (old_range[1] - old_range[0]);
-	int			image_size;
-	int			height_diff;
-	int			width_diff;
-
-	ft_printf("range_len: %d\n", range_len);
-	ft_printf("range_len / step: %d\n", range_len / step);
-	image_size = 2048;
-	while (image_size < range_len * 2 + step * 2)
-		image_size += image_size_iterator;
-	height_diff = (fdf->window->height - image_size);
-	width_diff = (fdf->window->width - image_size);
-	ft_printf("image_size: %d\n, height_diff: %d\n, width_diff: %d\n", image_size, height_diff, width_diff);
-	fdf->img = mlx_new_image(fdf->window, image_size, image_size);
-	if (!fdf->img)
-	{
-		fdf->img = NULL;
-		return ;
-	}
 }
 
 void	create_window(t_fdf *fdf, char *map_file)
@@ -246,41 +251,9 @@ void	create_window(t_fdf *fdf, char *map_file)
 		clean_exit(fdf);
 }
 
-int	get_new_max(t_map *map, int *max_point, int *min_point, const int step)
-{
-	int	maximum_distance;
-
-	if (*max_point < map->max_x * step)
-		*max_point = map->max_x * step;
-	if (*max_point < map->max_y * step)
-		*max_point = map->max_y * step;
-	if (*min_point > 0)
-		*min_point = 0;
-	maximum_distance = *max_point - *min_point + 1;
-	return (maximum_distance);
-}
-
-void	calculate_map_ranges(t_map *map, const int step,
-						  int *centered_range, int *old_range)
-{
-	int	min_point;
-	int	max_point;
-	int	new_max_distance;
-
-	min_point = map->min_z * step;
-	max_point = map->max_z * step;
-	new_max_distance = get_new_max(map, &max_point, &min_point, step);
-	old_range[0] = min_point;
-	old_range[1] = max_point;
-	centered_range[0] = -new_max_distance / 2;
-	centered_range[1] = new_max_distance / 2;
-}
-
 int	main(int argc, char *argv[])
 {
 	t_fdf		*fdf;
-	int			old_range[2];
-	int			centered_range[2];
 	const int	step = 50;
 
 	if (argc != 2)
@@ -291,10 +264,9 @@ int	main(int argc, char *argv[])
 		clean_exit(fdf);
 	fdf->map = parse_map(argv[1]);
 	fdf->step = step;
-	calculate_map_ranges(&fdf->map, step, centered_range, old_range);
 	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
 	create_window(fdf, argv[1]);
-	create_map_image(fdf, step, old_range);
+	//create_map_image(fdf, step, old_range);
 	main_drawing_loop(fdf);
 	mlx_loop(fdf->window);
 	clean_exit(fdf);
