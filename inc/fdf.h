@@ -38,13 +38,6 @@ typedef struct	s_four_vector
 	float	w;
 }	t_four_vector;
 
-typedef struct	s_edges
-{
-	t_four_vector	vec;
-	t_four_vector	*next;
-	t_four_vector	*prev;
-}	t_edges;
-
 typedef enum	e_direction
 {
 	up,
@@ -65,10 +58,9 @@ typedef	struct	s_map
 typedef struct	s_fdf
 {
 	t_map	map;
+	int		step;
 	mlx_t	*window;
 	mlx_image_t	*img;
-	int		x_zero;
-	int		y_zero;
 }	t_fdf;
 
 void	free_2d_arr(void **arr);

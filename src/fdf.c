@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/10 18:01:14 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/13 17:06:38 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,6 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-void	find_edges(t_fdf *fdf, const int rotation_count, t_four_vector *edges)
-{
-	int				i;
-	const int		max_x = fdf->map.max_x;
-	const int		max_y = fdf->map.max_y;
-
-	if (i < 0)
-	allocate_four_vector(&edges[i], 0, 0, fdf->map.coord[0][0]);
-	i++;
-	if (i == 4)
-		i = 0;
-	allocate_four_vector(&edges[i], max_x, 0, fdf->map.coord[max_x][0]);
-	i++;
-	if (i == 4)
-		i = 0;
-	allocate_four_vector(&edges[i], max_x, max_y, fdf->map.coord[max_x][max_y]);
-	i++;
-	if (i == 4)
-		i = 0;
-	allocate_four_vector(&edges[i], 0, max_y, fdf->map.coord[0][max_y]);
-	i++;
-	if (i == 4)
-		i = 0;
-}
 /*	The magic numbers for centering were arrived at through
  *	guesswork/approximation
 */
