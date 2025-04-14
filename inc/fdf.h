@@ -73,7 +73,7 @@ typedef struct	s_fdf
 }	t_fdf;
 
 /*	Main functions	*/
-void	clean_exit(t_fdf *fdf, int map_fd);
+void	clean_exit(t_fdf *fdf, int map_fd, t_transformed_map *transformed_map);
 t_map	parse_map(const int map_fd);
 
 /*	Vector/matrix rotations, transformations, projection	*/

@@ -16,7 +16,7 @@
 #include <errno.h>
 #include <string.h>
 
-void	clean_exit(t_fdf *fdf, int map_fd)
+void	clean_exit(t_fdf *fdf, int map_fd, t_transformed_map *transformed_map)
 {
 	int	exit_status;
 
@@ -27,6 +27,11 @@ void	clean_exit(t_fdf *fdf, int map_fd)
 	}
 	else
 		exit_status = errno;
+	if (transformed_map)
+	{
+		free_2d_arr((void **) transformed_map->coord);
+		free(transformed_map);
+	}
 	if (fdf)
 	{
 		mlx_terminate(fdf->window);

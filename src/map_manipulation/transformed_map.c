@@ -17,12 +17,8 @@ t_four_vector		*allocate_vector_array(int size)
 	t_four_vector	*new_array;
 
 	new_array = ft_calloc(size, sizeof(t_four_vector));
-	ft_printf("checking size x: %d\n", size);
 	if (!new_array)
-	{
-		ft_printf("something is wonky\n");
-		// ADD ERROR_MANAGEMENT!!
-	}
+		return (NULL);
 	return (new_array);
 }
 
@@ -32,29 +28,19 @@ t_transformed_map	*alloc_transofrmed_map(t_fdf *fdf)
 	t_four_vector		**new_vector_array;
 	int					y;
 
-	new_vector_array = ft_calloc(fdf->map.max_y + 1, sizeof(*new_vector_array));
-	if (!new_vector_array)
-	{
-		// ADD ERROR MANAGEMENT
-		return (NULL);
-	}
 	new_map = ft_calloc(1, sizeof(t_transformed_map));
 	if (!new_map)
-	{
-		free(new_vector_array);
-		return (NULL);
-		// ADD ERROR MANAGEMENT
-	}
+		clean_exit(fdf, -1, NULL);
+	new_vector_array = ft_calloc(fdf->map.max_y + 2, sizeof(*new_vector_array));
+	if (!new_vector_array)
+		clean_exit(fdf, -1, new_map);
 	new_map->coord = new_vector_array;
 	y = -1;
 	while (++y <= fdf->map.max_y)
 	{
-		new_vector_array[y] = allocate_vector_array(fdf->map.max_x + 1);
+		new_vector_array[y] = allocate_vector_array(fdf->map.max_x + 2);
 		if (!new_vector_array[y])
-		{
-			ft_printf("something is wonky\n");
-			// ADDD ERROR MANAGEMENT!
-		}
+			clean_exit(fdf, -1, new_map);
 	}
 	return (new_map);
 }
@@ -94,4 +80,3 @@ t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count)
 	}
 	return (transformed_map);
 }
-

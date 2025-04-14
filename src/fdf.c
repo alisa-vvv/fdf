@@ -35,7 +35,7 @@ void	create_window(t_fdf *fdf, char *map_file)
 	fdf->window = mlx_init(2048, 1536, map_file, false);
 	mlx_key_hook(fdf->window, test_fdf_key_hook, fdf);
 	if (!fdf->window)
-		clean_exit(fdf, -1);
+		clean_exit(fdf, -1, NULL);
 }
 
 int	main(int argc, char *argv[])
@@ -48,12 +48,12 @@ int	main(int argc, char *argv[])
 		return (1);
 	map_fd = open(argv[1], O_RDONLY);
 	if (map_fd < 0)
-		clean_exit(NULL, map_fd);
+		clean_exit(NULL, map_fd, NULL);
 	zoom = 50;
 	ft_printf("testrun: argc: %d, argv[1]: %s\n", argc, argv[1]);
 	fdf = (t_fdf *) malloc(sizeof (t_fdf));
 	if (!fdf)
-		clean_exit(NULL, map_fd);
+		clean_exit(NULL, map_fd, NULL);
 	fdf->map = parse_map(map_fd);
 	fdf->zoom = zoom;
 	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
@@ -61,5 +61,5 @@ int	main(int argc, char *argv[])
 	//create_map_image(fdf, zoom, old_range);
 	main_drawing_loop(fdf);
 	mlx_loop(fdf->window);
-	clean_exit(fdf, -1);
+	clean_exit(fdf, -1, NULL);
 }
