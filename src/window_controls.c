@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/26 14:30:24 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/27 16:29:15 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/14 17:22:10 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,25 @@
 #include <errno.h>
 #include <string.h>
 
-void	clean_exit(t_fdf *fdf)
+void	clean_exit(t_fdf *fdf, int map_fd)
 {
 	int	exit_status;
 
-	if (mlx_errno != 0)
+	if (errno != 0)
 	{
-		perror(mlx_strerror(mlx_errno));
-		exit_status = EXIT_FAILURE;
+		perror(strerror(errno));
+		exit_status = errno;
 	}
 	else
-		exit_status = EXIT_SUCCESS;
+		exit_status = errno;
 	if (fdf)
 	{
 		mlx_terminate(fdf->window);
 		free_2d_arr((void **) fdf->map.coord);
 		free(fdf);
 	}
+	if (map_fd > 0)
+		close(map_fd);
 	exit(exit_status);
 }
 

@@ -6,13 +6,14 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 20:04:34 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/13 17:07:43 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/14 16:49:11 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <stdio.h>
 #include <fcntl.h>
+#include <errno.h>
 
 void	get_max_min_z(int **coord, int *max_min_z,
 					const int max_x, const int max_y)
@@ -94,9 +95,8 @@ static int	**funny_recursive_map_read(int map_fd, int y, int *max_x, int *max_y)
 	return (coord);
 }
 
-t_map	parse_map(char *filename)
+t_map	parse_map(const int map_fd)
 {
-	const int	map_fd = open(filename, O_RDONLY);
 	int			**coord;
 	t_map		map;
 	int			max_min_z[2];

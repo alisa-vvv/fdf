@@ -6,7 +6,7 @@
 #    By: avaliull <avaliull@student.codam.nl>        +#+                       #
 #                                                   +#+                        #
 #    Created: 2025/03/07 18:02:14 by avaliull     #+#    #+#                   #
-#    Updated: 2025/04/05 13:59:55 by avaliull     ########   odam.nl           #
+#    Updated: 2025/04/14 16:39:26 by avaliull     ########   odam.nl           #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,16 +19,22 @@ CFILES	=	fdf.c\
 			fdf_utils.c\
 			window_controls.c\
 			line_drawing.c\
+			coordinate_adjustments.c\
 			rotations.c\
+			image_creation.c\
 			vector_matrix_math.c\
+			transformed_map.c\
 			test_funcs.c
+
 OFILES	= $(addprefix $(OBJDIR)/,$(CFILES:.c=.o))
 
 VPATH	= $(INCLUDE) $(SRCDIRS)
 OBJDIR = obj
 SRCDIR = src
 LIBDIR = lib
-SRCDIRS = $(SRCDIR)
+INCDIR = inc
+SRCDIRS = $(addprefix $(SRCDIR)/, image_creation\
+		  coordinate_manipulation map_manipulation) $(SRCDIR)
 $(LIBDIR):
 	mkdir $@
 $(OBJDIR):
@@ -37,12 +43,12 @@ MLX	= $(LIBDIR)/libmlx42.a -ldl -lglfw -pthread -lm
 MLXDIR = $(LIBDIR)/mlx42
 LIBFT_PRINTF	= $(LIBDIR)/libft_printf/libftprintf.a
 LIBFT_PRINTF_DIR = $(LIBDIR)/libft_printf
-INCLUDE = inc $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
+INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
 
 RM	= rm -rf
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/mars.fdf
+INPUT	= test_maps/fakefile.fdf
 
 $(OBJDIR)/%.o: %.c $(INCLUDEFILES) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
