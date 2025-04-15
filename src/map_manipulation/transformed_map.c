@@ -22,7 +22,7 @@ t_four_vector		*allocate_vector_array(int size)
 	return (new_array);
 }
 
-t_transformed_map	*alloc_transofrmed_map(t_fdf *fdf)
+t_transformed_map	*alloc_transofrmed_map(t_fdf *fdf, t_fdf_exit_data *exit_data)
 {
 	t_transformed_map	*new_map;
 	t_four_vector		**new_vector_array;
@@ -30,17 +30,17 @@ t_transformed_map	*alloc_transofrmed_map(t_fdf *fdf)
 
 	new_map = ft_calloc(1, sizeof(t_transformed_map));
 	if (!new_map)
-		clean_exit(fdf, -1, NULL);
+		error_exit(exit_data, MALLOC_ERR, false);
 	new_vector_array = ft_calloc(fdf->map.max_y + 2, sizeof(*new_vector_array));
 	if (!new_vector_array)
-		clean_exit(fdf, -1, new_map);
+		error_exit(exit_data, MALLOC_ERR, false);
 	new_map->coord = new_vector_array;
 	y = -1;
 	while (++y <= fdf->map.max_y)
 	{
 		new_vector_array[y] = allocate_vector_array(fdf->map.max_x + 2);
 		if (!new_vector_array[y])
-			clean_exit(fdf, -1, new_map);
+			error_exit(exit_data, MALLOC_ERR, false);
 	}
 	return (new_map);
 }
@@ -53,14 +53,14 @@ void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
 	allocate_four_vector(vec, x, y, fdf->map.coord[y][x]);
 }
 
-t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count)
+t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count, t_fdf_exit_data *exit_data)
 {
 	int					x;
 	int					y;
 	t_transformed_map	*transformed_map;
 
 	
-	transformed_map = alloc_transofrmed_map(fdf);
+	transformed_map = alloc_transofrmed_map(fdf, exit_data);
 	y = 0;
 	while (y <= fdf->map.max_y)
 	{

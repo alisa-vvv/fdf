@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/27 16:33:58 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/13 18:09:55 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/15 18:56:01 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,5 @@ void	test_print_four_vector(t_four_vector *vector, char *vec_name)
 void	test_fdf_key_hook(mlx_key_data_t keydata, void *param)
 {
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-		clean_exit(param, -1, NULL);
+		clean_exit(param);
 }

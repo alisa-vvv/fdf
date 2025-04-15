@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/14 17:22:25 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/15 18:54:02 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,8 @@
 /*	Error messages	*/
 # define MALLOC_ERR "Error! malloc()"
 # define DUP2_ERR "Error! dup2()"
-# define FORK_ERR "Error! fork()"
-# define PIPE_ERR "Error! pipe()"
 # define FD_ERR "Error! Invalid file descriptor"
-# define CLOSE_ERR "Error! close()"
+# define MLX42_ERR "Error! MLX42"
 
 typedef struct	s_dot
 {
@@ -72,8 +70,17 @@ typedef struct	s_fdf
 	mlx_image_t	*img;
 }	t_fdf;
 
+typedef struct	s_fdf_exit_data
+{
+	t_fdf				*fdf;
+	t_transformed_map	*transformed_map;
+	int					map_fd;
+	int					last_err;
+}	t_fdf_exit_data;
+
 /*	Main functions	*/
-void	clean_exit(t_fdf *fdf, int map_fd, t_transformed_map *transformed_map);
+mlx_closefunc	clean_exit(t_fdf_exit_data *exit_data);
+void	error_exit(t_fdf_exit_data *exit_data, char	*err_msg, int is_mlx);
 t_map	parse_map(const int map_fd);
 
 /*	Vector/matrix rotations, transformations, projection	*/
@@ -88,7 +95,7 @@ void	vector_by_scalar(t_four_vector *vector, const float scalar);
 void	allocate_four_vector(t_four_vector *vector, int x, int y, int z);
 
 /*	Map transformation	*/
-t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count);
+t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count, t_fdf_exit_data *exit_data);
 
 /*	Line drawing	*/
 void	draw_line(t_fdf *fdf, t_dot start, t_dot end, int color);
