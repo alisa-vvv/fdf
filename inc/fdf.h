@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/15 18:54:02 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/15 19:38:11 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "ft_printf.h"
 
 /*	Error messages	*/
+# define PARSE_ERR "Error! Parsing fail"
 # define MALLOC_ERR "Error! malloc()"
 # define DUP2_ERR "Error! dup2()"
 # define FD_ERR "Error! Invalid file descriptor"

@@ -13,7 +13,6 @@
 #include "fdf.h"
 #include <stdio.h>
 #include <fcntl.h>
-#include <errno.h>
 
 void	get_max_min_z(int **coord, int *max_min_z,
 					const int max_x, const int max_y)
@@ -41,10 +40,10 @@ void	get_max_min_z(int **coord, int *max_min_z,
 	max_min_z[1] = max_z;
 }
 
-static int	*funny_recursive_allocate_x(int *coord, char **values, int x, int *max_x)
+static int	*allocate_x(int *coord, char **values, int x, int *max_x)
 {
 	if (values[x])
-		coord = funny_recursive_allocate_x(coord, values, x + 1, max_x);
+		coord = allocate_x(coord, values, x + 1, max_x);
 	else
 	{
 		coord = (int *) malloc(sizeof(int) * x);
@@ -56,6 +55,15 @@ static int	*funny_recursive_allocate_x(int *coord, char **values, int x, int *ma
 	coord[x] = ft_atoi(values[x]);
 	return (coord);
 }
+
+// here, should add a variablke called char **color_map
+// then using ft_split we can see if there's a color variable in the cell
+// then save it to color map
+// color map can then be either merged with the regular map or exist on it's won
+// it's the same size and has the same indexes as the regular map so I can iterate through it whenever I iterate through the map
+// I don't remember if any of the functions I have can convert from hex string to int, but it shouldn't be hard to make.
+// then those values can be added to vectors and used for color grading the image
+// profit
 
 static int	get_x_z(int **coord, char *line)
 {
@@ -70,19 +78,19 @@ static int	get_x_z(int **coord, char *line)
 		coord = NULL;
 	}
 	max_x = 0;
-	*coord = funny_recursive_allocate_x(*coord, values, 0, &max_x);
+	*coord = allocate_x(*coord, values, 0, &max_x);
 	free_2d_arr((void **) values);
 	return (max_x);
 }
 
-static int	**funny_recursive_map_read(int map_fd, int y, int *max_x, int *max_y)
+static int	**read_map(int map_fd, int y, int *max_x, int *max_y)
 {
 	char	*next_line;
 	int		**coord;
 
 	next_line = get_next_line(map_fd);
 	if (next_line != NULL)
-		coord = funny_recursive_map_read(map_fd, y + 1, max_x, max_y);
+		coord = read_map(map_fd, y + 1, max_x, max_y);
 	else
 	{
 		coord = (int **) malloc((y + 1) * sizeof(int *));
@@ -106,7 +114,7 @@ t_map	parse_map(const int map_fd)
 	map.max_z = 0;
 	map.min_z = 0;
 	// this is how bloatware is created
-	coord = funny_recursive_map_read(map_fd, 0, &(map.max_x), &(map.max_y));
+	coord = read_map(map_fd, 0, &(map.max_x), &(map.max_y));
 	map.coord = coord;
 	get_max_min_z(coord, max_min_z, map.max_x, map.max_y);
 	map.min_z = max_min_z[0];
