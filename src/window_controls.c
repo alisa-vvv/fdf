@@ -56,6 +56,11 @@ mlx_closefunc	clean_exit(t_exit_data *exit_data)
 		if (fdf->window)
 			mlx_terminate(fdf->window);
 		free_2d_arr((void **) fdf->map.coord);
+		if (fdf->map.colors)
+		{
+			free_2d_arr((void **) *fdf->map.colors);
+			free(fdf->map.colors);
+		}
 		free(fdf);
 	}
 	if (map_fd > 0)

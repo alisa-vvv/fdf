@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/14 17:23:53 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/16 20:20:37 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	main(int argc, char *argv[])
 	if (!fdf)
 		error_exit(&exit_data, MALLOC_ERR, false);
 	exit_data.fdf = fdf;
-	fdf->map = parse_map(exit_data.map_fd, &exit_data);
+	fdf->map = parse_map(&exit_data, argv[1]);
 	exit_data.map_fd = -1;
 	fdf->zoom = zoom;
 	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);

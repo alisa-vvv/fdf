@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/15 19:38:11 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/16 20:39:38 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ typedef struct	s_fdf_exit_data
 /*	Main functions	*/
 mlx_closefunc	clean_exit(t_exit_data *exit_data);
 void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx);
-t_map	parse_map(const int map_fd, t_exit_data *exit_data);
+t_map	parse_map(t_exit_data *exit_data, char *name);
 
 /*	Vector/matrix rotations, transformations, projection	*/
 void	rotate_along_x(t_four_vector *vector, float angle);
