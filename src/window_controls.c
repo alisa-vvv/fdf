@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <string.h>
 
-void	error_exit(t_fdf_exit_data *exit_data, char	*err_msg, int is_mlx)
+void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx)
 {
 	if (is_mlx == true)
 	{
@@ -35,7 +35,7 @@ void	error_exit(t_fdf_exit_data *exit_data, char	*err_msg, int is_mlx)
 	clean_exit(exit_data);
 }
 
-mlx_closefunc	clean_exit(t_fdf_exit_data *exit_data)
+mlx_closefunc	clean_exit(t_exit_data *exit_data)
 {
 
 	t_fdf				*fdf;

@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <math.h>
 
-void	main_drawing_loop(t_fdf *fdf, t_fdf_exit_data *exit_data)
+void	main_drawing_loop(t_fdf *fdf, t_exit_data *exit_data)
 {
 	int					rotation_count;
 	t_transformed_map	*map;
@@ -30,7 +30,7 @@ void	main_drawing_loop(t_fdf *fdf, t_fdf_exit_data *exit_data)
 	put_aligned_image_to_window(fdf);
 }
 
-void	create_window(t_fdf *fdf, char *map_file, t_fdf_exit_data *exit_data)
+void	create_window(t_fdf *fdf, char *map_file, t_exit_data *exit_data)
 {
 	mlx_set_setting(MLX_STRETCH_IMAGE, 0);
 	fdf->window = mlx_init(2048, 1536, map_file, false);
@@ -39,7 +39,7 @@ void	create_window(t_fdf *fdf, char *map_file, t_fdf_exit_data *exit_data)
 		error_exit(exit_data, MLX42_ERR, true);
 }
 
-void	set_fdf_exit_data(t_fdf_exit_data *exit_data)
+void	set_exit_data(t_exit_data *exit_data)
 {
 	exit_data->map_fd = -1;
 	exit_data->fdf = NULL;
@@ -49,13 +49,13 @@ void	set_fdf_exit_data(t_fdf_exit_data *exit_data)
 
 int	main(int argc, char *argv[])
 {
-	t_fdf_exit_data	exit_data;
+	t_exit_data	exit_data;
 	t_fdf			*fdf;
 	int				zoom;
 
 	if (argc != 2)
 		return (1);
-	set_fdf_exit_data(&exit_data);
+	set_exit_data(&exit_data);
 	exit_data.map_fd = open(argv[1], O_RDONLY);
 	if (exit_data.map_fd < 0)
 		error_exit(&exit_data, FD_ERR, false);
@@ -64,7 +64,7 @@ int	main(int argc, char *argv[])
 	if (!fdf)
 		error_exit(&exit_data, MALLOC_ERR, false);
 	exit_data.fdf = fdf;
-	fdf->map = parse_map(exit_data.map_fd);
+	fdf->map = parse_map(exit_data.map_fd, &exit_data);
 	exit_data.map_fd = -1;
 	fdf->zoom = zoom;
 	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);

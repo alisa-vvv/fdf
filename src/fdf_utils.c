@@ -11,7 +11,10 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include <math.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <limits.h>
 
 void	free_2d_arr(void **arr)
 {
@@ -56,35 +59,60 @@ int	ft_islower(int c)
 	return (false);
 }
 
-long	ft_base_convert_l(char *s, size_t str_len, int base)
+int	n_to_10_convert(unsigned char *str, int str_len, int base, int sign)
 {
-	size_t	i;
-	long	converted_num;
+	long	converted_value;
+	int		digit_base;
 
-	i = 0;
-	while (i < str_len)
-		
+	if (str_len > 8)
+	{
+		errno = ERANGE;
+		return (0);
+	}
+	digit_base = str_len;
+	converted_value = 0;
+	while (digit_base--)
+	{
+		if (ft_isdigit(str[digit_base]))
+			converted_value += str[digit_base] - '0' * pow(base, digit_base);
+		else if (ft_isupper(str[digit_base]))
+			converted_value += str[digit_base] - 55 * pow(base, digit_base);
+		else if (ft_islower(str[digit_base]))
+			converted_value += str[digit_base] - 87 * pow(base, digit_base);
+	}
+	if (sign < 0)
+		converted_value = -converted_value;
+	if (converted_value > INT_MAX || converted_value < INT_MIN)
+		errno = ERANGE;
+	return (converted_value);
 }
 
-long	ft_strtol(void *nptr, char **endptr, int base)
-{
-	ssize_t			i;
-	ssize_t			num_start;
-	int				sign;
-	unsigned char	*str;
-	
-	str = (unsigned char *) nptr;
-	sign = -1;
-	i = 0;
-	while (ft_isspace(str[i]))
-		i++;
-	if (str[i] == '-')
-		sign = -sign;
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	num_start = i;
-	while (ft_isdigit(str[i]) || ft_isalpha(str[i]))
-		i++;
-	if (endptr)
-		*endptr = &nptr[i];
-}
+//long	ft_strtol(void *nptr, char **endptr, int base)
+//{
+//	unsigned char	*str;
+//	ssize_t			i;
+//	ssize_t			num_start;
+//	long long		converted_value;
+//	int				sign;
+//	
+//	str = (unsigned char *) nptr;
+//	sign = -1;
+//	i = 0;
+//	while (ft_isspace(str[i]))
+//		i++;
+//	if (str[i] == '-' || str[i] == '+')
+//	{
+//		if (str[i] == '-')
+//			sign = -sign;
+//		i++;
+//	}
+//	if (str[i] == '0' && (str[i + 1] == 'x' || str[i + 1] == 'X'))
+//		i += 2;
+//	num_start = i;
+//	while (ft_isdigit(str[i]) || ft_isalpha(str[i]))
+//		i++;
+//	converted_value = n_to_ten_convert(&str[num_start], i - num_start);
+//	if (endptr)
+//		*endptr = &nptr[i];
+//	return ((long) converted_value);
+//}

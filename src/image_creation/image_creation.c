@@ -19,10 +19,6 @@ void	put_aligned_image_to_window(t_fdf *fdf)
 	int	height_offset;
 	width_offset = (int) (fdf->window->width - fdf->img->width) / 2;
 	height_offset = (int) (fdf->window->height - fdf->img->height) / 2;
-	ft_printf("windowheight: %d\n", fdf->window->height);
-	ft_printf("image height: %d\n", fdf->img->height);
-	ft_printf("width_offset: %d\n", width_offset);
-	ft_printf("height_offset: %d\n", height_offset);
 	mlx_image_to_window(fdf->window, fdf->img, width_offset, height_offset);
 }
 

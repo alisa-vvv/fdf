@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 20:04:34 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/14 16:49:11 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/04/16 19:44:08 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	*allocate_x(int *coord, char **values, int x, int *max_x)
 		coord = allocate_x(coord, values, x + 1, max_x);
 	else
 	{
-		coord = (int *) malloc(sizeof(int) * x);
+		coord = (int *) ft_calloc(x, sizeof(int));
 		if (!coord)
 			return (NULL);
 		*max_x = x - 1;
@@ -73,9 +73,8 @@ static int	get_x_z(int **coord, char *line)
 	values = ft_split(line, ' ');
 	if (!values)
 	{
-		perror(MALLOC_ERR);
-		// ADD ERROR MANAGEMENT
 		coord = NULL;
+		return (-1);
 	}
 	max_x = 0;
 	*coord = allocate_x(*coord, values, 0, &max_x);
@@ -83,29 +82,27 @@ static int	get_x_z(int **coord, char *line)
 	return (max_x);
 }
 
-static int	**read_map(int map_fd, int y, int *max_x, int *max_y)
+static void	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 {
 	char	*next_line;
-	int		**coord;
 
 	next_line = get_next_line(map_fd);
 	if (next_line != NULL)
-		coord = read_map(map_fd, y + 1, max_x, max_y);
+		read_map(map, map_fd, y + 1, exit_data);
 	else
 	{
-		coord = (int **) malloc((y + 1) * sizeof(int *));
-		coord[y] = NULL;
-		*max_y = y - 1;
-		return (coord);
+		map->coord = (int **) ft_calloc((y + 1), sizeof(int *));
+		map->max_y = y - 1;
+		return ;
 	}
-	*max_x = get_x_z(&coord[y], next_line);
+	map->max_x = get_x_z(&map->coord[y], next_line);
+	if (map->coord == NULL)
+		error_exit(exit_data, MALLOC_ERR, false);
 	free(next_line);
-	return (coord);
 }
 
-t_map	parse_map(const int map_fd)
+t_map	parse_map(const int map_fd, t_exit_data *exit_data)
 {
-	int			**coord;
 	t_map		map;
 	int			max_min_z[2];
 
@@ -114,9 +111,8 @@ t_map	parse_map(const int map_fd)
 	map.max_z = 0;
 	map.min_z = 0;
 	// this is how bloatware is created
-	coord = read_map(map_fd, 0, &(map.max_x), &(map.max_y));
-	map.coord = coord;
-	get_max_min_z(coord, max_min_z, map.max_x, map.max_y);
+	read_map(&map, map_fd, 0, exit_data);
+	get_max_min_z(map.coord, max_min_z, map.max_x, map.max_y);
 	map.min_z = max_min_z[0];
 	map.max_z = max_min_z[1];
 	close(map_fd);

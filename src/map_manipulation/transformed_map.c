@@ -22,7 +22,7 @@ t_four_vector		*allocate_vector_array(int size)
 	return (new_array);
 }
 
-t_transformed_map	*alloc_transofrmed_map(t_fdf *fdf, t_fdf_exit_data *exit_data)
+t_transformed_map	*alloc_transofrmed_map(t_fdf *fdf, t_exit_data *exit_data)
 {
 	t_transformed_map	*new_map;
 	t_four_vector		**new_vector_array;
@@ -53,7 +53,7 @@ void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
 	allocate_four_vector(vec, x, y, fdf->map.coord[y][x]);
 }
 
-t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count, t_fdf_exit_data *exit_data)
+t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count, t_exit_data *exit_data)
 {
 	int					x;
 	int					y;

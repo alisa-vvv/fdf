@@ -47,11 +47,12 @@ typedef enum	e_direction
 
 typedef	struct	s_map
 {
-	int	**coord;
-	int	max_x;
-	int	max_y;
-	int	max_z;
-	int	min_z;
+	int		**coord;
+	char	***colors;
+	int		max_x;
+	int		max_y;
+	int		max_z;
+	int		min_z;
 }	t_map;
 
 typedef struct	s_transformed_map
@@ -77,12 +78,12 @@ typedef struct	s_fdf_exit_data
 	t_transformed_map	*transformed_map;
 	int					map_fd;
 	int					last_err;
-}	t_fdf_exit_data;
+}	t_exit_data;
 
 /*	Main functions	*/
-mlx_closefunc	clean_exit(t_fdf_exit_data *exit_data);
-void	error_exit(t_fdf_exit_data *exit_data, char	*err_msg, int is_mlx);
-t_map	parse_map(const int map_fd);
+mlx_closefunc	clean_exit(t_exit_data *exit_data);
+void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx);
+t_map	parse_map(const int map_fd, t_exit_data *exit_data);
 
 /*	Vector/matrix rotations, transformations, projection	*/
 void	rotate_along_x(t_four_vector *vector, float angle);
@@ -96,7 +97,7 @@ void	vector_by_scalar(t_four_vector *vector, const float scalar);
 void	allocate_four_vector(t_four_vector *vector, int x, int y, int z);
 
 /*	Map transformation	*/
-t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count, t_fdf_exit_data *exit_data);
+t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count, t_exit_data *exit_data);
 
 /*	Line drawing	*/
 void	draw_line(t_fdf *fdf, t_dot start, t_dot end, int color);
