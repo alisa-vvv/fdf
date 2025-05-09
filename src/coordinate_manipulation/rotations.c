@@ -18,7 +18,7 @@
 *	{	0		cos(angle)		-sin(angle)	}	{y}
 *	{	0		sin(angle)		cos(angle)	}	{z}
 */
-void	rotate_along_x(t_four_vector *vector, float angle)
+void	rotate_along_x(t_fdf_vec *vector, float angle)
 {
 	const float	angle_rad = M_PI / 180 * angle;
 	const float	cos_angle = cos(angle_rad);
@@ -37,7 +37,7 @@ void	rotate_along_x(t_four_vector *vector, float angle)
 *	{	0				1		0			}	{y}
 *	{	-sin(angle)		0		cos(angle)	}	{z}
 */
-void	rotate_along_y(t_four_vector *vector, float angle)
+void	rotate_along_y(t_fdf_vec *vector, float angle)
 {
 	const float	angle_rad = M_PI / 180 * angle;
 	const float	cos_angle = cos(angle_rad);
@@ -56,7 +56,7 @@ void	rotate_along_y(t_four_vector *vector, float angle)
 *	{	sin(angle)		cos(angle)		0	}	{y}
 *	{	0				0				1	}	{z}
 */
-void	rotate_along_z(t_four_vector *vector, float angle)
+void	rotate_along_z(t_fdf_vec *vector, float angle)
 {
 	const float	angle_rad = M_PI / 180 * angle;
 	const float	cos_angle = cos(angle_rad);

@@ -32,13 +32,19 @@ typedef struct	s_dot
 	int	y;
 }	t_dot;
 
-typedef struct	s_four_vector
+typedef struct	s_colors
+{
+	char	*start;
+	char	*end;
+}	t_colors;
+
+typedef struct	s_fdf_vec
 {
 	float	x;
 	float	y;
 	float	z;
-	float	w;
-}	t_four_vector;
+	char	*color;
+}	t_fdf_vec;
 
 typedef enum	e_direction
 {
@@ -60,7 +66,7 @@ typedef	struct	s_map
 
 typedef struct	s_transformed_map
 {
-	t_four_vector	**coord;
+	t_fdf_vec	**coord;
 	float	min_x;
 	float	max_x;
 	float	min_y;
@@ -89,34 +95,35 @@ void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx);
 t_map	parse_map(t_exit_data *exit_data);
 
 /*	Vector/matrix rotations, transformations, projection	*/
-void	rotate_along_x(t_four_vector *vector, float angle);
-void	rotate_along_y(t_four_vector *vector, float angle);
-void	rotate_along_z(t_four_vector *vector, float angle);
+void	rotate_along_x(t_fdf_vec *vector, float angle);
+void	rotate_along_y(t_fdf_vec *vector, float angle);
+void	rotate_along_z(t_fdf_vec *vector, float angle);
 void	rotate_and_project(t_transformed_map *map, t_fdf *fdf,
-						t_four_vector *vec, int *rotation_count);
+						t_fdf_vec *vec, int *rotation_count);
 
 /*	Matrix and vector allocation/math	*/
-void	vector_by_scalar(t_four_vector *vector, const float scalar);
-void	allocate_four_vector(t_four_vector *vector, int x, int y, int z);
+void	vector_by_scalar(t_fdf_vec *vector, const float scalar);
+void	allocate_fdf_vector(t_fdf_vec *vector, int x, int y, int z);
 
 /*	Map transformation	*/
 t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count, t_exit_data *exit_data);
 
 /*	Line drawing	*/
-void	draw_line(t_fdf *fdf, t_dot start, t_dot end, int color);
+void	draw_line(t_fdf *fdf, t_dot start, t_dot end, t_colors colors);
 
 /*	Image creation	*/
 void	draw_map(t_fdf *fdf, t_transformed_map *map);
 void	put_aligned_image_to_window(t_fdf *fdf);
 
 /*	Utils	*/
+uint32_t	hexstr_to_uint32(char *str);
 void	free_2d_arr(void **arr);
 int	n_to_10_convert(unsigned char *str, int str_len, int base, int sign);
 
 /*	TEST (COMMENT THEM OUT)	*/
 void	test_print_map(int **coord, int max_x, int max_y);
 void	test_fdf_key_hook(mlx_key_data_t keydata, void *param);
-void	test_print_four_vector(t_four_vector *vector, char *vec_name);
+void	test_print_fdf_vec(t_fdf_vec *vector, char *vec_name);
 //void	test_move_square(t_fdf *fdf, e_action action);
 
 #endif

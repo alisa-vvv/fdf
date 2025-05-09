@@ -1,5 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
+/* ************************************************************************** */ /*                                                                            */
 /*                                                       ::::::::             */
 /*   transformed_map.c                                 :+:    :+:             */
 /*                                                    +:+                     */
@@ -12,11 +11,11 @@
 
 #include "fdf.h"
 
-t_four_vector		*allocate_vector_array(int size)
+t_fdf_vec		*allocate_vector_array(int size)
 {
-	t_four_vector	*new_array;
+	t_fdf_vec	*new_array;
 
-	new_array = ft_calloc(size, sizeof(t_four_vector));
+	new_array = ft_calloc(size, sizeof(t_fdf_vec));
 	if (!new_array)
 		return (NULL);
 	return (new_array);
@@ -25,7 +24,7 @@ t_four_vector		*allocate_vector_array(int size)
 t_transformed_map	*alloc_transofrmed_map(t_fdf *fdf, t_exit_data *exit_data)
 {
 	t_transformed_map	*new_map;
-	t_four_vector		**new_vector_array;
+	t_fdf_vec			**new_vector_array;
 	int					y;
 
 	new_map = ft_calloc(1, sizeof(t_transformed_map));
@@ -47,10 +46,11 @@ t_transformed_map	*alloc_transofrmed_map(t_fdf *fdf, t_exit_data *exit_data)
 
 void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
 {
-	t_four_vector	*vec;
+	t_fdf_vec	*vec;
 
 	vec = &new_map->coord[y][x];
-	allocate_four_vector(vec, x, y, fdf->map.coord[y][x]);
+	allocate_fdf_vector(vec, x, y, fdf->map.coord[y][x]);
+	vec->color = fdf->map.colors[y][x];
 }
 
 t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count, t_exit_data *exit_data)

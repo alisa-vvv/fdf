@@ -11,23 +11,11 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include "MLX42/MLX42_Int.h"
 #include <math.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
-
-void	free_2d_arr(void **arr)
-{
-	int	i;
-
-	if (arr)
-	{
-		i = -1;
-		while (arr[++i])
-			free(arr[i]);
-		free(arr);
-	}
-}
 
 int	ft_isspace(int c)
 {
@@ -57,6 +45,54 @@ int	ft_islower(int c)
 	if (u_c >= 'A' && u_c <= 'Z')
 		return (true);
 	return (false);
+}
+
+uint32_t	hexstr_to_uint32(char *str)
+{
+	ssize_t		len;
+	ssize_t		i;
+	uint32_t	result;
+	int			digit_base;
+
+	len = ft_strlen(str);
+	digit_base = len - 1;
+	i = -1;
+	result = 0;
+	while (++i < len)
+	{
+		//ft_printf("cur symbol: %c\n", str[i]);
+		//ft_printf("digit_base = %d\n", digit_base);
+		if (ft_isdigit(str[i]))
+		{
+			//ft_printf("is this the number? %d\n", str[i] - '0');
+			result += (str[i] - '0') * pow(16, digit_base);
+		}
+		else if (ft_isupper(str[i]))
+		{
+			//ft_printf("is this the number? %d\n", 10 + str[i] - 'A');
+			result += (10 + str[i] - 'A') * pow(16, digit_base);
+		}
+		else if (ft_islower(str[i]))
+		{
+			//ft_printf("is this the number? %d\n", 10 + str[i] - 'A');
+			result += (10 + str[i] - 'a') * pow(16, digit_base);
+		}
+		digit_base--;
+	}
+	return (result);
+}
+
+void	free_2d_arr(void **arr)
+{
+	int	i;
+
+	if (arr)
+	{
+		i = -1;
+		while (arr[++i])
+			free(arr[i]);
+		free(arr);
+	}
 }
 
 int	n_to_10_convert(unsigned char *str, int str_len, int base, int sign)

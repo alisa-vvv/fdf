@@ -33,7 +33,7 @@ void	test_print_map(int **coord, int max_x, int max_y)
 	}
 }
 
-void	test_print_four_vector(t_four_vector *vector, char *vec_name)
+void	test_print_fdf_vec(t_fdf_vec *vector, char *vec_name)
 {
 	printf("\n");
 	printf("vector: %s\n", vec_name);

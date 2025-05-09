@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-void	adjust_coordinates_for_zoom(t_four_vector *vector, const int zoom)
+void	adjust_coordinates_for_zoom(t_fdf_vec *vector, const int zoom)
 {
 	int	height_factor;
 
@@ -22,7 +22,7 @@ void	adjust_coordinates_for_zoom(t_four_vector *vector, const int zoom)
 	vector->z = vector->z * zoom / height_factor;
 }
 
-void	isometric_transform(t_four_vector *vec)
+void	isometric_transform(t_fdf_vec *vec)
 {
 	vec->z = -vec->z;
 	rotate_along_x(vec, -45);
@@ -31,7 +31,7 @@ void	isometric_transform(t_four_vector *vec)
 }
 
 void	rotate_and_project(t_transformed_map *map, t_fdf *fdf,
-						t_four_vector *vec, int *rotation_count)
+						t_fdf_vec *vec, int *rotation_count)
 {
 	int	local_rotation_count;
 

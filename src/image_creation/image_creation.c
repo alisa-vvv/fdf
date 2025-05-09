@@ -23,13 +23,14 @@ void	put_aligned_image_to_window(t_fdf *fdf)
 }
 
 void	draw_segment(t_fdf *fdf, t_transformed_map *map,
-				  t_four_vector vec, t_four_vector next_vec)
+				  t_fdf_vec vec, t_fdf_vec next_vec)
 {
 
-	int		width_offset;
-	int		height_offset;
-	t_dot	start_dot;
-	t_dot	end_dot;
+	int			width_offset;
+	int			height_offset;
+	t_dot		start_dot;
+	t_dot		end_dot;
+	t_colors	colors;
 
 	width_offset = (fdf->img->width - map->max_x - map->min_x) / 2;
 	height_offset = (fdf->img->height - map->max_y - map->min_y) / 2;
@@ -37,7 +38,9 @@ void	draw_segment(t_fdf *fdf, t_transformed_map *map,
 	start_dot.y = vec.y + height_offset;
 	end_dot.x = next_vec.x + width_offset;
 	end_dot.y = next_vec.y + height_offset;
-	draw_line(fdf, start_dot, end_dot, 0x008080FF);
+	colors.start = vec.color;
+	colors.end = next_vec.color;
+	draw_line(fdf, start_dot, end_dot, colors);
 }
 
 void	create_map_image(t_fdf *fdf, t_transformed_map *transformed_map)
