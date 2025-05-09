@@ -53,6 +53,7 @@ static void	vertical(t_fdf *fdf, t_dot start, t_dot end, int color)
 	}
 }
 
+//replace start and end with fdf_vecs so I can actually have color isndie
 static void	horizontal(t_fdf *fdf, t_dot start, t_dot end, int color)
 {
 	int	direction;
@@ -72,6 +73,7 @@ static void	horizontal(t_fdf *fdf, t_dot start, t_dot end, int color)
 	i = -1;
 	while (++i < distance_x)
 	{
+		//this should be replaced with a wrapper that calculates color of pixel
 		mlx_put_pixel(fdf->img, start.x + i, start.y, color);
 		if (decision_parameter >= 0)
 		{

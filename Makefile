@@ -48,7 +48,7 @@ INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
 RM	= rm -rf
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/elem-col.fdf
+INPUT	= test_maps/pyramide.fdf
 
 $(OBJDIR)/%.o: %.c $(INCLUDEFILES) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))

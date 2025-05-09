@@ -64,7 +64,7 @@ int	main(int argc, char *argv[])
 	if (!fdf)
 		error_exit(&exit_data, MALLOC_ERR, false);
 	exit_data.fdf = fdf;
-	fdf->map = parse_map(&exit_data, argv[1]);
+	fdf->map = parse_map(&exit_data);
 	exit_data.map_fd = -1;
 	fdf->zoom = zoom;
 	test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);

@@ -23,6 +23,9 @@
 # define FD_ERR "Error! Invalid file descriptor"
 # define MLX42_ERR "Error! MLX42"
 
+/*	Default values	*/
+# define DEFAULT_COLOR "0x008080FF"
+
 typedef struct	s_dot
 {
 	int	x;
@@ -83,7 +86,7 @@ typedef struct	s_fdf_exit_data
 /*	Main functions	*/
 mlx_closefunc	clean_exit(t_exit_data *exit_data);
 void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx);
-t_map	parse_map(t_exit_data *exit_data, char *name);
+t_map	parse_map(t_exit_data *exit_data);
 
 /*	Vector/matrix rotations, transformations, projection	*/
 void	rotate_along_x(t_four_vector *vector, float angle);
@@ -108,6 +111,7 @@ void	put_aligned_image_to_window(t_fdf *fdf);
 
 /*	Utils	*/
 void	free_2d_arr(void **arr);
+int	n_to_10_convert(unsigned char *str, int str_len, int base, int sign);
 
 /*	TEST (COMMENT THEM OUT)	*/
 void	test_print_map(int **coord, int max_x, int max_y);

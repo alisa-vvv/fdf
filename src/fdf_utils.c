@@ -63,6 +63,7 @@ int	n_to_10_convert(unsigned char *str, int str_len, int base, int sign)
 {
 	long	converted_value;
 	int		digit_base;
+	int		i;
 
 	if (str_len > 8)
 	{
@@ -71,14 +72,16 @@ int	n_to_10_convert(unsigned char *str, int str_len, int base, int sign)
 	}
 	digit_base = str_len;
 	converted_value = 0;
-	while (digit_base--)
+	i = 0;
+	while (digit_base-- >= 0)
 	{
 		if (ft_isdigit(str[digit_base]))
-			converted_value += str[digit_base] - '0' * pow(base, digit_base);
+			converted_value += (str[i] - '0') * pow(base, digit_base);
 		else if (ft_isupper(str[digit_base]))
-			converted_value += str[digit_base] - 55 * pow(base, digit_base);
+			converted_value += (10 + str[i] - 'A') * pow(base, digit_base);
 		else if (ft_islower(str[digit_base]))
-			converted_value += str[digit_base] - 87 * pow(base, digit_base);
+			converted_value += (10 + str[i] - 'a') * pow(base, digit_base);
+		i++;
 	}
 	if (sign < 0)
 		converted_value = -converted_value;

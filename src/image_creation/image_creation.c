@@ -79,7 +79,9 @@ void	draw_map(t_fdf *fdf, t_transformed_map *map)
 		while (x <= fdf->map.max_x)
 		{
 			if (x < fdf->map.max_x)
+			{
 				draw_segment(fdf, map, map->coord[y][x], map->coord[y][x + 1]);
+			}
 			if (y < fdf->map.max_y)
 				draw_segment(fdf, map, map->coord[y][x], map->coord[y + 1][x]);
 			x++;
