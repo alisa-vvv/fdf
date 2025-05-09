@@ -35,6 +35,16 @@ static void	put_rgb_pixel(t_fdf *fdf, int x_pos, int y_pos, uint32_t color)
 	mlx_put_pixel(fdf->img, x_pos, y_pos, color);
 }
 
+// 1. convert each channel value to int separately (r, g, b, a)
+// 2.1 end_r - start_r = diff_r
+// 2.2-4 repeat for each of the channels
+// 3.1 diff_r / distance = increment
+// 3.2-4 repeat for each of the channels
+// 4. save this in a struct (fucking great, love my structs (no)
+// 5. for each pixel, peform:
+// 	1) channel_value = start.channel + increment * i
+// 	2) get_rgba on all channels
+// 6. the result is my color
 static uint32_t	get_next_color(int distance, int i, t_colors colors)
 {
 	uint32_t	next_color;
