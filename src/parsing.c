@@ -153,15 +153,15 @@ t_map	parse_map(t_exit_data *exit_data)
 	read_map(&map, exit_data->map_fd, 0, exit_data);
 	get_max_min_z(map.coord, max_min_z, map.max_x, map.max_y);
 	ft_printf("color map\n");
-	int	x = -1;
-	int	y = -1;
-	while (++y <= map.max_y)
-	{
-		ft_printf("%d: ", y);
-		while (++x <= map.max_x)
-			ft_printf("%d:%s, ", x, map.colors[y][x]);
-		ft_printf("\n");
-	}
+	//int	y = -1;
+	//while (++y <= map.max_y)
+	//{
+	//	ft_printf("%d: ", y);
+	//	int	x = -1;
+	//	while (++x <= map.max_x)
+	//		ft_printf("%d:%s, ", x, map.colors[y][x]);
+	//	ft_printf("\n");
+	//}
 	map.min_z = max_min_z[0];
 	map.max_z = max_min_z[1];
 	close(exit_data->map_fd);

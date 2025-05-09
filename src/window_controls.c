@@ -35,6 +35,16 @@ void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx)
 	clean_exit(exit_data);
 }
 
+void			free_color_map(char ***map, int max_y)
+{
+	int	y;
+
+	y = -1;
+	while (++y <= max_y)
+		free_2d_arr((void **) map[y]);
+	free(map);
+}
+
 mlx_closefunc	clean_exit(t_exit_data *exit_data)
 {
 
@@ -57,12 +67,18 @@ mlx_closefunc	clean_exit(t_exit_data *exit_data)
 			mlx_terminate(fdf->window);
 		free_2d_arr((void **) fdf->map.coord);
 		if (fdf->map.colors)
-		{
-			free_2d_arr((void **) *fdf->map.colors);
-			free(fdf->map.colors);
-		}
+			free_color_map(fdf->map.colors, fdf->map.max_y);
 		free(fdf);
 	}
+	//int	y = -1;
+	//while (++y <= fdf->map.max_y)
+	//{
+	//	ft_printf("%d: ", y);
+	//	int	x = -1;
+	//	while (++x <= fdf->map.max_x)
+	//		ft_printf("%d:%s, ", x, fdf->map.colors[y][x]);
+	//	ft_printf("\n");
+	//}
 	if (map_fd > 0)
 		close(map_fd);
 	exit(0);
