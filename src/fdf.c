@@ -59,7 +59,7 @@ int	main(int argc, char *argv[])
 	exit_data.map_fd = open(argv[1], O_RDONLY);
 	if (exit_data.map_fd < 0)
 		error_exit(&exit_data, FD_ERR, false);
-	zoom = 50;
+	zoom = 10;
 	fdf = (t_fdf *) malloc(sizeof (t_fdf));
 	if (!fdf)
 		error_exit(&exit_data, MALLOC_ERR, false);

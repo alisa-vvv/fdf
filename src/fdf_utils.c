@@ -47,11 +47,11 @@ int	ft_islower(int c)
 	return (false);
 }
 
-uint32_t	hexstr_to_uint32(char *str)
+int	hexstr_to_int(char *str)
 {
 	ssize_t		len;
 	ssize_t		i;
-	uint32_t	result;
+	int			result;
 	int			digit_base;
 
 	len = ft_strlen(str);

@@ -32,6 +32,18 @@ typedef struct	s_dot
 	int	y;
 }	t_dot;
 
+typedef struct	s_grading
+{
+	int	red;
+	int	green;
+	int	blue;
+	int	opacity;
+	int	red_increment;
+	int	green_increment;
+	int	blue_increment;
+	int	opacity_increment;
+}	t_grading;
+
 typedef struct	s_colors
 {
 	char	*start;
@@ -116,7 +128,7 @@ void	draw_map(t_fdf *fdf, t_transformed_map *map);
 void	put_aligned_image_to_window(t_fdf *fdf);
 
 /*	Utils	*/
-uint32_t	hexstr_to_uint32(char *str);
+int	hexstr_to_int(char *str);
 void	free_2d_arr(void **arr);
 int	n_to_10_convert(unsigned char *str, int str_len, int base, int sign);
 

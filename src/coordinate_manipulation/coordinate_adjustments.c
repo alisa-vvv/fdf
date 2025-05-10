@@ -16,7 +16,7 @@ void	adjust_coordinates_for_zoom(t_fdf_vec *vector, const int zoom)
 {
 	int	height_factor;
 
-	height_factor = 2;
+	height_factor = 8;
 	vector->x *= zoom;
 	vector->y *= zoom;
 	vector->z = vector->z * zoom / height_factor;
@@ -43,8 +43,8 @@ void	rotate_and_project(t_transformed_map *map, t_fdf *fdf,
 		while (local_rotation_count--)
 			rotate_along_z(vec, 90);
 	}
-	isometric_transform(vec);
 	adjust_coordinates_for_zoom(vec, fdf->zoom);
+	isometric_transform(vec);
 	if (vec->x < map->min_x)
 		map->min_x = vec->x;
 	if (vec->x > map->max_x)
