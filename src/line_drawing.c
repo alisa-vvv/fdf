@@ -31,10 +31,10 @@ static	uint32_t	get_color(t_pixel *start, t_pixel *end, int distance, int i)
 	int			blue;
 	int			opacity;
 
-	red = start->red + ((end->red - start->red) / distance * i);
-	green = start->green + ((end->green - start->green) / distance * i);
-	blue = start->blue + ((end->blue - start->blue) / distance * i);
-	opacity = start->opacity + ((end->opacity - start->opacity) / distance * i);
+	red = start->red + ((end->red - start->red) / distance) * i;
+	green = start->green + ((end->green - start->green) / distance) * i;
+	blue = start->blue + ((end->blue - start->blue) / distance) * i;
+	opacity = start->opacity + ((end->opacity - start->opacity)) / distance * i;
 	return (red << 24 | green << 16 | blue << 8 | opacity);
 }
 
@@ -69,7 +69,6 @@ static void	vertical(t_fdf *fdf, t_pixel start, t_pixel end)
 	}
 }
 
-//replace start and end with fdf_vecs so I can actually have color isndie
 static void	horizontal(t_fdf *fdf, t_pixel start, t_pixel end)
 {
 	int	direction;
@@ -89,7 +88,6 @@ static void	horizontal(t_fdf *fdf, t_pixel start, t_pixel end)
 	i = -1;
 	while (++i < distance_x)
 	{
-		//this should be replaced with a wrapper that calculates color of pixel
 		mlx_put_pixel(fdf->img, start.x + i, start.y, get_color(&start, &end, distance_x, i));
 		if (decision_parameter >= 0)
 		{
@@ -100,16 +98,6 @@ static void	horizontal(t_fdf *fdf, t_pixel start, t_pixel end)
 	}
 }
 
-// 1. convert each channel value to int separately (r, g, b, a)
-// 2.1 end_r - start_r = diff_r
-// 2.2-4 repeat for each of the channels
-// 3.1 diff_r / distance = increment
-// 3.2-4 repeat for each of the channels
-// 4. save this in a struct (fucking great, love my structs (no)
-// 5. for each pixel, peform:
-// 	1) channel_value = start.channel + increment * i
-// 	2) get_rgba on all channels
-// 6. the result is my color
 void	draw_line(t_fdf *fdf, t_pixel start, t_pixel end)
 {
 	// ADD COORDINATE ERROR CHECKING
