@@ -42,39 +42,32 @@ int	ft_islower(int c)
 	unsigned char	u_c;
 
 	u_c = (unsigned char) c;
-	if (u_c >= 'A' && u_c <= 'Z')
+	if (u_c >= 'a' && u_c <= 'z')
 		return (true);
 	return (false);
 }
 
-int	hexstr_to_int(char *str)
+int	hexstr_to_int(char *str, int len)
 {
-	ssize_t		len;
-	ssize_t		i;
-	int			result;
-	int			digit_base;
+	int		i;
+	int		result;
+	int		digit_base;
 
-	len = ft_strlen(str);
 	digit_base = len - 1;
 	i = -1;
 	result = 0;
 	while (++i < len)
 	{
-		//ft_printf("cur symbol: %c\n", str[i]);
-		//ft_printf("digit_base = %d\n", digit_base);
 		if (ft_isdigit(str[i]))
 		{
-			//ft_printf("is this the number? %d\n", str[i] - '0');
 			result += (str[i] - '0') * pow(16, digit_base);
 		}
 		else if (ft_isupper(str[i]))
 		{
-			//ft_printf("is this the number? %d\n", 10 + str[i] - 'A');
 			result += (10 + str[i] - 'A') * pow(16, digit_base);
 		}
 		else if (ft_islower(str[i]))
 		{
-			//ft_printf("is this the number? %d\n", 10 + str[i] - 'A');
 			result += (10 + str[i] - 'a') * pow(16, digit_base);
 		}
 		digit_base--;

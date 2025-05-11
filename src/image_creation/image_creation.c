@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/04/14 15:54:52 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/14 16:32:13 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/11 19:43:44 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,23 @@ void	put_aligned_image_to_window(t_fdf *fdf)
 	mlx_image_to_window(fdf->window, fdf->img, width_offset, height_offset);
 }
 
-void	get_rgba_channels(t_pixel *start_pixel, t_pixel *end_pixel,
-					   char *start_color_str, char *end_color_str)
+void	get_rgba_from_str(t_pixel *pixel, char *color_str)
 {
-	const int	start_color = hexstr_to_int(start_color_str + 2);
-	const int	end_color = hexstr_to_int(end_color_str + 2);
-	const int	start_color_len = ft_strlen(start_color_str + 2);
-	const int	end_color_len = ft_strlen(end_color_str + 2);
+	const int	code_len = ft_strlen(color_str + 2);
 
-	start_pixel->red = (start_color >> 24) & 0xFF;
-	start_pixel->green = (start_color >> 16) & 0xFF;
-	start_pixel->blue = (start_color >> 8) & 0xFF;
-	if (start_color_len == 8)
-		start_pixel->opacity = start_color & 0xFF;
+	pixel->red = hexstr_to_int(color_str + 2, 2);
+	if (code_len >= 4)
+		pixel->green = hexstr_to_int(color_str + 4, 2);
 	else
-		start_pixel->opacity = 0xFF;
-	end_pixel->red = (end_color >> 24) & 0xFF;
-	end_pixel->green = (end_color >> 16) & 0xFF;
-	end_pixel->blue = (end_color >> 8) & 0xFF;
-	if (end_color_len == 8)
-		end_pixel->opacity = end_color & 0xFF;
+		pixel->green = 0x00;
+	if (code_len >= 6)
+		pixel->blue = hexstr_to_int(color_str + 6, 2);
 	else
-		end_pixel->opacity = 0xFF;
+		pixel->blue = 0x00;
+	if (code_len >= 8)
+		pixel->opacity = hexstr_to_int(color_str + 8, 2);
+	else
+		pixel->opacity = 0xFF;
 }
 
 void	draw_segment(t_fdf *fdf, t_transformed_map *map,
@@ -54,7 +49,6 @@ void	draw_segment(t_fdf *fdf, t_transformed_map *map,
 	int			height_offset;
 	t_pixel		start_pixel;
 	t_pixel		end_pixel;
-	t_colors	colors;
 
 	width_offset = (fdf->img->width - map->max_x - map->min_x) / 2;
 	height_offset = (fdf->img->height - map->max_y - map->min_y) / 2;
@@ -62,9 +56,8 @@ void	draw_segment(t_fdf *fdf, t_transformed_map *map,
 	start_pixel.y = vec.y + height_offset;
 	end_pixel.x = next_vec.x + width_offset;
 	end_pixel.y = next_vec.y + height_offset;
-	colors.start = vec.color;
-	colors.end = next_vec.color;
-	get_rgba_channels(&start_pixel, &end_pixel, vec.color, next_vec.color);
+	get_rgba_from_str(&start_pixel, vec.color);
+	get_rgba_from_str(&end_pixel, next_vec.color);
 	draw_line(fdf, start_pixel, end_pixel);
 }
 

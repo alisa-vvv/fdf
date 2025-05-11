@@ -128,7 +128,7 @@ void	draw_map(t_fdf *fdf, t_transformed_map *map);
 void	put_aligned_image_to_window(t_fdf *fdf);
 
 /*	Utils	*/
-int	hexstr_to_int(char *str);
+int	hexstr_to_int(char *str, int len);
 void	free_2d_arr(void **arr);
 int	n_to_10_convert(unsigned char *str, int str_len, int base, int sign);
 

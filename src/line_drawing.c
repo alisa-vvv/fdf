@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/30 20:20:12 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/11 17:34:34 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/11 19:50:33 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ static void	swap_pixels(t_pixel *start, t_pixel *end)
 
 static	uint32_t	get_color(t_pixel *start, t_pixel *end, int distance, int i)
 {
-	int			red;
-	int			green;
-	int			blue;
-	int			opacity;
+	int	red;
+	int	green;
+	int	blue;
+	int	opacity;
 
 	red = start->red + ((end->red - start->red) / distance) * i;
 	green = start->green + ((end->green - start->green) / distance) * i;
