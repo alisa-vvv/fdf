@@ -26,23 +26,23 @@
 /*	Default values	*/
 # define DEFAULT_COLOR "0x008080FF"
 
-typedef struct	s_dot
+typedef struct	s_pixel
 {
 	int	x;
 	int	y;
-}	t_dot;
-
-typedef struct	s_grading
-{
 	int	red;
 	int	green;
 	int	blue;
 	int	opacity;
+}	t_pixel;
+
+typedef struct	s_gradient
+{
 	int	red_increment;
 	int	green_increment;
 	int	blue_increment;
 	int	opacity_increment;
-}	t_grading;
+}	t_gradient;
 
 typedef struct	s_colors
 {
@@ -121,7 +121,7 @@ void	allocate_fdf_vector(t_fdf_vec *vector, int x, int y, int z);
 t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count, t_exit_data *exit_data);
 
 /*	Line drawing	*/
-void	draw_line(t_fdf *fdf, t_dot start, t_dot end, t_colors colors);
+void	draw_line(t_fdf *fdf, t_pixel start, t_pixel end);
 
 /*	Image creation	*/
 void	draw_map(t_fdf *fdf, t_transformed_map *map);

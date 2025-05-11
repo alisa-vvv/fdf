@@ -22,25 +22,50 @@ void	put_aligned_image_to_window(t_fdf *fdf)
 	mlx_image_to_window(fdf->window, fdf->img, width_offset, height_offset);
 }
 
+void	get_rgba_channels(t_pixel *start_pixel, t_pixel *end_pixel,
+					   char *start_color_str, char *end_color_str)
+{
+	const int	start_color = hexstr_to_int(start_color_str + 2);
+	const int	end_color = hexstr_to_int(end_color_str + 2);
+	const int	start_color_len = ft_strlen(start_color_str + 2);
+	const int	end_color_len = ft_strlen(end_color_str + 2);
+
+	start_pixel->red = (start_color >> 24) & 0xFF;
+	start_pixel->green = (start_color >> 16) & 0xFF;
+	start_pixel->blue = (start_color >> 8) & 0xFF;
+	if (start_color_len == 8)
+		start_pixel->opacity = start_color & 0xFF;
+	else
+		start_pixel->opacity = 0xFF;
+	end_pixel->red = (end_color >> 24) & 0xFF;
+	end_pixel->green = (end_color >> 16) & 0xFF;
+	end_pixel->blue = (end_color >> 8) & 0xFF;
+	if (end_color_len == 8)
+		end_pixel->opacity = end_color & 0xFF;
+	else
+		end_pixel->opacity = 0xFF;
+}
+
 void	draw_segment(t_fdf *fdf, t_transformed_map *map,
 				  t_fdf_vec vec, t_fdf_vec next_vec)
 {
 
 	int			width_offset;
 	int			height_offset;
-	t_dot		start_dot;
-	t_dot		end_dot;
+	t_pixel		start_pixel;
+	t_pixel		end_pixel;
 	t_colors	colors;
 
 	width_offset = (fdf->img->width - map->max_x - map->min_x) / 2;
 	height_offset = (fdf->img->height - map->max_y - map->min_y) / 2;
-	start_dot.x = vec.x + width_offset;
-	start_dot.y = vec.y + height_offset;
-	end_dot.x = next_vec.x + width_offset;
-	end_dot.y = next_vec.y + height_offset;
+	start_pixel.x = vec.x + width_offset;
+	start_pixel.y = vec.y + height_offset;
+	end_pixel.x = next_vec.x + width_offset;
+	end_pixel.y = next_vec.y + height_offset;
 	colors.start = vec.color;
 	colors.end = next_vec.color;
-	draw_line(fdf, start_dot, end_dot, colors);
+	get_rgba_channels(&start_pixel, &end_pixel, vec.color, next_vec.color);
+	draw_line(fdf, start_pixel, end_pixel);
 }
 
 void	create_map_image(t_fdf *fdf, t_transformed_map *transformed_map)
