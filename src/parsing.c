@@ -84,7 +84,7 @@ void		read_colors(char **values, char **colors, int max_x)
 		}
 		if (color_check[1] == NULL)
 		{
-			colors[x] = ft_strdup(DEFAULT_COLOR);
+			colors[x] = ft_strdup(COLOR_TEAL);
 			if (!colors[x])
 			{
 				/// ADD ERROR MANAGEMTN
@@ -151,8 +151,18 @@ t_map	parse_map(t_exit_data *exit_data)
 	map.colors = NULL;
 	// this is how bloatware is created
 	read_map(&map, exit_data->map_fd, 0, exit_data);
+	//ft_printf("coord\n");
+	//int	y = -1;
+	//while (++y <= map.max_y)
+	//{
+	//	ft_printf("%d: ", y);
+	//	int	x = -1;
+	//	while (++x <= map.max_x)
+	//		ft_printf("%d:%d, ", x, map.coord[y][x]);
+	//	ft_printf("\n");
+	//}
 	get_max_min_z(map.coord, max_min_z, map.max_x, map.max_y);
-	ft_printf("color map\n");
+	//ft_printf("color map\n");
 	//int	y = -1;
 	//while (++y <= map.max_y)
 	//{

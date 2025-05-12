@@ -76,10 +76,10 @@ void	create_map_image(t_fdf *fdf, t_transformed_map *transformed_map)
 	map_width = abs(map_width);
 	map_height = (int) (transformed_map->max_y - transformed_map->min_y);
 	map_height = abs(map_height);
-	if (image_width < map_width + fdf->zoom * 4)
-		image_width = map_width + fdf->zoom * 4;
-	if (image_height < map_height + fdf->zoom * 4)
-		image_height = map_height + fdf->zoom * 4;
+	if (image_width < map_width + fdf->param.zoom * 4)
+		image_width = map_width + fdf->param.zoom * 4;
+	if (image_height < map_height + fdf->param.zoom * 4)
+		image_height = map_height + fdf->param.zoom * 4;
 	fdf->img = mlx_new_image(fdf->window, image_width, image_height);
 	if (!fdf->img)
 	{
@@ -102,9 +102,7 @@ void	draw_map(t_fdf *fdf, t_transformed_map *map)
 		while (x <= fdf->map.max_x)
 		{
 			if (x < fdf->map.max_x)
-			{
 				draw_segment(fdf, map, map->coord[y][x], map->coord[y][x + 1]);
-			}
 			if (y < fdf->map.max_y)
 				draw_segment(fdf, map, map->coord[y][x], map->coord[y + 1][x]);
 			x++;

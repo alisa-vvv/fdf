@@ -31,24 +31,10 @@ static	uint32_t	get_color(t_pixel *start, t_pixel *end, int distance, int i)
 	uint8_t	blue;
 	uint8_t	opacity;
 
-	//printf("start color: %d\n", start->color.rgba);
-	//printf("end color: %d\n", end->color.rgba);
-	//printf("end color r: %d\n", end->color.r);
-	//printf("start color r: %d\n", start->color.r);
-	//printf("end color g: %d\n", end->color.g);
-	//printf("start color g: %d\n", start->color.g);
-	//printf("end color b: %d\n", end->color.b);
-	//printf("start color b: %d\n", start->color.b);
-	//printf("end color a: %d\n", end->color.a);
-	//printf("start color a: %d\n", start->color.a);
 	red = start->color.r + ((end->color.r - start->color.r) / distance) * i;
 	green = start->color.g + ((end->color.g - start->color.g) / distance) * i;
 	blue = start->color.b + ((end->color.b - start->color.b) / distance) * i;
 	opacity = start->color.a + ((end->color.a - start->color.a) / distance) * i;
-	//ft_printf("red: %d\n", red);
-	//ft_printf("green: %d\n", green);
-	//ft_printf("blue: %d\n", blue);
-	//ft_printf("alpha: %d\n", opacity);
 	return ((red << 24) + (green << 16) + (blue << 8) + opacity);
 }
 

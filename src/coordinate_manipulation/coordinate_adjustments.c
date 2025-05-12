@@ -12,14 +12,11 @@
 
 #include "fdf.h"
 
-void	adjust_coordinates_for_zoom(t_fdf_vec *vector, const int zoom)
+void	zoom(t_fdf_vec *vector, const int zoom, const int height_mod)
 {
-	int	height_factor;
-
-	height_factor = 8;
 	vector->x *= zoom;
 	vector->y *= zoom;
-	vector->z = vector->z * zoom / height_factor;
+	vector->z = vector->z * zoom / height_mod;
 }
 
 void	isometric_transform(t_fdf_vec *vec)
@@ -43,7 +40,7 @@ void	rotate_and_project(t_transformed_map *map, t_fdf *fdf,
 		while (local_rotation_count--)
 			rotate_along_z(vec, 90);
 	}
-	adjust_coordinates_for_zoom(vec, fdf->zoom);
+	zoom(vec, fdf->param.zoom, fdf->param.height_mod);
 	isometric_transform(vec);
 	if (vec->x < map->min_x)
 		map->min_x = vec->x;
