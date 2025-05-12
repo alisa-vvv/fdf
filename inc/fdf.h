@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/16 20:39:38 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/12 15:45:26 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,23 @@
 /*	Default values	*/
 # define DEFAULT_COLOR "0x008080FF"
 
+typedef union	rgba_u
+{
+	uint32_t	rgba;
+	struct
+	{
+		uint8_t		a;
+		uint8_t		b;
+		uint8_t		g;
+		uint8_t		r;
+	} ;
+}	rgba_u;
+
 typedef struct	s_pixel
 {
-	int	x;
-	int	y;
-	int	red;
-	int	green;
-	int	blue;
-	int	opacity;
+	int		x;
+	int		y;
+	rgba_u	color;
 }	t_pixel;
 
 typedef struct	s_gradient
@@ -131,6 +140,7 @@ void	put_aligned_image_to_window(t_fdf *fdf);
 int	hexstr_to_int(char *str, int len);
 void	free_2d_arr(void **arr);
 int	n_to_10_convert(unsigned char *str, int str_len, int base, int sign);
+int	ft_isspace(int c);
 
 /*	TEST (COMMENT THEM OUT)	*/
 void	test_print_map(int **coord, int max_x, int max_y);

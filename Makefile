@@ -6,7 +6,7 @@
 #    By: avaliull <avaliull@student.codam.nl>        +#+                       #
 #                                                   +#+                        #
 #    Created: 2025/03/07 18:02:14 by avaliull     #+#    #+#                   #
-#    Updated: 2025/04/14 16:39:26 by avaliull     ########   odam.nl           #
+#    Updated: 2025/05/12 17:08:57 by avaliull     ########   odam.nl           #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
 RM	= rm -rf
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/elem-fract.fdf
+INPUT	= test_maps/t1.fdf
 
 $(OBJDIR)/%.o: %.c $(INCLUDEFILES) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))

@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/04/14 15:54:52 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/11 19:43:44 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/12 17:08:15 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,23 @@ void	put_aligned_image_to_window(t_fdf *fdf)
 
 void	get_rgba_from_str(t_pixel *pixel, char *color_str)
 {
-	const int	code_len = ft_strlen(color_str + 2);
+	int	i;
+	int	code_len;
 
-	pixel->red = hexstr_to_int(color_str + 2, 2);
-	if (code_len >= 4)
-		pixel->green = hexstr_to_int(color_str + 4, 2);
-	else
-		pixel->green = 0x00;
-	if (code_len >= 6)
-		pixel->blue = hexstr_to_int(color_str + 6, 2);
-	else
-		pixel->blue = 0x00;
-	if (code_len >= 8)
-		pixel->opacity = hexstr_to_int(color_str + 8, 2);
-	else
-		pixel->opacity = 0xFF;
+	i = -1;
+	while (color_str[++i])
+	{
+		if (ft_isspace(color_str[i]))
+			color_str[i] = '\0';
+	}
+	//ft_printf("color_str: %s\n", color_str + 2);
+	code_len = ft_strlen(color_str + 2);
+	pixel->color.rgba = 0;
+	pixel->color.rgba = hexstr_to_int(color_str + 2, code_len);
+	//ft_printf("unshifted_color: %d\n", pixel->color.rgba);
+	if (code_len < 7)
+		pixel->color.rgba = (pixel->color.rgba << 8) + 0xFF;
+	//ft_printf("shifted_color: %d\n", pixel->color.rgba);
 }
 
 void	draw_segment(t_fdf *fdf, t_transformed_map *map,

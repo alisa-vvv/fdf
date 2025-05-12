@@ -59,17 +59,11 @@ int	hexstr_to_int(char *str, int len)
 	while (++i < len)
 	{
 		if (ft_isdigit(str[i]))
-		{
 			result += (str[i] - '0') * pow(16, digit_base);
-		}
 		else if (ft_isupper(str[i]))
-		{
 			result += (10 + str[i] - 'A') * pow(16, digit_base);
-		}
 		else if (ft_islower(str[i]))
-		{
 			result += (10 + str[i] - 'a') * pow(16, digit_base);
-		}
 		digit_base--;
 	}
 	return (result);
