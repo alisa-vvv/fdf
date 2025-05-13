@@ -6,15 +6,15 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/13 14:49:37 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/13 15:09:02 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
-#include "MLX42/MLX42.h"
-#include "ft_printf.h"
+# include "MLX42/MLX42.h"
+# include "ft_printf.h"
 
 /*	Error messages	*/
 # define PARSE_ERR "Error! Parsing fail"
@@ -30,12 +30,12 @@
 # define COLOR_WHITE "0xFFFFFFFF"
 # define COLOR_BLUE "0x0000FFFF"
 # define COLOR_RED "0xFF0000FF"
-# define ZOOM_DEFAULT 50;
-# define MAX_ZOOM_DEFAULT 100;
-# define MAX_HEIGHT_DEFAULT 10;
-# define HEIGHT_DEFAULT 6;
+# define ZOOM_DEFAULT 50
+# define MAX_ZOOM_DEFAULT 100
+# define MAX_HEIGHT_DEFAULT 10
+# define HEIGHT_DEFAULT 6
 
-typedef union	rgba_u
+typedef union rgba_u
 {
 	uint32_t	rgba;
 	struct
@@ -133,15 +133,16 @@ typedef struct	s_fdf_exit_data
 
 /*	Main functions	*/
 mlx_closefunc	clean_exit(t_exit_data *exit_data);
-void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx);
-t_map	parse_map(t_exit_data *exit_data);
+void			error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx);
+t_map			parse_map(t_exit_data *exit_data);
 
 /*	Initialization	*/
-void	initial_draw(t_fdf *fdf, t_exit_data *exit_data);
-void	create_window(t_fdf *fdf, char *map_file, t_exit_data *exit_data);
-void	set_exit_data(t_exit_data *exit_data, char *fd_arg);
-t_fdf_param	set_parameters(void);
-t_fdf	*setup_fdf_data(t_exit_data *exit_data);
+void			initial_draw(t_fdf *fdf, t_exit_data *exit_data);
+void			create_window(t_fdf *fdf, char *map_file,
+					 t_exit_data *exit_data);
+void			set_exit_data(t_exit_data *exit_data, char *fd_arg);
+t_fdf_param		set_parameters(void);
+t_fdf			*setup_fdf_data(t_exit_data *exit_data);
 
 /*	Vector/matrix rotations, transformations, projection	*/
 void	rotate_along_x(t_fdf_vec *vector, float angle);
