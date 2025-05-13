@@ -84,7 +84,7 @@ void		read_colors(char **values, char **colors, int max_x)
 		}
 		if (color_check[1] == NULL)
 		{
-			colors[x] = ft_strdup(COLOR_TEAL);
+			colors[x] = ft_strdup(COLOR_WHITE);
 			if (!colors[x])
 			{
 				/// ADD ERROR MANAGEMTN

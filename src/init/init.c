@@ -16,6 +16,15 @@
 
 // move this to a different file probably
 // ,aybe not actually
+void	redraw(t_fdf *fdf, t_transformed_map *map)
+{
+	//mlx_delete_image(fdf->window, fdf->img);
+	transform_map(fdf, map);
+	ft_printf("are we segging chat\n");
+	draw_map(fdf, map);
+	put_aligned_image_to_window(fdf);
+}
+
 void	initial_draw(t_fdf *fdf, t_exit_data *exit_data)
 {
 	t_transformed_map	*map;
@@ -61,11 +70,11 @@ t_fdf_param	set_parameters(void)
 {
 	t_fdf_param	param;
 
-	param.zoom = ZOOM_DEFAULT;
+	param.zoom = 7;// ZOOM_DEFAULT;
 	param.zoom_max = MAX_ZOOM_DEFAULT;
 	param.height_mod = HEIGHT_DEFAULT;
 	param.height_mod_max = MAX_HEIGHT_DEFAULT;
-	param.map_color = default_color;
+	param.color_mode = from_map;
 	param.rotation_count = 0;
 	return (param);
 }
@@ -81,4 +90,3 @@ t_fdf	*setup_fdf_data(t_exit_data *exit_data)
 	fdf->param = set_parameters();
 	return (fdf);
 }
-

@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/27 16:33:58 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/15 18:56:01 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/13 17:41:20 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,14 @@ void	test_print_fdf_vec(t_fdf_vec *vector, char *vec_name)
 
 void	test_fdf_key_hook(mlx_key_data_t keydata, void *param)
 {
+	t_fdf * const	fdf = (t_fdf *) param;
+	if (keydata.key == MLX_KEY_C && keydata.action == MLX_PRESS)
+	{
+		fdf->param.color_mode++;
+		if (fdf->param.color_mode >= 4)
+			fdf->param.color_mode = 0;
+		redraw(fdf, ((t_exit_data *) param)->transformed_map);
+	}
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		clean_exit(param);
 }

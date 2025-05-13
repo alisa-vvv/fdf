@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include <math.h>
 
 void	put_aligned_image_to_window(t_fdf *fdf)
 {
@@ -33,14 +32,31 @@ void	get_rgba_from_str(t_pixel *pixel, char *color_str)
 		if (ft_isspace(color_str[i]))
 			color_str[i] = '\0';
 	}
-	//ft_printf("color_str: %s\n", color_str + 2);
 	code_len = ft_strlen(color_str + 2);
 	pixel->color.rgba = 0;
 	pixel->color.rgba = hexstr_to_int(color_str + 2, code_len);
-	//ft_printf("unshifted_color: %d\n", pixel->color.rgba);
 	if (code_len < 7)
 		pixel->color.rgba = (pixel->color.rgba << 8) + 0xFF;
-	//ft_printf("shifted_color: %d\n", pixel->color.rgba);
+}
+
+void	alt_color(t_pixel *start_pixel, t_pixel *end_pixel,
+				  e_map_color color_mode)
+{
+	if (color_mode == default_color)
+	{
+		get_rgba_from_str(start_pixel, COLOR_TEAL);
+		get_rgba_from_str(end_pixel, COLOR_TEAL);
+	}
+	else if (color_mode == no_color)
+	{
+		get_rgba_from_str(start_pixel, COLOR_WHITE);
+		get_rgba_from_str(end_pixel, COLOR_WHITE);
+	}
+	else if (color_mode == height)
+	{
+		ft_printf("placeholder\n");
+	}
+
 }
 
 void	draw_segment(t_fdf *fdf, t_transformed_map *map,
@@ -58,8 +74,13 @@ void	draw_segment(t_fdf *fdf, t_transformed_map *map,
 	start_pixel.y = vec.y + height_offset;
 	end_pixel.x = next_vec.x + width_offset;
 	end_pixel.y = next_vec.y + height_offset;
-	get_rgba_from_str(&start_pixel, vec.color);
-	get_rgba_from_str(&end_pixel, next_vec.color);
+	if (fdf->param.color_mode == from_map)
+	{
+		get_rgba_from_str(&start_pixel, vec.color);
+		get_rgba_from_str(&end_pixel, next_vec.color);
+	}
+	else
+		alt_color(&start_pixel, &end_pixel, fdf->param.color_mode);
 	draw_line(fdf, start_pixel, end_pixel);
 }
 
@@ -80,6 +101,9 @@ void	create_map_image(t_fdf *fdf, t_transformed_map *transformed_map)
 		image_width = map_width + fdf->param.zoom * 4;
 	if (image_height < map_height + fdf->param.zoom * 4)
 		image_height = map_height + fdf->param.zoom * 4;
+	if (fdf->img)
+		mlx_delete_image(fdf->window, fdf->img);
+	ft_printf("are we segging chat\n");
 	fdf->img = mlx_new_image(fdf->window, image_width, image_height);
 	if (!fdf->img)
 	{

@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/13 14:49:13 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/13 16:34:41 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,5 @@ int	main(int argc, char *argv[])
 	create_window(fdf, argv[1], &exit_data);
 	initial_draw(fdf, &exit_data);
 	mlx_loop(fdf->window);
-	mlx_close_hook(fdf->window, clean_exit(&exit_data), NULL);
+	error_exit(&exit_data, "Error! Unexpected exit", 0);
 }

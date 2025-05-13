@@ -112,7 +112,7 @@ typedef struct	s_fdf_param
 	int			height_mod;
 	int			height_mod_max;
 	int			rotation_count;
-	e_map_color	map_color;
+	e_map_color	color_mode;
 }	t_fdf_param;
 
 typedef struct	s_fdf
@@ -163,8 +163,11 @@ void	draw_line(t_fdf *fdf, t_pixel start, t_pixel end);
 
 /*	Image creation	*/
 void	draw_map(t_fdf *fdf, t_transformed_map *map);
+void	redraw(t_fdf *fdf, t_transformed_map *map);
 void	put_aligned_image_to_window(t_fdf *fdf);
 
+/*	Controls	*/
+void fdf_controls(mlx_key_data_t keydata, t_fdf *fdf, t_transformed_map *map);
 /*	Utils	*/
 int	hexstr_to_int(char *str, int len);
 void	free_2d_arr(void **arr);

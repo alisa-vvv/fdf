@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/26 14:30:24 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/15 18:45:25 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/13 17:18:52 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,17 @@ void			free_color_map(char ***map, int max_y)
 		free_2d_arr((void **) map[y]);
 	free(map);
 }
+
+//void fdf_controls(mlx_key_data_t keydata, t_fdf *fdf, t_transformed_map *map)
+//{
+//	if (keydata.key == MLX_KEY_C && keydata.action == MLX_PRESS)
+//	{
+//		fdf->param.color_mode++;
+//		if (fdf->param.color_mode >= 4)
+//			fdf->param.color_mode = 0;
+//		draw_map(fdf, map);
+//	}
+//}
 
 mlx_closefunc	clean_exit(t_exit_data *exit_data)
 {
