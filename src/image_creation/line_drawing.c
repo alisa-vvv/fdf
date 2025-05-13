@@ -12,8 +12,6 @@
 
 #include "fdf.h"
 #include "MLX42/MLX42.h"
-#include <math.h>
-#include <stdio.h>
 
 static void	swap_pixels(t_pixel *start, t_pixel *end)
 {

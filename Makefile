@@ -6,7 +6,7 @@
 #    By: avaliull <avaliull@student.codam.nl>        +#+                       #
 #                                                   +#+                        #
 #    Created: 2025/03/07 18:02:14 by avaliull     #+#    #+#                   #
-#    Updated: 2025/05/12 20:33:40 by avaliull     ########   odam.nl           #
+#    Updated: 2025/05/13 15:01:31 by avaliull     ########   odam.nl           #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ MAKEFLAGS =
 
 NAME	=	fdf
 CFILES	=	fdf.c\
+			init.c\
 			parsing.c\
 			fdf_utils.c\
 			window_controls.c\
@@ -33,7 +34,7 @@ OBJDIR = obj
 SRCDIR = src
 LIBDIR = lib
 INCDIR = inc
-SRCDIRS = $(addprefix $(SRCDIR)/, image_creation\
+SRCDIRS = $(addprefix $(SRCDIR)/, image_creation window_management init\
 		  coordinate_manipulation map_manipulation) $(SRCDIR)
 $(LIBDIR):
 	mkdir $@
@@ -48,7 +49,7 @@ INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
 RM	= rm -rf
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/elem-fract.fdf
+INPUT	= test_maps/42.fdf
 
 $(OBJDIR)/%.o: %.c $(INCLUDEFILES) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))

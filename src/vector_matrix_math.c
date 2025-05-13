@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-void	allocate_fdf_vector(t_fdf_vec *vector, int x, int y, int z)
+void	setval_fdf_vector(t_fdf_vec *vector, int x, int y, int z)
 {
 	vector->x = x;
 	vector->y = y;

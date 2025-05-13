@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/12 20:20:31 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/13 14:49:37 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ typedef struct	s_fdf_param
 	int			zoom_max;
 	int			height_mod;
 	int			height_mod_max;
+	int			rotation_count;
 	e_map_color	map_color;
 }	t_fdf_param;
 
@@ -135,19 +136,26 @@ mlx_closefunc	clean_exit(t_exit_data *exit_data);
 void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx);
 t_map	parse_map(t_exit_data *exit_data);
 
+/*	Initialization	*/
+void	initial_draw(t_fdf *fdf, t_exit_data *exit_data);
+void	create_window(t_fdf *fdf, char *map_file, t_exit_data *exit_data);
+void	set_exit_data(t_exit_data *exit_data, char *fd_arg);
+t_fdf_param	set_parameters(void);
+t_fdf	*setup_fdf_data(t_exit_data *exit_data);
+
 /*	Vector/matrix rotations, transformations, projection	*/
 void	rotate_along_x(t_fdf_vec *vector, float angle);
 void	rotate_along_y(t_fdf_vec *vector, float angle);
 void	rotate_along_z(t_fdf_vec *vector, float angle);
-void	rotate_and_project(t_transformed_map *map, t_fdf *fdf,
-						t_fdf_vec *vec, int *rotation_count);
+void	rotate_and_project(t_transformed_map *map, t_fdf *fdf, t_fdf_vec *vec);
 
 /*	Matrix and vector allocation/math	*/
 void	vector_by_scalar(t_fdf_vec *vector, const float scalar);
-void	allocate_fdf_vector(t_fdf_vec *vector, int x, int y, int z);
+void	setval_fdf_vector(t_fdf_vec *vector, int x, int y, int z);
 
 /*	Map transformation	*/
-t_transformed_map	*transform_map(t_fdf *fdf, int *rotation_count, t_exit_data *exit_data);
+t_transformed_map	*alloc_transformed_map(t_fdf *fdf, t_exit_data *exit_data);
+void				transform_map(t_fdf *fdf, t_transformed_map *transformed_map);
 
 /*	Line drawing	*/
 void	draw_line(t_fdf *fdf, t_pixel start, t_pixel end);

@@ -175,6 +175,7 @@ t_map	parse_map(t_exit_data *exit_data)
 	map.min_z = max_min_z[0];
 	map.max_z = max_min_z[1];
 	close(exit_data->map_fd);
+	exit_data->map_fd = -1;
 	return (map);
 }
 

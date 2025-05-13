@@ -27,16 +27,15 @@ void	isometric_transform(t_fdf_vec *vec)
 	rotate_along_z(vec, 30);
 }
 
-void	rotate_and_project(t_transformed_map *map, t_fdf *fdf,
-						t_fdf_vec *vec, int *rotation_count)
+void	rotate_and_project(t_transformed_map *map, t_fdf *fdf, t_fdf_vec *vec)
 {
 	int	local_rotation_count;
 
-	if (*rotation_count == 3)
+	if (fdf->param.rotation_count == 3)
 		rotate_along_z(vec, -90);
-	else if (*rotation_count)
+	else if (fdf->param.rotation_count)
 	{
-		local_rotation_count = *rotation_count;
+		local_rotation_count = fdf->param.rotation_count;
 		while (local_rotation_count--)
 			rotate_along_z(vec, 90);
 	}
