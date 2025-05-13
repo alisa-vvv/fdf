@@ -18,7 +18,6 @@
 // ,aybe not actually
 void	redraw(t_fdf *fdf, t_transformed_map *map)
 {
-	//mlx_delete_image(fdf->window, fdf->img);
 	transform_map(fdf, map);
 	ft_printf("are we segging chat\n");
 	draw_map(fdf, map);
@@ -50,7 +49,6 @@ void	create_window(t_fdf *fdf, char *map_file, t_exit_data *exit_data)
 {
 	mlx_set_setting(MLX_STRETCH_IMAGE, 0);
 	fdf->window = mlx_init(2048, 1536, map_file, false);
-	mlx_key_hook(fdf->window, test_fdf_key_hook, exit_data);
 	if (!fdf->window)
 		error_exit(exit_data, MLX42_ERR, true);
 }

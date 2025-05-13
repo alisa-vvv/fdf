@@ -92,13 +92,15 @@ void	test_print_fdf_vec(t_fdf_vec *vector, char *vec_name)
 
 void	test_fdf_key_hook(mlx_key_data_t keydata, void *param)
 {
-	t_fdf * const	fdf = (t_fdf *) param;
+	t_exit_data * const	exit_data = (t_exit_data *) param;
+	t_fdf * const		fdf = exit_data->fdf;
+
 	if (keydata.key == MLX_KEY_C && keydata.action == MLX_PRESS)
 	{
 		fdf->param.color_mode++;
 		if (fdf->param.color_mode >= 4)
 			fdf->param.color_mode = 0;
-		redraw(fdf, ((t_exit_data *) param)->transformed_map);
+		redraw(fdf, exit_data->transformed_map);
 	}
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		clean_exit(param);

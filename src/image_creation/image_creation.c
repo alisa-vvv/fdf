@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/04/14 15:54:52 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/12 17:08:15 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/13 18:40:34 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,18 @@ void	alt_color(t_pixel *start_pixel, t_pixel *end_pixel,
 {
 	if (color_mode == default_color)
 	{
-		get_rgba_from_str(start_pixel, COLOR_TEAL);
-		get_rgba_from_str(end_pixel, COLOR_TEAL);
+		start_pixel->color.rgba = RGBA_TEAL;
+		end_pixel->color.rgba = RGBA_TEAL;
 	}
 	else if (color_mode == no_color)
 	{
-		get_rgba_from_str(start_pixel, COLOR_WHITE);
-		get_rgba_from_str(end_pixel, COLOR_WHITE);
+		start_pixel->color.rgba = RGBA_WHITE;
+		end_pixel->color.rgba = RGBA_TEAL;
 	}
 	else if (color_mode == height)
 	{
 		ft_printf("placeholder\n");
 	}
-
 }
 
 void	draw_segment(t_fdf *fdf, t_transformed_map *map,
@@ -103,7 +102,6 @@ void	create_map_image(t_fdf *fdf, t_transformed_map *transformed_map)
 		image_height = map_height + fdf->param.zoom * 4;
 	if (fdf->img)
 		mlx_delete_image(fdf->window, fdf->img);
-	ft_printf("are we segging chat\n");
 	fdf->img = mlx_new_image(fdf->window, image_width, image_height);
 	if (!fdf->img)
 	{
@@ -115,9 +113,11 @@ void	create_map_image(t_fdf *fdf, t_transformed_map *transformed_map)
 
 void	draw_map(t_fdf *fdf, t_transformed_map *map)
 {
-	int					x;
-	int					y;
+	int	x;
+	int	y;
 
+	if (fdf->img)
+		mlx_delete_image(fdf->window, fdf->img);
 	create_map_image(fdf, map);
 	y = 0;
 	while (y <= fdf->map.max_y)

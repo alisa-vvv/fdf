@@ -27,6 +27,7 @@ int	main(int argc, char *argv[])
 	//test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
 	create_window(fdf, argv[1], &exit_data);
 	initial_draw(fdf, &exit_data);
+	mlx_key_hook(fdf->window, test_fdf_key_hook, &exit_data);
 	mlx_loop(fdf->window);
 	error_exit(&exit_data, "Error! Unexpected exit", 0);
 }

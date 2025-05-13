@@ -54,7 +54,11 @@ void	clear_transformed_map(t_transformed_map *map, int max_x, int max_y)
 	map->max_y = 0;
 	y = 0;
 	while (y <= max_y)
+	{
+		ft_printf("map->coord[y][x]: %d\n", map->coord[y][0]);
 		ft_bzero(map->coord[y++], max_x);
+	}
+	ft_printf("here?\n");
 }
 
 void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
@@ -68,8 +72,8 @@ void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
 
 void	transform_map(t_fdf *fdf, t_transformed_map *transformed_map)
 {
-	int					x;
-	int					y;
+	int	x;
+	int	y;
 
 	y = 0;
 	clear_transformed_map(transformed_map, fdf->map.max_x, fdf->map.max_y);
