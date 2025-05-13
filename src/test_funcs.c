@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/27 16:33:58 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/13 17:41:20 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/13 18:53:43 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,15 @@ void	test_fdf_key_hook(mlx_key_data_t keydata, void *param)
 		fdf->param.color_mode++;
 		if (fdf->param.color_mode >= 4)
 			fdf->param.color_mode = 0;
+		redraw(fdf, exit_data->transformed_map);
+	}
+	if ((keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_LEFT)
+		&& keydata.action == MLX_PRESS)
+	{
+		if (keydata.key == MLX_KEY_RIGHT)
+			fdf->param.rotation_count++;
+		else if (keydata.key == MLX_KEY_LEFT)
+			fdf->param.rotation_count--;
 		redraw(fdf, exit_data->transformed_map);
 	}
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
