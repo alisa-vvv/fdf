@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/13 14:43:21 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/13 14:52:55 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/15 16:56:43 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	initial_draw(t_fdf *fdf, t_exit_data *exit_data)
 	t_transformed_map	*map;
 
 	map = alloc_transformed_map(fdf, exit_data);
+	fdf->param.zoom = fdf->param.zoom_max;
 	transform_map(fdf, map);
 	while (map->max_x > MAX_IMAGE_SIZE
 		|| map->max_y > MAX_IMAGE_SIZE
@@ -40,6 +41,12 @@ void	initial_draw(t_fdf *fdf, t_exit_data *exit_data)
 		transform_map(fdf, map);
 		fdf->param.zoom_max = fdf->param.zoom;
 	}
+	if (fdf->param.zoom_max > ZOOM_DEFAULT)
+	{
+		fdf->param.zoom = ZOOM_DEFAULT;
+		transform_map(fdf, map);
+	}
+	ft_printf("max zoom: %d\n", fdf->param.zoom_max);
 	exit_data->transformed_map = map;
 	draw_map(fdf, map);
 	put_aligned_image_to_window(fdf);
@@ -68,12 +75,13 @@ t_fdf_param	set_parameters(void)
 {
 	t_fdf_param	param;
 
-	param.zoom = 7;// ZOOM_DEFAULT;
+	param.zoom = ZOOM_DEFAULT;
 	param.zoom_max = MAX_ZOOM_DEFAULT;
 	param.height_mod = HEIGHT_DEFAULT;
 	param.height_mod_max = MAX_HEIGHT_DEFAULT;
 	param.color_mode = from_map;
 	param.rotation_count = 0;
+	param.time_tracker = 0;
 	return (param);
 }
 

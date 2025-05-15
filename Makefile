@@ -6,9 +6,7 @@
 #    By: avaliull <avaliull@student.codam.nl>        +#+                       #
 #                                                   +#+                        #
 #    Created: 2025/03/07 18:02:14 by avaliull     #+#    #+#                   #
-#    Updated: 2025/05/13 15:01:31 by avaliull     ########   odam.nl           #
-#                                                                              #
-# **************************************************************************** #
+#    Updated: 2025/05/13 15:01:31 by avaliull     ########   odam.nl           # # **************************************************************************** #
 
 .DEFAULT_GOAL := all
 MAKEFLAGS =
@@ -49,7 +47,7 @@ INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
 RM	= rm -rf
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/t1.fdf
+INPUT	= test_maps/elem-fract.fdf
 
 $(OBJDIR)/%.o: %.c $(INCLUDEFILES) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))

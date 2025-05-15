@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                       ::::::::             */
+/*   transformed_map.c                                 :+:    :+:             */
+/*                                                    +:+                     */
+/*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
+/*                                                  +#+                       */
+/*   Created: 2025/05/15 15:33:12 by avaliull     #+#    #+#                  */
+/*   Updated: 2025/05/15 15:33:54 by avaliull     ########   odam.nl          */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* ************************************************************************** */ /*                                                                            */
 /*                                                       ::::::::             */
 /*   transformed_map.c                                 :+:    :+:             */
@@ -54,11 +66,7 @@ void	clear_transformed_map(t_transformed_map *map, int max_x, int max_y)
 	map->max_y = 0;
 	y = 0;
 	while (y <= max_y)
-	{
-		ft_printf("map->coord[y][x]: %d\n", map->coord[y][0]);
 		ft_bzero(map->coord[y++], max_x);
-	}
-	ft_printf("here?\n");
 }
 
 void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
@@ -83,7 +91,7 @@ void	transform_map(t_fdf *fdf, t_transformed_map *transformed_map)
 		while (x <= fdf->map.max_x)
 		{
 			add_vector_to_map(fdf, x, y, transformed_map);
-			rotate_and_project(transformed_map, fdf,
+			project_map(transformed_map, fdf,
 					  &transformed_map->coord[y][x]);
 			if (x < fdf->map.max_x)
 				add_vector_to_map(fdf, x + 1, y, transformed_map);

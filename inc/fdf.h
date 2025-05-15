@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/13 15:09:02 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/15 16:29:20 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define RGBA_BLUE 0x0000FFFF
 # define RGBA_RED 0xFF0000FF
 # define ZOOM_DEFAULT 50
-# define MAX_ZOOM_DEFAULT 100
+# define MAX_ZOOM_DEFAULT 300
 # define MAX_HEIGHT_DEFAULT 10
 # define HEIGHT_DEFAULT 6
 
@@ -116,6 +116,7 @@ typedef struct	s_fdf_param
 	int			height_mod;
 	int			height_mod_max;
 	int			rotation_count;
+	double		time_tracker;
 	e_map_color	color_mode;
 }	t_fdf_param;
 
@@ -152,7 +153,7 @@ t_fdf			*setup_fdf_data(t_exit_data *exit_data);
 void	rotate_along_x(t_fdf_vec *vector, float angle);
 void	rotate_along_y(t_fdf_vec *vector, float angle);
 void	rotate_along_z(t_fdf_vec *vector, float angle);
-void	rotate_and_project(t_transformed_map *map, t_fdf *fdf, t_fdf_vec *vec);
+void	project_map(t_transformed_map *map, t_fdf *fdf, t_fdf_vec *vec);
 
 /*	Matrix and vector allocation/math	*/
 void	vector_by_scalar(t_fdf_vec *vector, const float scalar);
@@ -172,6 +173,7 @@ void	put_aligned_image_to_window(t_fdf *fdf);
 
 /*	Controls	*/
 void fdf_controls(mlx_key_data_t keydata, t_fdf *fdf, t_transformed_map *map);
+void	test_loop_hook(void *param);
 /*	Utils	*/
 int	hexstr_to_int(char *str, int len);
 void	free_2d_arr(void **arr);

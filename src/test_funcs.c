@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/27 16:33:58 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/13 18:53:43 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/15 16:54:17 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,27 +90,89 @@ void	test_print_fdf_vec(t_fdf_vec *vector, char *vec_name)
 //	}
 //}
 
-void	test_fdf_key_hook(mlx_key_data_t keydata, void *param)
+void	zoom_projection(t_fdf *const fdf, t_transformed_map *const map)
 {
-	t_exit_data * const	exit_data = (t_exit_data *) param;
-	t_fdf * const		fdf = exit_data->fdf;
+	int	zoom_factor;
 
-	if (keydata.key == MLX_KEY_C && keydata.action == MLX_PRESS)
+	if (fdf->param.time_tracker > 0.02)
+	{
+		zoom_factor = fdf->param.zoom / 10 + 1;
+		if (mlx_is_key_down(fdf->window, MLX_KEY_UP))
+		{
+			if (fdf->param.zoom == fdf->param.zoom_max)
+				return ;
+			fdf->param.zoom = fdf->param.zoom + zoom_factor;
+			if (fdf->param.zoom > fdf->param.zoom_max)
+				fdf->param.zoom = fdf->param.zoom_max;
+		}
+		else if (mlx_is_key_down(fdf->window, MLX_KEY_DOWN))
+		{
+			if (fdf->param.zoom == 1)
+				return ;
+			fdf->param.zoom = fdf->param.zoom - zoom_factor;
+			if (fdf->param.zoom < 1)
+				fdf->param.zoom = 1;
+		}
+		redraw(fdf, map);
+		fdf->param.time_tracker = 0;
+	}
+}
+
+void	rotate_projection(t_fdf *const fdf,
+				  t_transformed_map *const map)
+{
+	printf("fdf->window->delta_time: %f\n", fdf->window->delta_time);
+	printf("tracker: %f\n", fdf->param.time_tracker);
+	if (fdf->param.time_tracker > 0.1)
+	{
+		if (mlx_is_key_down(fdf->window, MLX_KEY_RIGHT))
+			fdf->param.rotation_count++;
+		else if (mlx_is_key_down(fdf->window, MLX_KEY_LEFT))
+			fdf->param.rotation_count--;
+		if (fdf->param.rotation_count > 3)
+			fdf->param.rotation_count = 0;
+		else if (fdf->param.rotation_count < 0)
+			fdf->param.rotation_count = 3;
+		redraw(fdf, map);
+		fdf->param.time_tracker = 0;
+	}
+}
+
+void	color_switch(t_fdf *const fdf, t_transformed_map *const map)
+{
+	if (fdf->param.time_tracker > 0.2)
 	{
 		fdf->param.color_mode++;
 		if (fdf->param.color_mode >= 4)
 			fdf->param.color_mode = 0;
-		redraw(fdf, exit_data->transformed_map);
+		redraw(fdf, map);
+		fdf->param.time_tracker = 0;
 	}
-	if ((keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_LEFT)
-		&& keydata.action == MLX_PRESS)
-	{
-		if (keydata.key == MLX_KEY_RIGHT)
-			fdf->param.rotation_count++;
-		else if (keydata.key == MLX_KEY_LEFT)
-			fdf->param.rotation_count--;
-		redraw(fdf, exit_data->transformed_map);
-	}
-	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-		clean_exit(param);
+}
+
+void	test_fdf_key_hook(mlx_key_data_t keydata, void *param)
+{
+	//t_exit_data * const	exit_data = (t_exit_data *) param;
+	//t_fdf * const		fdf = exit_data->fdf;
+
+		if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+			clean_exit(param);
+}
+
+void	test_loop_hook(void *param)
+{
+	t_exit_data * const	exit_data = (t_exit_data *) param;
+	t_fdf * const		fdf = exit_data->fdf;
+
+	fdf->param.time_tracker += fdf->window->delta_time;
+		if (mlx_is_key_down(fdf->window, MLX_KEY_C))
+			color_switch(fdf, exit_data->transformed_map);
+		if (mlx_is_key_down(fdf->window, MLX_KEY_RIGHT) ||
+			mlx_is_key_down(fdf->window, MLX_KEY_LEFT))
+			rotate_projection(fdf, exit_data->transformed_map);
+		//if ((keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_LEFT)
+		//	&& (keydata.action == MLX_PRESS))// || keydata.action == MLX_REPEAT))
+		if (mlx_is_key_down(fdf->window, MLX_KEY_UP)
+		|| mlx_is_key_down(fdf->window, MLX_KEY_DOWN))
+			zoom_projection(fdf, exit_data->transformed_map);
 }
