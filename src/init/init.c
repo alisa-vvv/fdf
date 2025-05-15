@@ -81,7 +81,8 @@ t_fdf_param	set_parameters(void)
 	param.zoom_max = MAX_ZOOM_DEFAULT;
 	param.height_mod = HEIGHT_DEFAULT;
 	param.height_mod_max = MAX_HEIGHT_DEFAULT;
-	setval_fdf_vector(&param.camera_pos, 0, 0, 0);
+	param.x_offset = 0;
+	param.y_offset = 0;
 	param.color_mode = from_map;
 	param.rotation_count = 0;
 	param.time_tracker = 0;
