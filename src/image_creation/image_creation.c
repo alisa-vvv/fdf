@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/04/14 15:54:52 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/13 18:40:34 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/15 18:29:15 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,17 @@
 
 void	put_aligned_image_to_window(t_fdf *fdf)
 {
-	int	width_offset;
-	int	height_offset;
-	width_offset = (int) (fdf->window->width - fdf->img->width) / 2;
-	height_offset = (int) (fdf->window->height - fdf->img->height) / 2;
-	mlx_image_to_window(fdf->window, fdf->img, width_offset, height_offset);
+	int	x_pos;
+	int	y_pos;
+	int	x_offset;
+	int	y_offset;
+
+	x_offset = fdf->param.x_offset * fdf->param.zoom;
+	y_offset = fdf->param.y_offset * fdf->param.zoom;
+	x_pos = fdf->window->width - fdf->img->width / 2 + x_offset;
+	y_pos = fdf->window->height - fdf->img->height / 2 + y_offset;
+	fdf->x_
+	mlx_image_to_window(fdf->window, fdf->img, x_pos, y_pos);
 }
 
 void	get_rgba_from_str(t_pixel *pixel, char *color_str)
