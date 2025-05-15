@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/13 14:43:21 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/15 16:56:43 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/15 17:37:10 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	initial_draw(t_fdf *fdf, t_exit_data *exit_data)
 		fdf->param.zoom = ZOOM_DEFAULT;
 		transform_map(fdf, map);
 	}
+	fdf->param.zoom_prev = fdf->param.zoom;
 	ft_printf("max zoom: %d\n", fdf->param.zoom_max);
 	exit_data->transformed_map = map;
 	draw_map(fdf, map);
@@ -76,9 +77,12 @@ t_fdf_param	set_parameters(void)
 	t_fdf_param	param;
 
 	param.zoom = ZOOM_DEFAULT;
+	param.zoom_prev = param.zoom;
 	param.zoom_max = MAX_ZOOM_DEFAULT;
 	param.height_mod = HEIGHT_DEFAULT;
 	param.height_mod_max = MAX_HEIGHT_DEFAULT;
+	param.x_offset = 0;
+	param.y_offset = 0;
 	param.color_mode = from_map;
 	param.rotation_count = 0;
 	param.time_tracker = 0;

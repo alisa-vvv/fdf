@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/27 16:33:58 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/15 16:54:17 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/15 17:45:26 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,28 @@ void	color_switch(t_fdf *const fdf, t_transformed_map *const map)
 	}
 }
 
+void	move_image(t_fdf *const fdf)// t_transformed_map *const map)
+{
+	if (fdf->param.time_tracker > 0.1)
+	{
+		if (mlx_is_key_down(fdf->window, MLX_KEY_W))
+			fdf->img->instances->y += fdf->img->height / 50;
+		if (mlx_is_key_down(fdf->window, MLX_KEY_S))
+			fdf->img->instances->y -= fdf->img->height / 50;
+		if (mlx_is_key_down(fdf->window, MLX_KEY_A))
+			fdf->img->instances->x += fdf->img->width / 50;
+		if (mlx_is_key_down(fdf->window, MLX_KEY_D))
+			fdf->img->instances->x -= fdf->img->width / 50;
+		ft_printf("x: %d\n", fdf->img->instances->x);
+		ft_printf("width: %d\n", fdf->img->width);
+		ft_printf("y: %d\n", fdf->img->instances->y);
+		ft_printf("height: %d\n", fdf->img->height);
+		fdf->param.x_offset = fdf->img->instances->x / fdf->param.zoom;
+		fdf->param.y_offset = fdf->img->instances->y / fdf->param.zoom;
+		fdf->param.time_tracker = 0;
+	}
+}
+
 void	test_fdf_key_hook(mlx_key_data_t keydata, void *param)
 {
 	//t_exit_data * const	exit_data = (t_exit_data *) param;
@@ -175,4 +197,9 @@ void	test_loop_hook(void *param)
 		if (mlx_is_key_down(fdf->window, MLX_KEY_UP)
 		|| mlx_is_key_down(fdf->window, MLX_KEY_DOWN))
 			zoom_projection(fdf, exit_data->transformed_map);
+		if (mlx_is_key_down(fdf->window, MLX_KEY_W)
+		|| mlx_is_key_down(fdf->window, MLX_KEY_S)
+		|| mlx_is_key_down(fdf->window, MLX_KEY_A)
+		|| mlx_is_key_down(fdf->window, MLX_KEY_D))
+			move_image(fdf);
 }

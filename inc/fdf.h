@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/15 16:29:20 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/15 17:36:46 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,12 @@ typedef enum	e_map_color
 typedef struct	s_fdf_param
 {
 	int			zoom;
+	int			zoom_prev;
 	int			zoom_max;
 	int			height_mod;
 	int			height_mod_max;
+	int			x_offset;
+	int			y_offset;
 	int			rotation_count;
 	double		time_tracker;
 	e_map_color	color_mode;
