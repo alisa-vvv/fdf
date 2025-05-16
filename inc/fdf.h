@@ -175,8 +175,9 @@ void	redraw(t_fdf *fdf, t_transformed_map *map);
 void	put_aligned_image_to_window(t_fdf *fdf);
 
 /*	Controls	*/
-void fdf_controls(mlx_key_data_t keydata, t_fdf *fdf, t_transformed_map *map);
-void	test_loop_hook(void *param);
+void	fdf_key_hook(mlx_key_data_t keydata, void *param);
+//void fdf_controls(mlx_key_data_t keydata, t_fdf *fdf, t_transformed_map *map);
+void	fdf_loop_hook(void *param);
 /*	Utils	*/
 int	hexstr_to_int(char *str, int len);
 void	free_2d_arr(void **arr);
@@ -185,7 +186,6 @@ int	ft_isspace(int c);
 
 /*	TEST (COMMENT THEM OUT)	*/
 void	test_print_map(int **coord, int max_x, int max_y);
-void	test_fdf_key_hook(mlx_key_data_t keydata, void *param);
 void	test_print_fdf_vec(t_fdf_vec *vector, char *vec_name);
 //void	test_move_square(t_fdf *fdf, e_action action);
 

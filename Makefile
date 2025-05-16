@@ -17,6 +17,8 @@ CFILES	=	fdf.c\
 			parsing.c\
 			fdf_utils.c\
 			window_controls.c\
+			loop_hook.c\
+			key_hook.c\
 			line_drawing.c\
 			coordinate_adjustments.c\
 			rotations.c\

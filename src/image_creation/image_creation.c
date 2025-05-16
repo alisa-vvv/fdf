@@ -12,6 +12,13 @@
 
 #include "fdf.h"
 
+void	adjust_camera_position(t_fdf *fdf, mlx_image_t *img)
+{
+	#include <stdio.h>
+	img->instances[0].x += fdf->param.x_offset * fdf->param.zoom;
+	img->instances[0].y += fdf->param.y_offset * fdf->param.zoom;
+}
+
 void	put_aligned_image_to_window(t_fdf *fdf)
 {
 	int	width_offset;
@@ -19,6 +26,7 @@ void	put_aligned_image_to_window(t_fdf *fdf)
 	width_offset = (int) (fdf->window->width - fdf->img->width) / 2;
 	height_offset = (int) (fdf->window->height - fdf->img->height) / 2;
 	mlx_image_to_window(fdf->window, fdf->img, width_offset, height_offset);
+	adjust_camera_position(fdf, fdf->img);
 }
 
 void	get_rgba_from_str(t_pixel *pixel, char *color_str)
@@ -81,17 +89,6 @@ void	draw_segment(t_fdf *fdf, t_transformed_map *map,
 	else
 		alt_color(&start_pixel, &end_pixel, fdf->param.color_mode);
 	draw_line(fdf, start_pixel, end_pixel);
-}
-
-void	adjust_camera_position(t_fdf *fdf, mlx_image_t *img)
-{
-	#include <stdio.h>
-	(void) fdf;
-	printf("count: %lu\n", img->count);
-	ft_printf("img->instances->x before: %d\n", img->instances);
-	//img->instances[0].x += fdf->param.x_offset * fdf->param.zoom;
-	//printf("img->instances->x after: %d\n", img->instances[0].x);
-	//img->instances[0].y += fdf->param.y_offset * fdf->param.zoom;
 }
 
 void	create_map_image(t_fdf *fdf, t_transformed_map *transformed_map)

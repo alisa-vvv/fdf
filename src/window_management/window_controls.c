@@ -35,7 +35,7 @@ void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx)
 	clean_exit(exit_data);
 }
 
-void			free_color_map(char ***map, int max_y)
+static void	free_color_map(char ***map, int max_y)
 {
 	int	y;
 
