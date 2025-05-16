@@ -12,21 +12,16 @@
 
 #include "fdf.h"
 
-void	adjust_camera_position(t_fdf *fdf, mlx_image_t *img)
-{
-	#include <stdio.h>
-	img->instances[0].x += fdf->param.x_offset * fdf->param.zoom;
-	img->instances[0].y += fdf->param.y_offset * fdf->param.zoom;
-}
-
 void	put_aligned_image_to_window(t_fdf *fdf)
 {
 	int	width_offset;
 	int	height_offset;
+
 	width_offset = (int) (fdf->window->width - fdf->img->width) / 2;
 	height_offset = (int) (fdf->window->height - fdf->img->height) / 2;
 	mlx_image_to_window(fdf->window, fdf->img, width_offset, height_offset);
-	adjust_camera_position(fdf, fdf->img);
+	fdf->img->instances[0].x += fdf->param.x_offset * fdf->param.zoom;
+	fdf->img->instances[0].y += fdf->param.y_offset * fdf->param.zoom;
 }
 
 void	get_rgba_from_str(t_pixel *pixel, char *color_str)
@@ -58,11 +53,7 @@ void	alt_color(t_pixel *start_pixel, t_pixel *end_pixel,
 	else if (color_mode == no_color)
 	{
 		start_pixel->color.rgba = RGBA_WHITE;
-		end_pixel->color.rgba = RGBA_TEAL;
-	}
-	else if (color_mode == height)
-	{
-		ft_printf("placeholder\n");
+		end_pixel->color.rgba = RGBA_WHITE;
 	}
 }
 

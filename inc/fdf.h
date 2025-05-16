@@ -55,7 +55,7 @@ typedef struct	s_pixel
 {
 	int		x;
 	int		y;
-	rgba_u		color;
+	rgba_u	color;
 }	t_pixel;
 
 typedef struct	s_colors
@@ -71,14 +71,6 @@ typedef struct	s_fdf_vec
 	double	z;
 	char	*color;
 }	t_fdf_vec;
-
-typedef enum	e_direction
-{
-	up,
-	down,
-	left,
-	right,
-}	e_direction;
 
 typedef	struct	s_map
 {
@@ -104,9 +96,7 @@ typedef enum	e_map_color
 {
 	from_map,
 	default_color,
-	height,
 	no_color,
-	arg_color,
 }	e_map_color;
 
 typedef struct	s_fdf_param

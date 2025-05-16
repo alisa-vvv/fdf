@@ -24,15 +24,15 @@ static void	swap_pixels(t_pixel *start, t_pixel *end)
 
 static	uint32_t	get_color(t_pixel *start, t_pixel *end, int distance, int i)
 {
-	uint8_t	red;
-	uint8_t	green;
-	uint8_t	blue;
-	uint8_t	opacity;
+	int	red;
+	int	green;
+	int	blue;
+	int	opacity;
 
-	red = start->color.r + ((end->color.r - start->color.r) / distance) * i;
-	green = start->color.g + ((end->color.g - start->color.g) / distance) * i;
-	blue = start->color.b + ((end->color.b - start->color.b) / distance) * i;
-	opacity = start->color.a + ((end->color.a - start->color.a) / distance) * i;
+	red = start->color.r + ((end->color.r - start->color.r) * i / distance);
+	green = start->color.g + ((end->color.g - start->color.g) * i / distance);
+	blue = start->color.b + ((end->color.b - start->color.b) * i / distance);
+	opacity = start->color.a + ((end->color.a - start->color.a) * i / distance);
 	return ((red << 24) + (green << 16) + (blue << 8) + opacity);
 }
 

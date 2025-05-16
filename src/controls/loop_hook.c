@@ -9,7 +9,7 @@ void	zoom_projection(t_fdf *const fdf, t_transformed_map *const map)
 		zoom_factor = fdf->param.zoom / 10 + 1;
 		if (mlx_is_key_down(fdf->window, MLX_KEY_UP))
 		{
-			if (fdf->param.zoom == fdf->param.zoom_max)
+			if (fdf->param.zoom > fdf->param.zoom_max)
 				return ;
 			fdf->param.zoom = fdf->param.zoom + zoom_factor;
 			if (fdf->param.zoom > fdf->param.zoom_max)
@@ -51,7 +51,7 @@ void	color_switch(t_fdf *const fdf, t_transformed_map *const map)
 	if (fdf->param.time_tracker > 0.2)
 	{
 		fdf->param.color_mode++;
-		if (fdf->param.color_mode >= 4)
+		if (fdf->param.color_mode > 2)
 			fdf->param.color_mode = 0;
 		redraw(fdf, map);
 		fdf->param.time_tracker = 0;

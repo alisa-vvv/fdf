@@ -13,10 +13,10 @@ MAKEFLAGS =
 
 NAME	=	fdf
 CFILES	=	fdf.c\
-			init.c\
-			parsing.c\
 			fdf_utils.c\
-			window_controls.c\
+			init.c\
+			exit.c\
+			parsing.c\
 			loop_hook.c\
 			key_hook.c\
 			line_drawing.c\
@@ -34,7 +34,7 @@ OBJDIR = obj
 SRCDIR = src
 LIBDIR = lib
 INCDIR = inc
-SRCDIRS = $(addprefix $(SRCDIR)/, image_creation window_management init\
+SRCDIRS = $(addprefix $(SRCDIR)/, image_creation controls init_exit\
 		  coordinate_manipulation map_manipulation) $(SRCDIR)
 $(LIBDIR):
 	mkdir $@
