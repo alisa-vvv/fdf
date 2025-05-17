@@ -13,15 +13,6 @@
 #include "fdf.h"
 #include "MLX42/MLX42.h"
 
-static void	swap_pixels(t_pixel *start, t_pixel *end)
-{
-	t_pixel		tmp_pixel;
-
-	tmp_pixel = *start;
-	*start = *end;
-	*end = tmp_pixel;
-}
-
 static	uint32_t	get_color(t_pixel *start, t_pixel *end, int distance, int i)
 {
 	int	red;
@@ -42,11 +33,8 @@ static void	vertical(t_fdf *fdf, t_pixel start, t_pixel end)
 	int			distance_y;
 	int			distance_x;
 	int			decision_parameter;
-	uint32_t	color;
 	int			i;
 
-	if (start.y > end.y)
-		swap_pixels(&start, &end);
 	direction = 1;
 	if (end.x - start.x < 0)
 		direction = -direction;
@@ -56,8 +44,8 @@ static void	vertical(t_fdf *fdf, t_pixel start, t_pixel end)
 	i = -1;
 	while (++i < distance_y)
 	{
-		color = get_color(&start, &end, distance_y, i);
-		mlx_put_pixel(fdf->img, start.x, start.y + i, color);
+		mlx_put_pixel(fdf->img, start.x, start.y + i,
+				get_color(&start, &end, distance_y, i));
 		if (decision_parameter >= 0)
 		{
 			start.x += direction;
@@ -75,8 +63,6 @@ static void	horizontal(t_fdf *fdf, t_pixel start, t_pixel end)
 	int	decision_parameter;
 	int	i;
 
-	if (start.x > end.x)
-		swap_pixels(&start, &end);
 	direction = 1;
 	if (end.y - start.y < 0)
 		direction = -direction;
@@ -86,7 +72,8 @@ static void	horizontal(t_fdf *fdf, t_pixel start, t_pixel end)
 	i = -1;
 	while (++i < distance_x)
 	{
-		mlx_put_pixel(fdf->img, start.x + i, start.y, get_color(&start, &end, distance_x, i));
+		mlx_put_pixel(fdf->img, start.x + i, start.y,
+				get_color(&start, &end, distance_x, i));
 		if (decision_parameter >= 0)
 		{
 			start.y += direction;
@@ -99,8 +86,18 @@ static void	horizontal(t_fdf *fdf, t_pixel start, t_pixel end)
 void	draw_line(t_fdf *fdf, t_pixel start, t_pixel end)
 {
 	if (abs(end.x - start.x) > abs(end.y - start.y))
-		horizontal(fdf, start, end);
+	{
+		if (start.x < end.x)
+			horizontal(fdf, start, end);
+		else
+			horizontal(fdf, end, start);
+	}
 	else
-		vertical(fdf, start, end);
+	{
+		if (start.y < end.y)
+			vertical(fdf, start, end);
+		else
+			vertical(fdf, end, start);
+	}
 }
 
