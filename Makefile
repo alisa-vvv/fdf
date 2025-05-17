@@ -20,10 +20,11 @@ CFILES	=	fdf.c\
 			parsing_loop.c\
 			loop_hook.c\
 			key_hook.c\
+			image_creation.c\
 			line_drawing.c\
+			line_algo.c\
 			coordinate_adjustments.c\
 			rotations.c\
-			image_creation.c\
 			vector_matrix_math.c\
 			transformed_map.c\
 			test_funcs.c
@@ -35,7 +36,7 @@ OBJDIR = obj
 SRCDIR = src
 LIBDIR = lib
 INCDIR = inc
-SRCDIRS = $(addprefix $(SRCDIR)/, image_creation controls init_exit\
+SRCDIRS = $(addprefix $(SRCDIR)/, rendering controls init_exit\
 		  coordinate_manipulation map_manipulation) $(SRCDIR)
 $(LIBDIR):
 	mkdir $@

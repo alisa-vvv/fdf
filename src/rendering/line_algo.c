@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   line_drawing.c                                    :+:    :+:             */
+/*   line_algo.c                                       :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
-/*   Created: 2025/03/30 20:20:12 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/11 19:50:33 by avaliull     ########   odam.nl          */
+/*   Created: 2025/05/17 18:39:22 by avaliull     #+#    #+#                  */
+/*   Updated: 2025/05/17 18:39:24 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,3 @@ void	draw_line(t_fdf *fdf, t_pixel start, t_pixel end)
 			vertical(fdf, end, start);
 	}
 }
-

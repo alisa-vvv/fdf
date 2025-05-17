@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/07 18:05:14 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/15 17:36:46 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/17 18:46:15 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,13 +158,15 @@ void	setval_fdf_vector(t_fdf_vec *vector, int x, int y, int z);
 void	alloc_transformed_map(t_fdf *fdf, t_exit_data *exit_data);
 void				transform_map(t_fdf *fdf, t_transformed_map *transformed_map);
 
-/*	Line drawing	*/
-void	draw_line(t_fdf *fdf, t_pixel start, t_pixel end);
-
-/*	Image creation	*/
+/*	Rendering	*/
 void	draw_map(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map);
 void	redraw(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map);
 void	put_aligned_image_to_window(t_fdf *fdf, t_exit_data *exit_data);
+
+/*	Line drawing	*/
+void	create_line(t_fdf *fdf, t_transformed_map *map,
+				  t_fdf_vec vec, t_fdf_vec next_vec);
+void	draw_line(t_fdf *fdf, t_pixel start, t_pixel end);
 
 /*	Controls	*/
 void	fdf_key_hook(mlx_key_data_t keydata, void *param);
