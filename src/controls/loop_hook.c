@@ -1,6 +1,7 @@
 #include "fdf.h"
 
-void	zoom_projection(t_fdf *const fdf, t_transformed_map *const map)
+void	zoom_projection(t_fdf *const fdf, t_exit_data *const exit_data,
+					 t_transformed_map *const map)
 {
 	int	zoom_factor;
 
@@ -23,12 +24,12 @@ void	zoom_projection(t_fdf *const fdf, t_transformed_map *const map)
 			if (fdf->param.zoom < 1)
 				fdf->param.zoom = 1;
 		}
-		redraw(fdf, map);
+		redraw(fdf, exit_data, map);
 		fdf->param.time_tracker = 0;
 	}
 }
 
-void	rotate_projection(t_fdf *const fdf,
+void	rotate_projection(t_fdf *const fdf, t_exit_data *const exit_data,
 				  t_transformed_map *const map)
 {
 	if (fdf->param.time_tracker > 0.1)
@@ -41,26 +42,27 @@ void	rotate_projection(t_fdf *const fdf,
 			fdf->param.rotation_count = 0;
 		else if (fdf->param.rotation_count < 0)
 			fdf->param.rotation_count = 3;
-		redraw(fdf, map);
+		redraw(fdf, exit_data, map);
 		fdf->param.time_tracker = 0;
 	}
 }
 
-void	color_switch(t_fdf *const fdf, t_transformed_map *const map)
+void	color_switch(t_fdf *const fdf, t_exit_data *const exit_data,
+				  t_transformed_map *const map)
 {
 	if (fdf->param.time_tracker > 0.2)
 	{
 		fdf->param.color_mode++;
 		if (fdf->param.color_mode > 2)
 			fdf->param.color_mode = 0;
-		redraw(fdf, map);
+		redraw(fdf, exit_data, map);
 		fdf->param.time_tracker = 0;
 	}
 }
 
 void	move_image(t_fdf *const fdf, int move_speed)
 {
-	if (fdf->param.time_tracker > 0.05)
+	if (fdf->param.time_tracker > 0.04)
 	{
 		if (mlx_is_key_down(fdf->window, MLX_KEY_W))
 		{
@@ -93,13 +95,13 @@ void	fdf_loop_hook(void *param)
 
 	fdf->param.time_tracker += fdf->window->delta_time;
 	if (mlx_is_key_down(fdf->window, MLX_KEY_C))
-		color_switch(fdf, exit_data->transformed_map);
+		color_switch(fdf, exit_data, exit_data->transformed_map);
 	if (mlx_is_key_down(fdf->window, MLX_KEY_RIGHT) ||
 		mlx_is_key_down(fdf->window, MLX_KEY_LEFT))
-		rotate_projection(fdf, exit_data->transformed_map);
+		rotate_projection(fdf, exit_data, exit_data->transformed_map);
 	if (mlx_is_key_down(fdf->window, MLX_KEY_UP)
 	|| mlx_is_key_down(fdf->window, MLX_KEY_DOWN))
-		zoom_projection(fdf, exit_data->transformed_map);
+		zoom_projection(fdf, exit_data, exit_data->transformed_map);
 	if (mlx_is_key_down(fdf->window, MLX_KEY_W)
 	|| mlx_is_key_down(fdf->window, MLX_KEY_S)
 	|| mlx_is_key_down(fdf->window, MLX_KEY_A)

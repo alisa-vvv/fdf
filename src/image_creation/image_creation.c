@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-void	put_aligned_image_to_window(t_fdf *fdf)
+void	put_aligned_image_to_window(t_fdf *fdf, t_exit_data *exit_data)
 {
 	int	width_offset;
 	int	height_offset;
@@ -20,6 +20,8 @@ void	put_aligned_image_to_window(t_fdf *fdf)
 	width_offset = (int) (fdf->window->width - fdf->img->width) / 2;
 	height_offset = (int) (fdf->window->height - fdf->img->height) / 2;
 	mlx_image_to_window(fdf->window, fdf->img, width_offset, height_offset);
+	if (!fdf->img || !fdf->window)
+		error_exit(exit_data, MLX42_ERR, true);
 	fdf->img->instances[0].x += fdf->param.x_offset * fdf->param.zoom;
 	fdf->img->instances[0].y += fdf->param.y_offset * fdf->param.zoom;
 }
@@ -102,15 +104,9 @@ void	create_map_image(t_fdf *fdf, t_transformed_map *transformed_map)
 	if (fdf->img)
 		mlx_delete_image(fdf->window, fdf->img);
 	fdf->img = mlx_new_image(fdf->window, image_width, image_height);
-	if (!fdf->img)
-	{
-		fdf->img = NULL;
-		// ADD ERROR MANAGEMENT
-		return ;
-	}
 }
 
-void	draw_map(t_fdf *fdf, t_transformed_map *map)
+void	draw_map(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map)
 {
 	int	x;
 	int	y;
@@ -118,6 +114,8 @@ void	draw_map(t_fdf *fdf, t_transformed_map *map)
 	if (fdf->img)
 		mlx_delete_image(fdf->window, fdf->img);
 	create_map_image(fdf, map);
+	if (!fdf->img)
+		error_exit(exit_data, MLX42_ERR, true);
 	y = 0;
 	while (y <= fdf->map->max_y)
 	{

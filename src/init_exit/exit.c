@@ -45,17 +45,6 @@ static void	free_color_map(char ***map, int max_y)
 	free(map);
 }
 
-//void fdf_controls(mlx_key_data_t keydata, t_fdf *fdf, t_transformed_map *map)
-//{
-//	if (keydata.key == MLX_KEY_C && keydata.action == MLX_PRESS)
-//	{
-//		fdf->param.color_mode++;
-//		if (fdf->param.color_mode >= 4)
-//			fdf->param.color_mode = 0;
-//		draw_map(fdf, map);
-//	}
-//}
-
 static void		free_map(t_map *map)
 {
 	if (map->coord)
@@ -64,6 +53,7 @@ static void		free_map(t_map *map)
 		free_color_map(map->colors, map->max_y);
 	free(map);
 }
+
 mlx_closefunc	clean_exit(t_exit_data *exit_data)
 {
 
@@ -92,4 +82,3 @@ mlx_closefunc	clean_exit(t_exit_data *exit_data)
 		close(map_fd);
 	exit(0);
 }
-

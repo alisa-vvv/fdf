@@ -14,51 +14,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-void	get_max_min_z(int **coord, int *max_min_z,
-					const int max_x, const int max_y)
-{
-	int	x;
-	int	y;
-	int	max_z;
-	int	min_z;
-
-	max_z = coord[0][0];
-	min_z = coord[0][0];
-	y = -1;
-
-	while (++y <= max_y)
-	{
-		x = -1;
-		while(++x <= max_x)
-		{
-			if (coord[y][x] > max_z)
-				max_z = coord[y][x];
-			if (coord[y][x] < min_z)
-				min_z = coord[y][x];
-		}
-	}
-	max_min_z[0] = min_z;
-	max_min_z[1] = max_z;
-}
-
-// can I shove the colors here?
-static int	*allocate_x(int *coord, char **values, int x, int *max_x)
-{
-	if (values[x])
-		coord = allocate_x(coord, values, x + 1, max_x);
-	else
-	{
-		coord = (int *) malloc(sizeof(int) * x);
-		if (!coord)
-			return (NULL);
-		*max_x = x - 1;
-		return (coord);
-	}
-	coord[x] = ft_atoi(values[x]);
-	return (coord);
-}
-
-int		read_colors(char **values, char **colors, int max_x)
+static int	read_colors(char **values, char **colors, int max_x)
 {
 	int		x;
 	char	**color_check;
@@ -86,6 +42,23 @@ int		read_colors(char **values, char **colors, int max_x)
 	return (0);
 }
 
+static int	*allocate_x(int *coord, char **values, int x, int *max_x)
+{
+	if (values[x])
+		coord = allocate_x(coord, values, x + 1, max_x);
+	else
+	{
+		coord = (int *) ft_calloc(x, sizeof(int));
+		if (!coord)
+			return (NULL);
+		*max_x = x - 1;
+		return (coord);
+	}
+	if (coord)
+		coord[x] = ft_atoi(values[x]);
+	return (coord);
+}
+
 static int	get_x_z(int **coord, char ***colors, char *line, int y)
 {
 	char	**values;
@@ -93,10 +66,7 @@ static int	get_x_z(int **coord, char ***colors, char *line, int y)
 
 	values = ft_split(line, ' ');
 	if (!values)
-	{
-		coord = NULL;
 		return (-1);
-	}
 	max_x = 0;
 	*coord = allocate_x(*coord, values, 0, &max_x);
 	if (!*coord)
@@ -105,13 +75,32 @@ static int	get_x_z(int **coord, char ***colors, char *line, int y)
 		return (-1);
 	}
 	colors[y] = (char **) ft_calloc(max_x + 2, sizeof(char *));
+	if (!colors[y])
+	{
+		free_2d_arr((void **) values);
+		return (-1);
+	}
 	if (read_colors(values, colors[y], max_x) != 0)
-		colors = NULL;
+		max_x = -1;
 	free_2d_arr((void **) values);
 	return (max_x);
 }
 
-static int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
+static int	panic_free(int **coord, char ***colors, int y)
+{
+	int	i;
+	i = y;
+	if (coord)
+		while (coord[i])
+			free(coord[i++]);
+	i = y;
+	if (colors)
+		while (colors[i])
+			free(colors[i++]);
+	return (1);
+}
+
+int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 {
 	char	*next_line;
 	int		err_check;
@@ -122,41 +111,16 @@ static int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 	else
 	{
 		map->coord = (int **) ft_calloc((y + 1), sizeof(int *));
-		if (!map->coord)
-			return (1);
 		map->colors = (char ***) ft_calloc((y + 1), sizeof(char **));
-		if (!map->colors)
+		if (!map->coord || !map->colors)
 			return (1);
 		map->max_y = y - 1;
 		return (0);
 	}
 	if (err_check != 1)
-	{
 		map->max_x = get_x_z(&map->coord[y], map->colors, next_line, y);
-		if (map->max_x <= 0)
-			err_check = 1;
-	}
+	if (map->max_x <= 0 || err_check != 0)
+		err_check = panic_free(map->coord, map->colors, y);
 	free(next_line);
 	return (err_check);
 }
-
-void	parse_map(t_exit_data *exit_data)
-{
-	t_map	*map;
-	int		max_min_z[2];
-	int		error_check;
-
-	map = ft_calloc(1, sizeof(t_map));
-	if (!map)
-		error_exit(exit_data, MALLOC_ERR, 0);
-	exit_data->fdf->map = map;
-	error_check = read_map(map, exit_data->map_fd, 0, exit_data);
-	if (error_check != 0 || map->colors == NULL || map->coord == NULL)
-		error_exit(exit_data, PARSE_ERR, 0);
-	get_max_min_z(map->coord, max_min_z, map->max_x, map->max_y);
-	map->min_z = max_min_z[0];
-	map->max_z = max_min_z[1];
-	close(exit_data->map_fd);
-	exit_data->map_fd = -1;
-}
-

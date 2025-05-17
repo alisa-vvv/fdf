@@ -16,7 +16,8 @@ CFILES	=	fdf.c\
 			fdf_utils.c\
 			init.c\
 			exit.c\
-			parsing.c\
+			parsing_starter.c\
+			parsing_loop.c\
 			loop_hook.c\
 			key_hook.c\
 			line_drawing.c\

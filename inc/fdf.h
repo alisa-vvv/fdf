@@ -142,6 +142,7 @@ void			create_window(t_fdf *fdf, char *map_file,
 void			set_exit_data(t_exit_data *exit_data, char *fd_arg);
 t_fdf_param		set_parameters(void);
 t_fdf			*setup_fdf_data(t_exit_data *exit_data);
+int				read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data);
 
 /*	Vector/matrix rotations, transformations, projection	*/
 void	rotate_along_x(t_fdf_vec *vector, float angle);
@@ -154,16 +155,16 @@ void	vector_by_scalar(t_fdf_vec *vector, const float scalar);
 void	setval_fdf_vector(t_fdf_vec *vector, int x, int y, int z);
 
 /*	Map transformation	*/
-t_transformed_map	*alloc_transformed_map(t_fdf *fdf, t_exit_data *exit_data);
+void	alloc_transformed_map(t_fdf *fdf, t_exit_data *exit_data);
 void				transform_map(t_fdf *fdf, t_transformed_map *transformed_map);
 
 /*	Line drawing	*/
 void	draw_line(t_fdf *fdf, t_pixel start, t_pixel end);
 
 /*	Image creation	*/
-void	draw_map(t_fdf *fdf, t_transformed_map *map);
-void	redraw(t_fdf *fdf, t_transformed_map *map);
-void	put_aligned_image_to_window(t_fdf *fdf);
+void	draw_map(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map);
+void	redraw(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map);
+void	put_aligned_image_to_window(t_fdf *fdf, t_exit_data *exit_data);
 
 /*	Controls	*/
 void	fdf_key_hook(mlx_key_data_t keydata, void *param);

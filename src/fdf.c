@@ -20,7 +20,6 @@ int	main(int argc, char *argv[])
 
 	if (argc != 2)
 		return (1);
-	ft_printf("argv[1]: %s\n", argv[1]);
 	set_exit_data(&exit_data, argv[1]);
 	fdf = setup_fdf_data(&exit_data);
 	parse_map(&exit_data);

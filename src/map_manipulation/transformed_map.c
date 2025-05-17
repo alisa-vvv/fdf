@@ -33,13 +33,14 @@ t_fdf_vec		*allocate_vector_array(int size)
 	return (new_array);
 }
 
-t_transformed_map	*alloc_transformed_map(t_fdf *fdf, t_exit_data *exit_data)
+void	alloc_transformed_map(t_fdf *fdf, t_exit_data *exit_data)
 {
-	t_transformed_map	*new_map;
 	t_fdf_vec			**new_vector_array;
+	t_transformed_map	*new_map;
 	int					y;
 
 	new_map = ft_calloc(1, sizeof(t_transformed_map));
+	exit_data->transformed_map = new_map;
 	if (!new_map)
 		error_exit(exit_data, MALLOC_ERR, false);
 	new_vector_array = ft_calloc(fdf->map->max_y + 2, sizeof(*new_vector_array));
@@ -53,7 +54,6 @@ t_transformed_map	*alloc_transformed_map(t_fdf *fdf, t_exit_data *exit_data)
 		if (!new_vector_array[y])
 			error_exit(exit_data, MALLOC_ERR, false);
 	}
-	return (new_map);
 }
 
 void	clear_transformed_map(t_transformed_map *map, int max_x, int max_y)
