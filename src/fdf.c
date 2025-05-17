@@ -25,7 +25,8 @@ int	main(int argc, char *argv[])
 	parse_map(&exit_data);
 	//test_print_map(fdf->map->coord, fdf->map->max_x, fdf->map->max_y);
 	create_window(fdf, argv[1], &exit_data);
-	initial_draw(fdf, &exit_data);
+	alloc_transformed_map(fdf, &exit_data);
+	initial_draw(fdf, &exit_data, exit_data.transformed_map);
 	mlx_key_hook(fdf->window, fdf_key_hook, &exit_data);
 	mlx_loop_hook(fdf->window, fdf_loop_hook, &exit_data);
 	mlx_loop(fdf->window);

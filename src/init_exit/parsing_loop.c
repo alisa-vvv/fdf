@@ -119,7 +119,7 @@ int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 	}
 	if (err_check != 1)
 		map->max_x = get_x_z(&map->coord[y], map->colors, next_line, y);
-	if (map->max_x <= 0 || err_check != 0)
+	if (map->max_x < 0 || err_check != 0)
 		err_check = panic_free(map->coord, map->colors, y);
 	free(next_line);
 	return (err_check);

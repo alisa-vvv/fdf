@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   utils.c                                           :+:    :+:             */
+/*   fdf_utils.c                                       :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 19:26:24 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/03/09 19:27:38 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/17 18:55:13 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "MLX42/MLX42_Int.h"
 #include <math.h>
 #include <stdlib.h>
-#include <errno.h>
 #include <limits.h>
 
 int	ft_isspace(int c)

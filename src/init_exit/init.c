@@ -23,29 +23,27 @@ void	redraw(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map)
 	put_aligned_image_to_window(fdf, exit_data);
 }
 
-void	initial_draw(t_fdf *fdf, t_exit_data *exit_data)
+void	initial_draw(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map)
 {
-	t_transformed_map	*map;
-
-	alloc_transformed_map(fdf, exit_data);
-	map = exit_data->transformed_map;
-	fdf->param.zoom = fdf->param.zoom_max;
 	transform_map(fdf, map);
-	while (map->max_x > MAX_IMAGE_SIZE
-		|| map->max_y > MAX_IMAGE_SIZE
-		|| map->min_x < MIN_IMAGE_SIZE
-		|| map->min_y < MIN_IMAGE_SIZE)
+	while (map->max_x > MAX_IMAGE_SIZE || map->max_y > MAX_IMAGE_SIZE
+		|| map->min_x < MIN_IMAGE_SIZE || map->min_y < MIN_IMAGE_SIZE)
 	{	
 		fdf->param.zoom -= 5;
+		if (fdf->param.zoom <= 0)
+			error_exit(exit_data, MAP_ERR, false);
 		transform_map(fdf, map);
-		fdf->param.zoom_max = fdf->param.zoom;
 	}
-	if (fdf->param.zoom_max > ZOOM_DEFAULT)
+	fdf->param.zoom_max = fdf->param.zoom;
+	while ((int) map->max_y > (WINDOW_HEIGHT / 2)
+		&& (int) map->max_x > (WINDOW_WIDTH / 2))
 	{
-		fdf->param.zoom = ZOOM_DEFAULT;
+		fdf->param.zoom -= 1;
+		if (fdf->param.zoom <= 0)
+			error_exit(exit_data, MAP_ERR, false);
 		transform_map(fdf, map);
 	}
-	fdf->param.zoom_prev = fdf->param.zoom;
+	fdf->param.zoom_default = fdf->param.zoom;
 	draw_map(fdf, exit_data, map);
 	put_aligned_image_to_window(fdf, exit_data);
 }
@@ -53,7 +51,7 @@ void	initial_draw(t_fdf *fdf, t_exit_data *exit_data)
 void	create_window(t_fdf *fdf, char *map_file, t_exit_data *exit_data)
 {
 	mlx_set_setting(MLX_STRETCH_IMAGE, 0);
-	fdf->window = mlx_init(2048, 1536, map_file, false);
+	fdf->window = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, map_file, false);
 	if (!fdf->window)
 		error_exit(exit_data, MLX42_ERR, true);
 }
@@ -73,8 +71,8 @@ t_fdf_param	set_parameters(void)
 {
 	t_fdf_param	param;
 
-	param.zoom = ZOOM_DEFAULT;
-	param.zoom_prev = param.zoom;
+	param.zoom = MAX_ZOOM_DEFAULT;
+	param.zoom_default = MAX_ZOOM_DEFAULT;
 	param.zoom_max = MAX_ZOOM_DEFAULT;
 	param.height_mod = HEIGHT_DEFAULT;
 	param.height_mod_max = MAX_HEIGHT_DEFAULT;

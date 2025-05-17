@@ -25,7 +25,6 @@ CFILES	=	fdf.c\
 			line_algo.c\
 			coordinate_adjustments.c\
 			rotations.c\
-			vector_matrix_math.c\
 			transformed_map.c\
 			test_funcs.c
 
@@ -51,7 +50,7 @@ INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
 RM	= rm -rf
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/t1.fdf
+INPUT	= test_maps/diff_sizes.fdf
 
 $(OBJDIR)/%.o: %.c $(INCLUDEFILES) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))

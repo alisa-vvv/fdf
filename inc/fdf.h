@@ -18,12 +18,15 @@
 
 /*	Error messages	*/
 # define PARSE_ERR "Error! Parsing fail"
+# define MAP_ERR "Error! Map is too big"
 # define MALLOC_ERR "Error! malloc()"
 # define DUP2_ERR "Error! dup2()"
 # define FD_ERR "Error! Invalid file descriptor"
 # define MLX42_ERR "Error! MLX42"
 
 /*	Default values	*/
+# define WINDOW_HEIGHT 1536
+# define WINDOW_WIDTH 2048
 # define MAX_IMAGE_SIZE 9500
 # define MIN_IMAGE_SIZE -9500
 # define COLOR_TEAL "0x008080FF"
@@ -34,7 +37,6 @@
 # define RGBA_WHITE 0xFFFFFFFF
 # define RGBA_BLUE 0x0000FFFF
 # define RGBA_RED 0xFF0000FF
-# define ZOOM_DEFAULT 50
 # define MAX_ZOOM_DEFAULT 300
 # define MAX_HEIGHT_DEFAULT 10
 # define HEIGHT_DEFAULT 6
@@ -102,7 +104,7 @@ typedef enum	e_map_color
 typedef struct	s_fdf_param
 {
 	int			zoom;
-	int			zoom_prev;
+	int			zoom_default;
 	int			zoom_max;
 	int			height_mod;
 	int			height_mod_max;
@@ -136,7 +138,7 @@ void			error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx);
 void	parse_map(t_exit_data *exit_data);
 
 /*	Initialization	*/
-void			initial_draw(t_fdf *fdf, t_exit_data *exit_data);
+void	initial_draw(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map);
 void			create_window(t_fdf *fdf, char *map_file,
 					 t_exit_data *exit_data);
 void			set_exit_data(t_exit_data *exit_data, char *fd_arg);

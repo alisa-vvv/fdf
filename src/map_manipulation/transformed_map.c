@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   transformed_map->c                                 :+:    :+:             */
+/*   transformed_map.c                                 :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/15 15:33:12 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/15 15:33:54 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/17 18:54:39 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,11 @@ void	clear_transformed_map(t_transformed_map *map, int max_x, int max_y)
 
 void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
 {
-	t_fdf_vec	*vec;
+	t_fdf_vec	*const vec = &new_map->coord[y][x];
 
-	vec = &new_map->coord[y][x];
-	setval_fdf_vector(vec, x, y, fdf->map->coord[y][x]);
+	vec->x = x;
+	vec->y = y;
+	vec->z = fdf->map->coord[y][x];
 	vec->color = fdf->map->colors[y][x];
 }
 
