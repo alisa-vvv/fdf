@@ -98,8 +98,6 @@ static void	horizontal(t_fdf *fdf, t_pixel start, t_pixel end)
 
 void	draw_line(t_fdf *fdf, t_pixel start, t_pixel end)
 {
-	// ADD COORDINATE ERROR CHECKING
-	//ft_printf("start.x: %d, end.x: %d, start.y: %d, end.y: %d\n", start.x, end.x, start.y, end.y);
 	if (abs(end.x - start.x) > abs(end.y - start.y))
 		horizontal(fdf, start, end);
 	else
