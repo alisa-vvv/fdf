@@ -119,14 +119,14 @@ void	draw_map(t_fdf *fdf, t_transformed_map *map)
 		mlx_delete_image(fdf->window, fdf->img);
 	create_map_image(fdf, map);
 	y = 0;
-	while (y <= fdf->map.max_y)
+	while (y <= fdf->map->max_y)
 	{
 		x = 0;
-		while (x <= fdf->map.max_x)
+		while (x <= fdf->map->max_x)
 		{
-			if (x < fdf->map.max_x)
+			if (x < fdf->map->max_x)
 				draw_segment(fdf, map, map->coord[y][x], map->coord[y][x + 1]);
-			if (y < fdf->map.max_y)
+			if (y < fdf->map->max_y)
 				draw_segment(fdf, map, map->coord[y][x], map->coord[y + 1][x]);
 			x++;
 		}

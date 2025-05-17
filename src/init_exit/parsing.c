@@ -124,7 +124,7 @@ static int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 		map->coord = (int **) ft_calloc((y + 1), sizeof(int *));
 		if (!map->coord)
 			return (1);
-		map->colors = (char ***) fake_ft_calloc((y + 1), sizeof(char **));
+		map->colors = (char ***) ft_calloc((y + 1), sizeof(char **));
 		if (!map->colors)
 			return (1);
 		map->max_y = y - 1;
@@ -146,18 +146,11 @@ void	parse_map(t_exit_data *exit_data)
 	int		max_min_z[2];
 	int		error_check;
 
-//	map.max_y = 0;
-//	map.max_x = 0;
-//	map.max_z = 0;
-//	map.min_z = 0;
-//	map.colors = NULL;
-//	map.coord = NULL;
 	map = ft_calloc(1, sizeof(t_map));
 	if (!map)
 		error_exit(exit_data, MALLOC_ERR, 0);
 	exit_data->fdf->map = map;
 	error_check = read_map(map, exit_data->map_fd, 0, exit_data);
-	ft_printf("map.colors: %d, map.coord: %d\n", map->colors, map->coord);
 	if (error_check != 0 || map->colors == NULL || map->coord == NULL)
 		error_exit(exit_data, PARSE_ERR, 0);
 	get_max_min_z(map->coord, max_min_z, map->max_x, map->max_y);
