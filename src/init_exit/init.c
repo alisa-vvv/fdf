@@ -93,10 +93,12 @@ t_fdf	*setup_fdf_data(t_exit_data *exit_data)
 {
 	t_fdf	*fdf;
 
-	fdf = (t_fdf *) malloc(sizeof (t_fdf));
+	fdf = (t_fdf *) ft_calloc(1, sizeof (t_fdf));
 	if (!fdf)
 		error_exit(exit_data, MALLOC_ERR, false);
-	exit_data->fdf = fdf;
+	//fdf->window = NULL;
+	//fdf->img = NULL;
 	fdf->param = set_parameters();
+	exit_data->fdf = fdf;
 	return (fdf);
 }

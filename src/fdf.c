@@ -23,7 +23,7 @@ int	main(int argc, char *argv[])
 	ft_printf("argv[1]: %s\n", argv[1]);
 	set_exit_data(&exit_data, argv[1]);
 	fdf = setup_fdf_data(&exit_data);
-	fdf->map = parse_map(&exit_data);
+	parse_map(&exit_data);
 	//test_print_map(fdf->map.coord, fdf->map.max_x, fdf->map.max_y);
 	create_window(fdf, argv[1], &exit_data);
 	initial_draw(fdf, &exit_data);

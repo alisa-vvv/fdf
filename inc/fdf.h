@@ -116,7 +116,7 @@ typedef struct	s_fdf_param
 typedef struct	s_fdf
 {
 	t_fdf_param	param;
-	t_map		map;
+	t_map		*map;
 	mlx_t		*window;
 	mlx_image_t	*img;
 }	t_fdf;
@@ -125,6 +125,7 @@ typedef struct	s_fdf_exit_data
 {
 	t_fdf				*fdf;
 	t_transformed_map	*transformed_map;
+	char				*map_line;
 	int					map_fd;
 	int					last_err;
 }	t_exit_data;
@@ -132,7 +133,7 @@ typedef struct	s_fdf_exit_data
 /*	Main functions	*/
 mlx_closefunc	clean_exit(t_exit_data *exit_data);
 void			error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx);
-t_map			parse_map(t_exit_data *exit_data);
+void	parse_map(t_exit_data *exit_data);
 
 /*	Initialization	*/
 void			initial_draw(t_fdf *fdf, t_exit_data *exit_data);
@@ -177,6 +178,8 @@ int	ft_isspace(int c);
 /*	TEST (COMMENT THEM OUT)	*/
 void	test_print_map(int **coord, int max_x, int max_y);
 void	test_print_fdf_vec(t_fdf_vec *vector, char *vec_name);
+void	*fake_ft_calloc(size_t nmemb, size_t size);
+void	*fake_malloc(size_t size);
 //void	test_move_square(t_fdf *fdf, e_action action);
 
 #endif

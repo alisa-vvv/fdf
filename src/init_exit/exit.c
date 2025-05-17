@@ -76,9 +76,16 @@ mlx_closefunc	clean_exit(t_exit_data *exit_data)
 	{
 		if (fdf->window)
 			mlx_terminate(fdf->window);
-		free_2d_arr((void **) fdf->map.coord);
+		if (fdf->map.coord)
+		{
+			free_2d_arr((void **) fdf->map.coord);
+			ft_printf("this happen?\n");
+		}
 		if (fdf->map.colors)
+		{
 			free_color_map(fdf->map.colors, fdf->map.max_y);
+			ft_printf("this happen?\n");
+		}
 		free(fdf);
 	}
 	//int	y = -1;

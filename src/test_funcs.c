@@ -33,6 +33,19 @@ void	test_print_map(int **coord, int max_x, int max_y)
 	}
 }
 
+void	*fake_malloc(size_t size)
+{
+	ft_printf("size passed to malloc: %d\n", size);
+	return (NULL);
+}
+
+void	*fake_ft_calloc(size_t nmemb, size_t size)
+{
+	ft_printf("nmemb passed to calloc: %d\n", nmemb);
+	ft_printf("size passed to calloc: %d\n", size);
+	return (NULL);
+}
+
 void	test_print_fdf_vec(t_fdf_vec *vector, char *vec_name)
 {
 	printf("\n");
