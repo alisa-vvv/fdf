@@ -6,24 +6,13 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/15 15:33:12 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/17 18:54:39 by avaliull     ########   odam.nl          */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */ /*                                                                            */
-/*                                                       ::::::::             */
-/*   transformed_map->c                                 :+:    :+:             */
-/*                                                    +:+                     */
-/*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
-/*                                                  +#+                       */
-/*   Created: 2025/04/14 16:28:02 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/04/14 16:28:51 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/20 20:51:04 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_fdf_vec		*allocate_vector_array(int size)
+t_fdf_vec	*allocate_vector_array(int size)
 {
 	t_fdf_vec	*new_array;
 
@@ -35,7 +24,7 @@ t_fdf_vec		*allocate_vector_array(int size)
 
 void	alloc_transformed_map(t_fdf *fdf, t_exit_data *exit_data)
 {
-	t_fdf_vec			**new_vector_array;
+	t_fdf_vec			**vectors;
 	t_transformed_map	*new_map;
 	int					y;
 
@@ -43,15 +32,15 @@ void	alloc_transformed_map(t_fdf *fdf, t_exit_data *exit_data)
 	exit_data->transformed_map = new_map;
 	if (!new_map)
 		error_exit(exit_data, MALLOC_ERR, false);
-	new_vector_array = ft_calloc(fdf->map->max_y + 2, sizeof(*new_vector_array));
-	if (!new_vector_array)
+	vectors = ft_calloc(fdf->map->max_y + 2, sizeof(*vectors));
+	if (!vectors)
 		error_exit(exit_data, MALLOC_ERR, false);
-	new_map->coord = new_vector_array;
+	new_map->coord = vectors;
 	y = -1;
 	while (++y <= fdf->map->max_y)
 	{
-		new_vector_array[y] = allocate_vector_array(fdf->map->max_x + 2);
-		if (!new_vector_array[y])
+		vectors[y] = allocate_vector_array(fdf->map->max_x + 2);
+		if (!vectors[y])
 			error_exit(exit_data, MALLOC_ERR, false);
 	}
 }
@@ -71,7 +60,7 @@ void	clear_transformed_map(t_transformed_map *map, int max_x, int max_y)
 
 void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
 {
-	t_fdf_vec	*const vec = &new_map->coord[y][x];
+	t_fdf_vec *const	vec = &new_map->coord[y][x];
 
 	vec->x = x;
 	vec->y = y;
@@ -93,7 +82,7 @@ void	transform_map(t_fdf *fdf, t_transformed_map *transformed_map)
 		{
 			add_vector_to_map(fdf, x, y, transformed_map);
 			project_map(transformed_map, fdf,
-					  &transformed_map->coord[y][x]);
+				&transformed_map->coord[y][x]);
 			if (x < fdf->map->max_x)
 				add_vector_to_map(fdf, x + 1, y, transformed_map);
 			if (y < fdf->map->max_y)

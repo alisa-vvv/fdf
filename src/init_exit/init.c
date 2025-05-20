@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/13 14:43:21 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/15 17:37:10 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/20 20:38:56 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,38 +16,41 @@
 
 // move this to a different file probably
 // ,aybe not actually
-void	redraw(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map)
-{
-	transform_map(fdf, map);
-	draw_map(fdf, exit_data, map);
-	put_aligned_image_to_window(fdf, exit_data);
-}
-
-void	initial_draw(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map)
-{
-	transform_map(fdf, map);
-	while (map->max_x > MAX_IMAGE_SIZE || map->max_y > MAX_IMAGE_SIZE
-		|| map->min_x < MIN_IMAGE_SIZE || map->min_y < MIN_IMAGE_SIZE)
-	{	
-		fdf->param.zoom -= 5;
-		if (fdf->param.zoom <= 0)
-			error_exit(exit_data, MAP_ERR, false);
-		transform_map(fdf, map);
-	}
-	fdf->param.zoom_max = fdf->param.zoom;
-	while ((int) map->max_y > (WINDOW_HEIGHT / 2)
-		&& (int) map->max_x > (WINDOW_WIDTH / 2))
-	{
-		fdf->param.zoom -= 1;
-		if (fdf->param.zoom <= 0)
-			error_exit(exit_data, MAP_ERR, false);
-		transform_map(fdf, map);
-	}
-	fdf->param.zoom_default = fdf->param.zoom;
-	draw_map(fdf, exit_data, map);
-	put_aligned_image_to_window(fdf, exit_data);
-}
-
+//void	redraw(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map)
+//{
+//	transform_map(fdf, map);
+//	draw_map(fdf, exit_data, map);
+//	put_aligned_image_to_window(fdf, exit_data);
+//}
+//
+//void	initial_draw(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map)
+//{
+//	transform_map(fdf, map);
+//	while (map->max_x > MAX_IMAGE_SIZE || map->max_y > MAX_IMAGE_SIZE
+//		|| map->min_x < MIN_IMAGE_SIZE || map->min_y < MIN_IMAGE_SIZE)
+//	{	
+//		fdf->param.zoom -= 5;
+//		if (fdf->param.zoom <= 0)
+//		{
+//			ft_printf("here?\n");
+//			error_exit(exit_data, BIG_MAP_ERR, false);
+//		}
+//		transform_map(fdf, map);
+//	}
+//	fdf->param.zoom_max = fdf->param.zoom;
+//	while ((int) map->max_y > (WINDOW_HEIGHT / 2)
+//		&& (int) map->max_x > (WINDOW_WIDTH / 2))
+//	{
+//		fdf->param.zoom -= 1;
+//		if (fdf->param.zoom <= 0)
+//			fdf->param.zoom = 1;
+//		transform_map(fdf, map);
+//	}
+//	fdf->param.zoom_default = fdf->param.zoom;
+//	draw_map(fdf, exit_data, map);
+//	put_aligned_image_to_window(fdf, exit_data);
+//}
+//
 void	create_window(t_fdf *fdf, char *map_file, t_exit_data *exit_data)
 {
 	mlx_set_setting(MLX_STRETCH_IMAGE, 0);
@@ -74,8 +77,6 @@ t_fdf_param	set_parameters(void)
 	param.zoom = MAX_ZOOM_DEFAULT;
 	param.zoom_default = MAX_ZOOM_DEFAULT;
 	param.zoom_max = MAX_ZOOM_DEFAULT;
-	param.height_mod = HEIGHT_DEFAULT;
-	param.height_mod_max = MAX_HEIGHT_DEFAULT;
 	param.x_offset = 0;
 	param.y_offset = 0;
 	param.color_mode = from_map;

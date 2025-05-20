@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/27 16:33:58 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/15 17:45:26 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/20 20:45:29 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	test_print_map(int **coord, int max_x, int max_y)
 	while (y <= max_y)
 	{
 		x = 0;
-		while(x <= max_x)
+		while (x <= max_x)
 		{
 			ft_printf("%d ", coord[y][x]);
 			ft_putchar_fd(' ', STDOUT_FILENO);

@@ -1,6 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                       ::::::::             */
+/* ************************************************************************** */ /*                                                                            */ /*                                                       ::::::::             */
 /*   fdf.h                                             :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
@@ -18,7 +16,8 @@
 
 /*	Error messages	*/
 # define PARSE_ERR "Error! Parsing fail"
-# define MAP_ERR "Error! Map is too big"
+# define BIG_MAP_ERR "Error! Map is too big"
+# define EMPTY_MAP_ERR "Error! Map is empty"
 # define MALLOC_ERR "Error! malloc()"
 # define DUP2_ERR "Error! dup2()"
 # define FD_ERR "Error! Invalid file descriptor"
@@ -29,6 +28,7 @@
 # define WINDOW_WIDTH 2048
 # define MAX_IMAGE_SIZE 9500
 # define MIN_IMAGE_SIZE -9500
+# define MAX_MAP_SIZE 3000
 # define COLOR_TEAL "0x008080FF"
 # define COLOR_WHITE "0xFFFFFFFF"
 # define COLOR_BLUE "0x0000FFFF"
@@ -78,7 +78,6 @@ typedef	struct	s_map
 {
 	int		**coord;
 	char	***colors;
-	rgba_u	**height_colors;
 	int		max_x;
 	int		max_y;
 	int		max_z;
@@ -106,8 +105,6 @@ typedef struct	s_fdf_param
 	int			zoom;
 	int			zoom_default;
 	int			zoom_max;
-	int			height_mod;
-	int			height_mod_max;
 	int			x_offset;
 	int			y_offset;
 	int			rotation_count;

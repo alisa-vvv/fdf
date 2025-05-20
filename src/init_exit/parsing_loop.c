@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   parsing.c                                         :+:    :+:             */
+/*   parsing_loop.c                                    :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
-/*   Created: 2025/03/09 20:04:34 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/08 19:22:32 by avaliull     ########   odam.nl          */
+/*   Created: 2025/05/20 19:43:20 by avaliull     #+#    #+#                  */
+/*   Updated: 2025/05/20 20:09:28 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <stdio.h>
 #include <fcntl.h>
+#include <limits.h>
 
 static int	read_colors(char **values, char **colors, int max_x)
 {
@@ -48,21 +49,18 @@ static int	*allocate_x(int *coord, char **values, int x, int *max_x)
 		coord = allocate_x(coord, values, x + 1, max_x);
 	else
 	{
+		if (x >= MAX_MAP_SIZE)
+		{
+			*max_x = -2;
+			return (NULL);
+		}
 		coord = (int *) ft_calloc(x, sizeof(int));
 		if (!coord)
 			return (NULL);
-		//ft_printf("x: %d\n", x);
-		//ft_printf("max_x: %d\n", *max_x);
 		if (*max_x == x - 1 || *max_x == -1)
-		{
 			*max_x = x;
-			//ft_printf("do we get here?\n");
-		}
 		else
-		{
-		//	ft_printf("do we get here?  2\n");
 			*max_x = -2;
-		}
 		return (coord);
 	}
 	if (coord)
@@ -80,7 +78,6 @@ static int	get_x_z(t_map *map, int **coord, char *line, int y)
 	*coord = allocate_x(*coord, values, 0, &map->max_x);
 	if (!*coord || map->max_x == -2)
 	{
-		ft_printf("why ? i cry\n");
 		free_2d_arr((void **) values);
 		return (-1);
 	}
@@ -92,16 +89,15 @@ static int	get_x_z(t_map *map, int **coord, char *line, int y)
 		return (-1);
 	}
 	if (read_colors(values, map->colors[y], map->max_x) != 0)
-	{
 		map->max_x = -1;
-	}
 	free_2d_arr((void **) values);
 	return (map->max_x);
 }
 
-static int	panic_free(int **coord, char ***colors, int y)
+static void	panic_free(int **coord, char ***colors, int y)
 {
 	int	i;
+
 	i = y;
 	if (coord)
 		while (coord[i])
@@ -110,19 +106,20 @@ static int	panic_free(int **coord, char ***colors, int y)
 	if (colors)
 		while (colors[i])
 			free(colors[i++]);
-	return (1);
 }
 
 int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 {
-	char	*next_line;
 	int		err_check;
+	char	*const next_line = get_next_line(map_fd);
 
-	next_line = get_next_line(map_fd);
-	if (next_line != NULL)
+	err_check = 0;
+	if (next_line != NULL && y < MAX_MAP_SIZE)
 		err_check = read_map(map, map_fd, y + 1, exit_data);
 	else
 	{
+		if (y == 0 || y >= MAX_MAP_SIZE || err_check != 0)
+			return (free(next_line), 1);
 		map->coord = (int **) ft_calloc((y + 1), sizeof(int *));
 		map->colors = (char ***) ft_calloc((y + 1), sizeof(char **));
 		if (!map->coord || !map->colors)
@@ -133,7 +130,6 @@ int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 	if (err_check != 1)
 		map->max_x = get_x_z(map, &map->coord[y], next_line, y);
 	if (map->max_x < 0 || err_check != 0)
-		err_check = panic_free(map->coord, map->colors, y);
-	free(next_line);
-	return (err_check);
+		panic_free(map->coord, map->colors, y);
+	return (free(next_line), err_check);
 }

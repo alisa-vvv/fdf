@@ -20,6 +20,7 @@ CFILES	=	fdf.c\
 			parsing_loop.c\
 			loop_hook.c\
 			key_hook.c\
+			draw_calls.c\
 			image_creation.c\
 			line_drawing.c\
 			line_algo.c\
@@ -50,7 +51,7 @@ INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
 RM	= rm -rf
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/diff_sizes.fdf
+INPUT	= test_maps/elem-fract.fdf
 
 $(OBJDIR)/%.o: %.c $(INCLUDEFILES) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
