@@ -50,6 +50,8 @@ void	parse_map(t_exit_data *exit_data)
 	map = ft_calloc(1, sizeof(t_map));
 	if (!map)
 		error_exit(exit_data, MALLOC_ERR, 0);
+	map->max_x = -1;
+	map->max_y = 0;
 	exit_data->fdf->map = map;
 	error_check = read_map(map, exit_data->map_fd, 0, exit_data);
 	if (error_check != 0 || map->colors == NULL || map->coord == NULL)

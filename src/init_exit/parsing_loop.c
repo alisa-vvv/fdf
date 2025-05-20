@@ -51,7 +51,18 @@ static int	*allocate_x(int *coord, char **values, int x, int *max_x)
 		coord = (int *) ft_calloc(x, sizeof(int));
 		if (!coord)
 			return (NULL);
-		*max_x = x - 1;
+		//ft_printf("x: %d\n", x);
+		//ft_printf("max_x: %d\n", *max_x);
+		if (*max_x == x - 1 || *max_x == -1)
+		{
+			*max_x = x;
+			//ft_printf("do we get here?\n");
+		}
+		else
+		{
+		//	ft_printf("do we get here?  2\n");
+			*max_x = -2;
+		}
 		return (coord);
 	}
 	if (coord)
@@ -59,31 +70,33 @@ static int	*allocate_x(int *coord, char **values, int x, int *max_x)
 	return (coord);
 }
 
-static int	get_x_z(int **coord, char ***colors, char *line, int y)
+static int	get_x_z(t_map *map, int **coord, char *line, int y)
 {
 	char	**values;
-	int		max_x;
 
 	values = ft_split(line, ' ');
 	if (!values)
 		return (-1);
-	max_x = 0;
-	*coord = allocate_x(*coord, values, 0, &max_x);
-	if (!*coord)
+	*coord = allocate_x(*coord, values, 0, &map->max_x);
+	if (!*coord || map->max_x == -2)
+	{
+		ft_printf("why ? i cry\n");
+		free_2d_arr((void **) values);
+		return (-1);
+	}
+	map->max_x--;
+	map->colors[y] = (char **) ft_calloc(map->max_x + 2, sizeof(char *));
+	if (!map->colors[y])
 	{
 		free_2d_arr((void **) values);
 		return (-1);
 	}
-	colors[y] = (char **) ft_calloc(max_x + 2, sizeof(char *));
-	if (!colors[y])
+	if (read_colors(values, map->colors[y], map->max_x) != 0)
 	{
-		free_2d_arr((void **) values);
-		return (-1);
+		map->max_x = -1;
 	}
-	if (read_colors(values, colors[y], max_x) != 0)
-		max_x = -1;
 	free_2d_arr((void **) values);
-	return (max_x);
+	return (map->max_x);
 }
 
 static int	panic_free(int **coord, char ***colors, int y)
@@ -118,7 +131,7 @@ int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 		return (0);
 	}
 	if (err_check != 1)
-		map->max_x = get_x_z(&map->coord[y], map->colors, next_line, y);
+		map->max_x = get_x_z(map, &map->coord[y], next_line, y);
 	if (map->max_x < 0 || err_check != 0)
 		err_check = panic_free(map->coord, map->colors, y);
 	free(next_line);
