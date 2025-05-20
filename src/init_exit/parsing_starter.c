@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 20:04:34 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/20 20:01:07 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/20 20:55:18 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-static void	get_max_min_z(int **coord, int *max_min_z,
-						  const int max_x, const int max_y)
+static void	get_max_min_z(int **const coord, int *max_min_z,
+						const int max_x, const int max_y)
 {
 	int	x;
 	int	y;

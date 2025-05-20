@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/20 19:43:20 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/20 20:09:28 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/20 20:53:41 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ static void	panic_free(int **coord, char ***colors, int y)
 
 int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 {
-	int		err_check;
-	char	*const next_line = get_next_line(map_fd);
+	int			err_check;
+	char *const next_line = get_next_line(map_fd);
 
 	err_check = 0;
 	if (next_line != NULL && y < MAX_MAP_SIZE)
