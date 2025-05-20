@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   window_controls.c                                 :+:    :+:             */
+/*   exit.c                                            :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/26 14:30:24 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/13 17:18:52 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/20 20:58:37 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
-#include <string.h>
 
 void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx)
 {
@@ -45,7 +44,7 @@ static void	free_color_map(char ***map, int max_y)
 	free(map);
 }
 
-static void		free_map(t_map *map)
+static void	free_map(t_map *map)
 {
 	if (map->coord)
 		free_2d_arr((void **) map->coord);
@@ -56,7 +55,6 @@ static void		free_map(t_map *map)
 
 mlx_closefunc	clean_exit(t_exit_data *exit_data)
 {
-
 	t_fdf				*fdf;
 	t_transformed_map	*transformed_map;
 	int					map_fd;

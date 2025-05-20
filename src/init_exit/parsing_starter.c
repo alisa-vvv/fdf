@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 20:04:34 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/20 20:55:18 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/20 20:56:54 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,10 @@ static void	get_max_min_z(int **const coord, int *max_min_z,
 	max_z = coord[0][0];
 	min_z = coord[0][0];
 	y = -1;
-
 	while (++y <= max_y)
 	{
 		x = -1;
-		while(++x <= max_x)
+		while (++x <= max_x)
 		{
 			if (coord[y][x] > max_z)
 				max_z = coord[y][x];
@@ -54,14 +53,8 @@ void	parse_map(t_exit_data *exit_data)
 	map->max_y = 0;
 	exit_data->fdf->map = map;
 	error_check = read_map(map, exit_data->map_fd, 0, exit_data);
-	ft_printf("error_cehck: %d\n", error_check);
-	ft_printf("map colors: %s\n", map->colors);
-	ft_printf("map coord: %s\n", map->coord);
 	if (error_check != 0 || map->colors == NULL || map->coord == NULL)
-	{	
-		ft_printf("eh?\n");
 		error_exit(exit_data, PARSE_ERR, 0);
-	}
 	get_max_min_z(map->coord, max_min_z, map->max_x, map->max_y);
 	map->min_z = max_min_z[0];
 	map->max_z = max_min_z[1];
