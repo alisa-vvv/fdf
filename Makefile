@@ -70,6 +70,8 @@ $(NAME): $(OFILES) $(LIBFT_PRINTF) $(MLX)
 
 #Base/project requirements
 all: $(NAME)
+libs_clean:
+	$(MAKE) fclean -C $(LIBFT_PRINTF_DIR)
 clean: libs_clean
 	$(RM) $(OFILES) $(MLXDIR)/build
 fclean:	clean
