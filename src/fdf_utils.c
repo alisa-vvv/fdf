@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 19:26:24 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/21 17:37:45 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/21 18:34:02 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,49 +16,49 @@
 #include <stdlib.h>
 #include <limits.h>
 
-//int	ft_isspace(int c)
-//{
-//	unsigned char	u_c;
-//
-//	u_c = (unsigned char) c;
-//	if ((u_c >= '\t' && u_c <= '\r') || u_c == ' ')
-//		return (true);
-//	return (false);
-//}
-//
-//int	ft_isupper(int c)
-//{
-//	unsigned char	u_c;
-//
-//	u_c = (unsigned char) c;
-//	if (u_c >= 'A' && u_c <= 'Z')
-//		return (true);
-//	return (false);
-//}
-//
-//int	ft_islower(int c)
-//{
-//	unsigned char	u_c;
-//
-//	u_c = (unsigned char) c;
-//	if (u_c >= 'a' && u_c <= 'z')
-//		return (true);
-//	return (false);
-//}
-//
-//void	free_2d_arr(void **arr)
-//{
-//	int	i;
-//
-//	if (arr)
-//	{
-//		i = -1;
-//		while (arr[++i])
-//			free(arr[i]);
-//		free(arr);
-//	}
-//}
-//
+int	ft_isspace(int c)
+{
+	unsigned char	u_c;
+
+	u_c = (unsigned char) c;
+	if ((u_c >= '\t' && u_c <= '\r') || u_c == ' ')
+		return (true);
+	return (false);
+}
+
+int	ft_isupper(int c)
+{
+	unsigned char	u_c;
+
+	u_c = (unsigned char) c;
+	if (u_c >= 'A' && u_c <= 'Z')
+		return (true);
+	return (false);
+}
+
+int	ft_islower(int c)
+{
+	unsigned char	u_c;
+
+	u_c = (unsigned char) c;
+	if (u_c >= 'a' && u_c <= 'z')
+		return (true);
+	return (false);
+}
+
+void	free_2d_arr(void **arr)
+{
+	int	i;
+
+	if (arr)
+	{
+		i = -1;
+		while (arr[++i])
+			free(arr[i]);
+		free(arr);
+	}
+}
+
 int	hexstr_to_int(char *str, int len)
 {
 	int		i;
