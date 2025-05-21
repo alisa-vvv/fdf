@@ -6,11 +6,12 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 19:26:24 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/21 17:18:19 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/21 17:37:45 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include "ft_printf.h"
 #include <math.h>
 #include <stdlib.h>
 #include <limits.h>
