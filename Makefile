@@ -44,7 +44,6 @@ $(LIBDIR):
 	mkdir -p $@
 $(OBJDIR):
 	mkdir -p $@
-#MLX	= $(LIBDIR)/libmlx42.a -ldl -lglfw -pthread -lm
 MLXDIR = $(LIBDIR)/mlx42
 MLX	= -L$(MLXDIR)/build/ -lmlx42 -ldl -lglfw -pthread -lm
 LIBFT_PRINTF	= $(LIBDIR)/libft_printf/libftprintf.a
@@ -54,7 +53,7 @@ INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
 RM	= rm -rf
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/t1.fdf
+INPUT	= test_maps/pyramide.fdf
 
 $(OBJDIR)/%.o: %.c $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
@@ -62,8 +61,6 @@ $(OBJDIR)/%.o: %.c $(OBJDIR)
 $(LIBFT_PRINTF):
 	export CFLAGS
 	$(MAKE) all -C $(LIBFT_PRINTF_DIR)
-
-#	cp $(MLXDIR)/build/libmlx42.a $(LIBDIR)
 
 $(NAME): $(OFILES) $(LIBFT_PRINTF)
 	$(CC) $(CFLAGS) -o $@ $^ $(MLX) $(addprefix -I,$(INCLUDE))
@@ -88,6 +85,7 @@ re:	fclean all
 clangd:
 	$(MAKE) fclean
 	intercept-build-14 make all
+
 #debugging
 debug: CFLAGS += -g
 debug: re
