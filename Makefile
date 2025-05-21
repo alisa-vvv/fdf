@@ -44,8 +44,9 @@ $(LIBDIR):
 	mkdir -p $@
 $(OBJDIR):
 	mkdir -p $@
-MLX	= $(LIBDIR)/libmlx42.a -ldl -lglfw -pthread -lm
+#MLX	= $(LIBDIR)/libmlx42.a -ldl -lglfw -pthread -lm
 MLXDIR = $(LIBDIR)/mlx42
+MLX	= -L$(MLXDIR)/build/ -lmlx42 -ldl -lglfw -pthread -lm
 LIBFT_PRINTF	= $(LIBDIR)/libft_printf/libftprintf.a
 LIBFT_PRINTF_DIR = $(LIBDIR)/libft_printf
 INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
@@ -62,18 +63,17 @@ $(LIBFT_PRINTF):
 	export CFLAGS
 	$(MAKE) all -C $(LIBFT_PRINTF_DIR)
 
-$(MLX):
-	mkdir -p $(MLXDIR) ; cd $(MLXDIR) ;\
-	cmake -B build ; cmake --build build  -j4
-	chmod 777 $(MLXDIR)/build/libmlx42.a ;\
-	cp $(MLXDIR)/build/libmlx42.a $(LIBDIR)
-	echo checking: $(MLXDIR)
+#	cp $(MLXDIR)/build/libmlx42.a $(LIBDIR)
 
-$(NAME): $(MLX) $(OFILES) $(LIBFT_PRINTF)
-	$(CC) $(CFLAGS) -o $@ $^ $(addprefix -I,$(INCLUDE))
+$(NAME): $(OFILES) $(LIBFT_PRINTF)
+	$(CC) $(CFLAGS) -o $@ $^ $(MLX) $(addprefix -I,$(INCLUDE))
 
 #Base/project requirements
-all: submodules $(NAME)
+all: submodules mlx_build $(NAME)
+mlx_build:
+	mkdir -p $(MLXDIR) ; cd $(MLXDIR) ;\
+	cmake -B build ; cmake --build build  -j4
+	chmod 777 $(MLXDIR)/build/libmlx42.a
 submodules:
 	git submodule update --init --recursive --remote
 libs_clean:
@@ -95,8 +95,11 @@ gdb: debug
 	gdb ./$(NAME)
 test:	$(NAME)
 	./$< $(INPUT)
+run:
+	./fdf $(INPUT)
 leak:	debug
 	valgrind  --suppressions=MLX42.supp -s --leak-check=full \
 	--show-leak-kinds=all --track-fds=yes ./$(NAME) $(INPUT)
 
-.PHONY:	clangd all clean fclean re libs_clean test leak debug gdb submodules
+.PHONY:	clangd all clean fclean re libs_clean test run leak debug gdb\
+	submodules mlx_build
