@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/21 16:22:06 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/21 18:52:05 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/21 19:31:38 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,6 @@ t_fdf			*setup_fdf_data(t_exit_data *exit_data);
 int				read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data);
 
 /*	Vector/matrix rotations, transformations, projection	*/
-void			setval_fdf_vector(t_fdf_vec *vector, int x, int y, int z);
 void			rotate_along_x(t_fdf_vec *vector, float angle);
 void			rotate_along_y(t_fdf_vec *vector, float angle);
 void			rotate_along_z(t_fdf_vec *vector, float angle);
