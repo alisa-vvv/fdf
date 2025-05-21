@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                       ::::::::             */
+/*   loop_hook.c                                       :+:    :+:             */
+/*                                                    +:+                     */
+/*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
+/*                                                  +#+                       */
+/*   Created: 2025/05/21 16:09:56 by avaliull     #+#    #+#                  */
+/*   Updated: 2025/05/21 16:14:17 by avaliull     ########   odam.nl          */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 void	zoom_projection(t_fdf *const fdf, t_exit_data *const exit_data,
-					 t_transformed_map *const map)
+					t_transformed_map *const map)
 {
 	int	zoom_factor;
 
@@ -30,7 +42,7 @@ void	zoom_projection(t_fdf *const fdf, t_exit_data *const exit_data,
 }
 
 void	rotate_projection(t_fdf *const fdf, t_exit_data *const exit_data,
-				  t_transformed_map *const map)
+					t_transformed_map *const map)
 {
 	if (fdf->param.time_tracker > 0.1)
 	{
@@ -48,7 +60,7 @@ void	rotate_projection(t_fdf *const fdf, t_exit_data *const exit_data,
 }
 
 void	color_switch(t_fdf *const fdf, t_exit_data *const exit_data,
-				  t_transformed_map *const map)
+				t_transformed_map *const map)
 {
 	if (fdf->param.time_tracker > 0.2)
 	{
@@ -90,22 +102,22 @@ void	move_image(t_fdf *const fdf, int move_speed)
 
 void	fdf_loop_hook(void *param)
 {
-	t_exit_data * const	exit_data = (t_exit_data *) param;
-	t_fdf * const		fdf = exit_data->fdf;
+	t_exit_data *const	exit_data = (t_exit_data *) param;
+	t_fdf *const		fdf = exit_data->fdf;
 
 	fdf->param.time_tracker += fdf->window->delta_time;
 	if (mlx_is_key_down(fdf->window, MLX_KEY_C))
 		color_switch(fdf, exit_data, exit_data->transformed_map);
-	if (mlx_is_key_down(fdf->window, MLX_KEY_RIGHT) ||
-		mlx_is_key_down(fdf->window, MLX_KEY_LEFT))
+	if (mlx_is_key_down(fdf->window, MLX_KEY_RIGHT)
+		|| mlx_is_key_down(fdf->window, MLX_KEY_LEFT))
 		rotate_projection(fdf, exit_data, exit_data->transformed_map);
 	if (mlx_is_key_down(fdf->window, MLX_KEY_UP)
-	|| mlx_is_key_down(fdf->window, MLX_KEY_DOWN))
+		|| mlx_is_key_down(fdf->window, MLX_KEY_DOWN))
 		zoom_projection(fdf, exit_data, exit_data->transformed_map);
 	if (mlx_is_key_down(fdf->window, MLX_KEY_W)
-	|| mlx_is_key_down(fdf->window, MLX_KEY_S)
-	|| mlx_is_key_down(fdf->window, MLX_KEY_A)
-	|| mlx_is_key_down(fdf->window, MLX_KEY_D))
+		|| mlx_is_key_down(fdf->window, MLX_KEY_S)
+		|| mlx_is_key_down(fdf->window, MLX_KEY_A)
+		|| mlx_is_key_down(fdf->window, MLX_KEY_D))
 	{
 		if (mlx_is_key_down(fdf->window, MLX_KEY_LEFT_SHIFT))
 			move_image(fdf, 8);

@@ -111,7 +111,7 @@ static void	panic_free(int **coord, char ***colors, int y)
 int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 {
 	int			err_check;
-	char *const next_line = get_next_line(map_fd);
+	char *const	next_line = get_next_line(map_fd);
 
 	err_check = 0;
 	if (next_line != NULL && y < MAX_MAP_SIZE)

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                       ::::::::             */
+/*   key_hook.c                                        :+:    :+:             */
+/*                                                    +:+                     */
+/*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
+/*                                                  +#+                       */
+/*   Created: 2025/05/21 16:10:42 by avaliull     #+#    #+#                  */
+/*   Updated: 2025/05/21 16:10:43 by avaliull     ########   odam.nl          */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 void	fdf_key_hook(mlx_key_data_t keydata, void *param)
 {
-	t_exit_data * const	exit_data = (t_exit_data *) param;
-	t_fdf * const		fdf = exit_data->fdf;
+	t_exit_data *const	exit_data = (t_exit_data *) param;
+	t_fdf *const		fdf = exit_data->fdf;
 
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		clean_exit(exit_data);

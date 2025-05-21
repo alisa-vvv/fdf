@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/30 20:20:12 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/17 18:56:30 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/21 16:19:07 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	get_rgba_from_str(t_pixel *pixel, char *color_str)
 }
 
 void	alt_color(t_pixel *start_pixel, t_pixel *end_pixel,
-				  e_map_color color_mode)
+				t_map_color color_mode)
 {
 	if (color_mode == default_color)
 	{
@@ -47,7 +47,7 @@ void	alt_color(t_pixel *start_pixel, t_pixel *end_pixel,
 }
 
 void	create_line(t_fdf *fdf, t_transformed_map *map,
-				  t_fdf_vec vec, t_fdf_vec next_vec)
+				t_fdf_vec vec, t_fdf_vec next_vec)
 {
 	int			width_offset;
 	int			height_offset;

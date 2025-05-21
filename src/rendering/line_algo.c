@@ -6,14 +6,14 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/17 18:39:22 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/17 18:39:24 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/21 16:19:22 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "MLX42/MLX42.h"
 
-static	uint32_t	get_color(t_pixel *start, t_pixel *end, int distance, int i)
+static uint32_t	get_color(t_pixel *start, t_pixel *end, int distance, int i)
 {
 	int	red;
 	int	green;
@@ -45,7 +45,7 @@ static void	vertical(t_fdf *fdf, t_pixel start, t_pixel end)
 	while (++i < distance_y)
 	{
 		mlx_put_pixel(fdf->img, start.x, start.y + i,
-				get_color(&start, &end, distance_y, i));
+			get_color(&start, &end, distance_y, i));
 		if (decision_parameter >= 0)
 		{
 			start.x += direction;
@@ -73,7 +73,7 @@ static void	horizontal(t_fdf *fdf, t_pixel start, t_pixel end)
 	while (++i < distance_x)
 	{
 		mlx_put_pixel(fdf->img, start.x + i, start.y,
-				get_color(&start, &end, distance_x, i));
+			get_color(&start, &end, distance_x, i));
 		if (decision_parameter >= 0)
 		{
 			start.y += direction;
