@@ -5,8 +5,10 @@
 #                                                     +:+                      #
 #    By: avaliull <avaliull@student.codam.nl>        +#+                       #
 #                                                   +#+                        #
-#    Created: 2025/03/07 18:02:14 by avaliull     #+#    #+#                   #
-#    Updated: 2025/05/13 15:01:31 by avaliull     ########   odam.nl           # # **************************************************************************** #
+#    Created: 2025/05/21 19:45:55 by avaliull     #+#    #+#                   #
+#    Updated: 2025/05/21 20:03:54 by avaliull     ########   odam.nl           #
+#                                                                              #
+# **************************************************************************** #
 
 .DEFAULT_GOAL := all
 MAKEFLAGS =
@@ -39,9 +41,9 @@ INCDIR = inc
 SRCDIRS = $(addprefix $(SRCDIR)/, rendering controls init_exit\
 		  coordinate_manipulation map_manipulation) $(SRCDIR)
 $(LIBDIR):
-	mkdir $@
+	mkdir -p $@
 $(OBJDIR):
-	mkdir $@
+	mkdir -p $@
 MLX	= $(LIBDIR)/libmlx42.a -ldl -lglfw -pthread -lm
 MLXDIR = $(LIBDIR)/mlx42
 LIBFT_PRINTF	= $(LIBDIR)/libft_printf/libftprintf.a
@@ -53,7 +55,7 @@ CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
 INPUT	= test_maps/t1.fdf
 
-$(OBJDIR)/%.o: %.c $(INCLUDEFILES) | $(OBJDIR)
+$(OBJDIR)/%.o: %.c $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
 
 $(LIBFT_PRINTF):
@@ -61,15 +63,19 @@ $(LIBFT_PRINTF):
 	$(MAKE) all -C $(LIBFT_PRINTF_DIR)
 
 $(MLX):
-	cd $(MLXDIR) ; cmake -B build ; cmake --build build  -j4
-	chmod 777 $(MLXDIR)/build/libmlx42.a
+	mkdir -p $(MLXDIR) ; cd $(MLXDIR) ;\
+	cmake -B build ; cmake --build build  -j4
+	chmod 777 $(MLXDIR)/build/libmlx42.a ;\
 	cp $(MLXDIR)/build/libmlx42.a $(LIBDIR)
+	echo checking: $(MLXDIR)
 
-$(NAME): $(OFILES) $(LIBFT_PRINTF) $(MLX)
+$(NAME): $(MLX) $(OFILES) $(LIBFT_PRINTF)
 	$(CC) $(CFLAGS) -o $@ $^ $(addprefix -I,$(INCLUDE))
 
 #Base/project requirements
-all: $(NAME)
+all: submodules $(NAME)
+submodules:
+	git submodule update --init --recursive --remote
 libs_clean:
 	$(MAKE) fclean -C $(LIBFT_PRINTF_DIR)
 clean: libs_clean
@@ -93,4 +99,4 @@ leak:	debug
 	valgrind  --suppressions=MLX42.supp -s --leak-check=full \
 	--show-leak-kinds=all --track-fds=yes ./$(NAME) $(INPUT)
 
-.PHONY:	clangd all clean fclean re libs_clean test leak debug gdb
+.PHONY:	clangd all clean fclean re libs_clean test leak debug gdb submodules
