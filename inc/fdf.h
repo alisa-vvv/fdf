@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/21 16:22:06 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/21 18:38:19 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/21 18:52:05 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,15 +175,11 @@ void			fdf_loop_hook(void *param);
 
 /*	Utils	*/
 int				hexstr_to_int(char *str, int len);
-//void			free_2d_arr(void **arr);
-////int				n_to_10_convert(unsigned char *str, int str_len, int base, int sign);
-//int				ft_isspace(int c);
 
 /*	TEST (COMMENT THEM OUT)	*/
-void			test_print_map(int **coord, int max_x, int max_y);
-void			test_print_fdf_vec(t_fdf_vec *vector, char *vec_name);
-void			*fake_ft_calloc(size_t nmemb, size_t size);
-void			*fake_malloc(size_t size);
-//void	test_move_square(t_fdf *fdf, e_action action);
+//void			test_print_map(int **coord, int max_x, int max_y);
+//void			test_print_fdf_vec(t_fdf_vec *vector, char *vec_name);
+//void			*fake_ft_calloc(size_t nmemb, size_t size);
+//void			*fake_malloc(size_t size);
 
 #endif
