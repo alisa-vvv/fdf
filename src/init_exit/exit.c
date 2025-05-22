@@ -34,14 +34,14 @@ void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx)
 	clean_exit(exit_data);
 }
 
-static void	free_color_map(char ***map, int max_y)
+static void	free_color_map(char ***colors, int max_y)
 {
 	int	y;
 
 	y = -1;
 	while (++y <= max_y)
-		free_2d_arr((void **) map[y]);
-	free(map);
+		free_2d_arr((void **) colors[y]);
+	free(colors);
 }
 
 static void	free_map(t_map *map)
@@ -50,6 +50,8 @@ static void	free_map(t_map *map)
 		free_2d_arr((void **) map->coord);
 	if (map->colors)
 		free_color_map(map->colors, map->max_y);
+	if (map->height_colors)
+		free_color_map(map->height_colors, map->max_y);
 	free(map);
 }
 

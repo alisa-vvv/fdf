@@ -64,9 +64,11 @@ void	color_switch(t_fdf *const fdf, t_exit_data *const exit_data,
 {
 	if (fdf->param.time_tracker > 0.2)
 	{
+		ft_printf("checking: %d\n", fdf->param.color_mode);
 		fdf->param.color_mode++;
-		if (fdf->param.color_mode > 2)
+		if (fdf->param.color_mode > 3)
 			fdf->param.color_mode = 0;
+		ft_printf("checking after: %d\n", fdf->param.color_mode);
 		redraw(fdf, exit_data, map);
 		fdf->param.time_tracker = 0;
 	}

@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/30 20:20:12 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/21 18:53:54 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/22 19:53:41 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ void	create_line(t_fdf *fdf, t_transformed_map *map,
 	start_pixel.y = vec.y + height_offset;
 	end_pixel.x = next_vec.x + width_offset;
 	end_pixel.y = next_vec.y + height_offset;
-	if (fdf->param.color_mode == from_map)
+	if (fdf->param.color_mode == from_map
+		|| fdf->param.color_mode == height_gradient)
 	{
 		get_rgba_from_str(&start_pixel, vec.color);
 		get_rgba_from_str(&end_pixel, next_vec.color);

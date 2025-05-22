@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/15 15:33:12 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/20 20:51:04 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/22 20:30:11 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,17 @@ void	clear_transformed_map(t_transformed_map *map, int max_x, int max_y)
 void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
 {
 	t_fdf_vec *const	vec = &new_map->coord[y][x];
+	const int			z = fdf->map->coord[y][x];
 
 	vec->x = x;
 	vec->y = y;
-	vec->z = fdf->map->coord[y][x];
-	vec->color = fdf->map->colors[y][x];
+	vec->z = z;
+	if (fdf->param.color_mode == from_map)
+		vec->color = fdf->map->colors[y][x];
+	else if (fdf->param.color_mode == height_gradient)
+	{
+		vec->color = fdf->map->height_colors[y][x];
+	}
 }
 
 void	transform_map(t_fdf *fdf, t_transformed_map *transformed_map)

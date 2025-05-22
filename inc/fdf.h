@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/21 16:22:06 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/21 19:31:38 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/22 22:04:09 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,14 @@
 # define MAX_MAP_SIZE 3000
 # define COLOR_TEAL "0x008080FF"
 # define COLOR_WHITE "0xFFFFFFFF"
-# define COLOR_BLUE "0x0000FFFF"
 # define COLOR_RED "0xFF0000FF"
+# define COLOR_GREEN "0x00FF00FF"
+# define COLOR_BLUE "0x0000FFFF"
 # define RGBA_TEAL 0x008080FF
 # define RGBA_WHITE 0xFFFFFFFF
-# define RGBA_BLUE 0x0000FFFF
 # define RGBA_RED 0xFF0000FF
+# define RGBA_GREEN 0x00FF00FF
+# define RGBA_BLUE 0x0000FFFF
 # define MAX_ZOOM_DEFAULT 300
 # define MAX_HEIGHT_DEFAULT 10
 # define HEIGHT_DEFAULT 6
@@ -80,6 +82,7 @@ typedef struct s_map
 {
 	int		**coord;
 	char	***colors;
+	char	***height_colors;
 	int		max_x;
 	int		max_y;
 	int		max_z;
@@ -98,6 +101,7 @@ typedef struct s_transformed_map
 typedef enum t_map_color
 {
 	from_map,
+	height_gradient,
 	default_color,
 	no_color,
 }	t_map_color;
@@ -173,12 +177,12 @@ void			fdf_key_hook(mlx_key_data_t keydata, void *param);
 void			fdf_loop_hook(void *param);
 
 /*	Utils	*/
-int				hexstr_to_int(char *str, int len);
+uint32_t		hexstr_to_int(char *str, int len);
 
 /*	TEST (COMMENT THEM OUT)	*/
-//void			test_print_map(int **coord, int max_x, int max_y);
-//void			test_print_fdf_vec(t_fdf_vec *vector, char *vec_name);
-//void			*fake_ft_calloc(size_t nmemb, size_t size);
-//void			*fake_malloc(size_t size);
+void			test_print_map(int **coord, int max_x, int max_y);
+void			test_print_fdf_vec(t_fdf_vec *vector, char *vec_name);
+void			*fake_ft_calloc(size_t nmemb, size_t size);
+void			*fake_malloc(size_t size);
 
 #endif

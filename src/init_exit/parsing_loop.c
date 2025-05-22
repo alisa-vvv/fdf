@@ -28,7 +28,7 @@ static int	read_colors(char **values, char **colors, int max_x)
 			return (1);
 		if (color_check[1] == NULL)
 		{
-			colors[x] = ft_strdup(COLOR_WHITE);
+			colors[x] = ft_strdup(COLOR_TEAL);
 			if (!colors[x])
 			{
 				free_2d_arr((void **) color_check);

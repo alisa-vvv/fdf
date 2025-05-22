@@ -27,10 +27,7 @@ void	initial_draw(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map)
 	{
 		fdf->param.zoom -= 5;
 		if (fdf->param.zoom <= 0)
-		{
-			ft_printf("here?\n");
 			error_exit(exit_data, BIG_MAP_ERR, false);
-		}
 		transform_map(fdf, map);
 	}
 	fdf->param.zoom_max = fdf->param.zoom;

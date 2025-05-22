@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/21 14:40:37 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/20 20:44:16 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/22 20:30:20 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	main(int argc, char *argv[])
 	fdf = setup_fdf_data(&exit_data);
 	parse_map(&exit_data);
 	create_window(fdf, argv[1], &exit_data);
+	ft_printf("WHY BRELK\n");
 	alloc_transformed_map(fdf, &exit_data);
 	initial_draw(fdf, &exit_data, exit_data.transformed_map);
 	mlx_key_hook(fdf->window, fdf_key_hook, &exit_data);

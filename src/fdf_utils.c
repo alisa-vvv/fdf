@@ -13,11 +13,11 @@
 #include "fdf.h"
 #include <math.h>
 
-int	hexstr_to_int(char *str, int len)
+uint32_t	hexstr_to_int(char *str, int len)
 {
-	int		i;
-	int		result;
-	int		digit_base;
+	int			i;
+	uint32_t	result;
+	int			digit_base;
 
 	digit_base = len - 1;
 	i = -1;
