@@ -45,22 +45,29 @@ static int	read_colors(char **values, char **colors, int max_x)
 
 static int	*allocate_x(int *coord, char **values, int x, int *max_x)
 {
-	if (values[x])
+	if (values[x] && !ft_isspace(values[x][0]))
+	{
+		ft_printf("values[x]: (%s)\n", values[x]);
 		coord = allocate_x(coord, values, x + 1, max_x);
+	}
 	else
 	{
+		ft_printf("x????: %d\n", x);
 		if (x >= MAX_MAP_SIZE)
-		{
-			*max_x = -2;
 			return (NULL);
-		}
 		coord = (int *) ft_calloc(x, sizeof(int));
 		if (!coord)
 			return (NULL);
 		if (*max_x == x - 1 || *max_x == -1)
+		{
+			ft_printf("this cond????\n");
 			*max_x = x;
+		}
 		else
-			*max_x = -2;
+		{
+			free(coord);
+			return (NULL);
+		}
 		return (coord);
 	}
 	if (coord)
@@ -71,41 +78,59 @@ static int	*allocate_x(int *coord, char **values, int x, int *max_x)
 static int	get_x_z(t_map *map, int **coord, char *line, int y)
 {
 	char	**values;
+	int		error_check;
 
+	error_check = 0;
 	values = ft_split(line, ' ');
 	if (!values)
-		return (-1);
+		return (1);
 	*coord = allocate_x(*coord, values, 0, &map->max_x);
-	if (!*coord || map->max_x == -2)
+	if (!*coord)
 	{
+		ft_printf("this one?\n");
 		free_2d_arr((void **) values);
-		return (-1);
+		return (1);
 	}
 	map->max_x--;
 	map->colors[y] = (char **) ft_calloc(map->max_x + 2, sizeof(char *));
 	if (!map->colors[y])
 	{
 		free_2d_arr((void **) values);
-		return (-1);
+		return (1);
 	}
 	if (read_colors(values, map->colors[y], map->max_x) != 0)
-		map->max_x = -1;
+		error_check = 1;
 	free_2d_arr((void **) values);
-	return (map->max_x);
+	return (error_check);
 }
 
-static void	panic_free(int **coord, char ***colors, int y)
+static int	panic_free(int **coord, char ***colors, int y)
 {
 	int	i;
+	int	x;
 
 	i = y;
 	if (coord)
+	{
 		while (coord[i])
-			free(coord[i++]);
+		{
+			free(coord[i]);
+			coord[i++] = NULL;
+		}
+	}
 	i = y;
 	if (colors)
+	{
 		while (colors[i])
-			free(colors[i++]);
+		{
+			x = -1;
+			while (colors[i][++x])
+				free(colors[i][x]);
+			free(colors[i]);
+			colors[i++] = NULL;
+		}
+	}
+	return (1);
 }
 
 int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
@@ -128,8 +153,8 @@ int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 		return (0);
 	}
 	if (err_check != 1)
-		map->max_x = get_x_z(map, &map->coord[y], next_line, y);
-	if (map->max_x < 0 || err_check != 0)
-		panic_free(map->coord, map->colors, y);
+		err_check = get_x_z(map, &map->coord[y], next_line, y);
+	if (err_check != 0)
+		err_check = panic_free(map->coord, map->colors, y + 1);
 	return (free(next_line), err_check);
 }

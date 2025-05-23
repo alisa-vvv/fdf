@@ -15,9 +15,9 @@
 #include <fcntl.h>
 
 static void	to_hex(uint32_t n, char *color_str)
- {
-	int		i;
-	char	symbols[17] = "0123456789ABCDEF";
+{
+	int			i;
+	const char	symbols[17] = "0123456789ABCDEF";
 
 	i = 10;
 	color_str[0] = '0';
@@ -26,9 +26,9 @@ static void	to_hex(uint32_t n, char *color_str)
 	ft_memset(&color_str[2], '0', 8);
 	while (n)
 	{
-	    i--;
-	    color_str[i] = symbols[n % 16];
-	    n /= 16;
+		i--;
+		color_str[i] = symbols[n % 16];
+		n /= 16;
 	}
 }
 
@@ -122,7 +122,10 @@ void	parse_map(t_exit_data *exit_data)
 	exit_data->fdf->map = map;
 	error_check = read_map(map, exit_data->map_fd, 0, exit_data);
 	if (error_check != 0 || map->colors == NULL || map->coord == NULL)
+	{
+		ft_printf("why parse fail?\n");
 		error_exit(exit_data, PARSE_ERR, 0);
+	}
 	get_max_min_z(map->coord, max_min_z, map->max_x, map->max_y);
 	map->min_z = max_min_z[0];
 	map->max_z = max_min_z[1];

@@ -40,7 +40,10 @@ static void	free_color_map(char ***colors, int max_y)
 
 	y = -1;
 	while (++y <= max_y)
-		free_2d_arr((void **) colors[y]);
+	{
+		if (colors[y])
+			free_2d_arr((void **) colors[y]);
+	}
 	free(colors);
 }
 
@@ -64,7 +67,6 @@ mlx_closefunc	clean_exit(t_exit_data *exit_data)
 	fdf = exit_data->fdf;
 	transformed_map = exit_data->transformed_map;
 	map_fd = exit_data->map_fd;
-	ft_printf("exit func called\n");
 	if (transformed_map)
 	{
 		free_2d_arr((void **) transformed_map->coord);

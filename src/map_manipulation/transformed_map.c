@@ -45,19 +45,6 @@ void	alloc_transformed_map(t_fdf *fdf, t_exit_data *exit_data)
 	}
 }
 
-void	clear_transformed_map(t_transformed_map *map, int max_x, int max_y)
-{
-	int	y;
-
-	map->min_x = 0;
-	map->max_x = 0;
-	map->min_y = 0;
-	map->max_y = 0;
-	y = 0;
-	while (y <= max_y)
-		ft_bzero(map->coord[y++], max_x);
-}
-
 void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
 {
 	t_fdf_vec *const	vec = &new_map->coord[y][x];
@@ -74,21 +61,37 @@ void	add_vector_to_map(t_fdf *fdf, int x, int y, t_transformed_map *new_map)
 	}
 }
 
+void	clear_transformed_map(t_fdf *fdf, t_transformed_map *map,
+						int max_x, int max_y)
+{
+	int	y;
+
+	y = 0;
+	while (y <= max_y)
+		ft_bzero(map->coord[y++], max_x);
+	add_vector_to_map(fdf, 0, 0, map);
+	project_map(map, fdf, &map->coord[0][0]);
+	map->min_x = map->coord[0][0].x;
+	map->max_x = map->coord[0][0].x;
+	map->min_y = map->coord[0][0].y;
+	map->max_y = map->coord[0][0].y;
+}
+
 void	transform_map(t_fdf *fdf, t_transformed_map *transformed_map)
 {
 	int	x;
 	int	y;
 
 	y = 0;
-	clear_transformed_map(transformed_map, fdf->map->max_x, fdf->map->max_y);
+	clear_transformed_map(fdf, transformed_map,
+		fdf->map->max_x, fdf->map->max_y);
 	while (y <= fdf->map->max_y)
 	{
 		x = 0;
 		while (x <= fdf->map->max_x)
 		{
 			add_vector_to_map(fdf, x, y, transformed_map);
-			project_map(transformed_map, fdf,
-				&transformed_map->coord[y][x]);
+			project_map(transformed_map, fdf, &transformed_map->coord[y][x]);
 			if (x < fdf->map->max_x)
 				add_vector_to_map(fdf, x + 1, y, transformed_map);
 			if (y < fdf->map->max_y)

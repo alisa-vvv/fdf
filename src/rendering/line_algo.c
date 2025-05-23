@@ -19,15 +19,11 @@ static uint32_t	get_color(t_pixel *start, t_pixel *end, int distance, int i)
 	int	green;
 	int	blue;
 	int	opacity;
-	//ft_printf("start->color.r: %d\n", start->color.r);
+
 	red = start->color.r + ((end->color.r - start->color.r) * i / distance);
-	//ft_printf("red? %d\n", red);
 	green = start->color.g + ((end->color.g - start->color.g) * i / distance);
-	//ft_printf("green? %d\n", green);
 	blue = start->color.b + ((end->color.b - start->color.b) * i / distance);
-	//ft_printf("blue? %d\n", blue);
 	opacity = start->color.a + ((end->color.a - start->color.a) * i / distance);
-	//ft_printf("opacity? %d\n", opacity);
 	return ((red << 24) + (green << 16) + (blue << 8) + opacity);
 }
 

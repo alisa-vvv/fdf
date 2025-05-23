@@ -53,7 +53,7 @@ INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
 RM	= rm -rf
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/10-70.fdf
+INPUT	= test_maps/mars.fdf
 
 $(OBJDIR)/%.o: %.c $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
@@ -91,8 +91,7 @@ debug: CFLAGS += -g
 debug: re
 gdb: debug
 	gdb ./$(NAME)
-test:	$(NAME)
-	./$< $(INPUT)
+test: re run
 run:
 	./fdf $(INPUT)
 leak:	debug
