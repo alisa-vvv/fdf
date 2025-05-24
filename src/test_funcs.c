@@ -13,13 +13,33 @@
 #include "fdf.h"
 #include <stdio.h>
 
+void	test_print_colors(int ***colors, int max_x, int max_y)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y <= max_y && colors[y])
+	{
+		x = 0;
+		while (x <= max_x && colors[y][x])
+		{
+			ft_printf("%d ", colors[y][x]);
+			ft_putchar_fd(' ', STDOUT_FILENO);
+			x++;
+		}
+		y++;
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	}
+}
+
 void	test_print_map(int **coord, int max_x, int max_y)
 {
 	int	x;
 	int	y;
 
 	y = 0;
-	while (y <= max_y)
+	while (y <= max_y && coord[y])
 	{
 		x = 0;
 		while (x <= max_x)
