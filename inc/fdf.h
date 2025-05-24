@@ -178,6 +178,7 @@ void			fdf_loop_hook(void *param);
 
 /*	Utils	*/
 uint32_t		hexstr_to_int(char *str, int len);
+char			*get_and_trim_next_line(int fd, char *set);
 
 /*	TEST (COMMENT THEM OUT)	*/
 void			test_print_map(int **coord, int max_x, int max_y);

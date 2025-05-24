@@ -45,22 +45,18 @@ static int	read_colors(char **values, char **colors, int max_x)
 
 static int	*allocate_x(int *coord, char **values, int x, int *max_x)
 {
-	if (values[x] && !ft_isspace(values[x][0]))
-	{
-		ft_printf("values[x]: (%s)\n", values[x]);
+	if (values[x] && ft_isdigit(values[x][0]))
 		coord = allocate_x(coord, values, x + 1, max_x);
-	}
 	else
 	{
-		ft_printf("x????: %d\n", x);
 		if (x >= MAX_MAP_SIZE)
 			return (NULL);
 		coord = (int *) ft_calloc(x, sizeof(int));
 		if (!coord)
 			return (NULL);
-		if (*max_x == x - 1 || *max_x == -1)
+		if ((*max_x == x - 1 || *max_x == -1))
 		{
-			ft_printf("this cond????\n");
+		//	ft_printf("does this trigger here?\n");
 			*max_x = x;
 		}
 		else
@@ -87,7 +83,6 @@ static int	get_x_z(t_map *map, int **coord, char *line, int y)
 	*coord = allocate_x(*coord, values, 0, &map->max_x);
 	if (!*coord)
 	{
-		ft_printf("this one?\n");
 		free_2d_arr((void **) values);
 		return (1);
 	}
@@ -136,15 +131,17 @@ static int	panic_free(int **coord, char ***colors, int y)
 int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 {
 	int			err_check;
-	char *const	next_line = get_next_line(map_fd);
+	char		*const next_line = get_and_trim_next_line(map_fd, " \n\t\f\r");
 
 	err_check = 0;
-	if (next_line != NULL && y < MAX_MAP_SIZE)
+	if (next_line != NULL && y < MAX_MAP_SIZE && ft_isdigit(next_line[0]))
 		err_check = read_map(map, map_fd, y + 1, exit_data);
 	else
 	{
+		if (next_line)
+			free(next_line);
 		if (y == 0 || y >= MAX_MAP_SIZE || err_check != 0)
-			return (free(next_line), 1);
+			return (1);
 		map->coord = (int **) ft_calloc((y + 1), sizeof(int *));
 		map->colors = (char ***) ft_calloc((y + 1), sizeof(char **));
 		if (!map->coord || !map->colors)
@@ -152,7 +149,7 @@ int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 		map->max_y = y - 1;
 		return (0);
 	}
-	if (err_check != 1)
+	if (err_check != 1 && ft_isdigit(next_line[0]))
 		err_check = get_x_z(map, &map->coord[y], next_line, y);
 	if (err_check != 0)
 		err_check = panic_free(map->coord, map->colors, y + 1);

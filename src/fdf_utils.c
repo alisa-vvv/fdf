@@ -34,3 +34,15 @@ uint32_t	hexstr_to_int(char *str, int len)
 	}
 	return (result);
 }
+
+char	*get_and_trim_next_line(int fd, char *set)
+{
+	char	*tmp;
+	char	*next_line;
+
+	tmp = get_next_line(fd);
+	next_line = ft_strtrim(tmp, set);
+	if (tmp)
+		free(tmp);
+	return (next_line);
+}
