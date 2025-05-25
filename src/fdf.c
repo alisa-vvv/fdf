@@ -21,14 +21,14 @@ int	main(int argc, char *argv[])
 	if (argc != 2)
 		return (1);
 	set_exit_data(&exit_data, argv[1]);
-	(void) fdf;
 	fdf = setup_fdf_data(&exit_data);
 	parse_map(&exit_data);
-//	create_window(fdf, argv[1], &exit_data);
-//	alloc_transformed_map(fdf, &exit_data);
-//	initial_draw(fdf, &exit_data, exit_data.transformed_map);
-//	mlx_key_hook(fdf->window, fdf_key_hook, &exit_data);
-//	mlx_loop_hook(fdf->window, fdf_loop_hook, &exit_data);
-//	mlx_loop(fdf->window);
+	create_window(fdf, argv[1], &exit_data);
+	ft_printf("WHY BRELK\n");
+	alloc_transformed_map(fdf, &exit_data);
+	initial_draw(fdf, &exit_data, exit_data.transformed_map);
+	mlx_key_hook(fdf->window, fdf_key_hook, &exit_data);
+	mlx_loop_hook(fdf->window, fdf_loop_hook, &exit_data);
+	mlx_loop(fdf->window);
 	error_exit(&exit_data, "Error! Unexpected exit", 0);
 }

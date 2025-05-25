@@ -108,81 +108,24 @@ static void	alloc_height_color_map(t_map *map, char ***colors,
 	}
 }
 
-void	get_first_line(t_map *map, t_exit_data *exit_data)
-{
-	char	*first_line;
-	char	**split_line;
-	int		error_check;
-	int		len;
-	int		x;
-
-	first_line = get_next_line(exit_data->map_fd);
-	ft_printf("first_line: %s\n", first_line);
-	if (!first_line)
-		error_exit(exit_data, MALLOC_ERR, 0);
-	split_line = ft_split(first_line, ' ');
-	if (!split_line)
-		error_exit(exit_data, MALLOC_ERR, 0);
-	ft_printf("zero zero: %s\n", split_line[0][0]);
-	int y = -1;
-	while (split_line[++y])
-	{
-		ft_printf("haty\n");
-		int x = -1;
-		while (split_line[y][++x])
-			ft_printf("split line: %s\n", split_line[y][x]);
-	}
-	ft_printf("WHERE\n");
-	len = 0;
-	while (split_line[len])
-		len++;
-	map->max_x = len - 1;
-	// this will be moved to init
-	map->coord = (int **) ft_calloc(128, sizeof(int *));
-	map->colors = (char ***) ft_calloc(128, sizeof(char **));
-	if (!map->coord || !map->colors)
-		error_exit(exit_data, MALLOC_ERR, 0);
-	// this will be moved to init
-	x = -1;
-	while (++x <= map->max_x)
-	{
-		map->coord[0][x] = ft_atoi(split_line[x]);
-		error_check = read_colors(split_line, map->colors[0], map->max_x);
-		if (error_check != 0)
-			error_exit(exit_data, MALLOC_ERR, 0);
-	}
-}
-
-//void	initial_read(t_map *map, t_exit_data *exit_data, char **first_line)
-//{
-//	int	map_y;
-//	int	y;
-//
-//	map_y = 128;
-//	y = 0;
-//	while (++y < map_y)
-//	{
-//		
-//	}
-//}
-
 void	parse_map(t_exit_data *exit_data)
 {
 	t_map	*map;
 	int		max_min_z[2];
-	//int		error_check;
+	int		error_check;
 
 	map = ft_calloc(1, sizeof(t_map));
 	if (!map)
 		error_exit(exit_data, MALLOC_ERR, 0);
-	map->max_x = 0;
+	map->max_x = -1;
 	map->max_y = 0;
 	exit_data->fdf->map = map;
-	get_first_line(map, exit_data);
-	test_print_map(map->coord, map->max_x, 127);
-	//error_check = read_map(map, exit_data->map_fd, 0, exit_data);
-//	if (error_check != 0 || map->colors == NULL || map->coord == NULL)
-//		error_exit(exit_data, PARSE_ERR, 0);
+	error_check = read_map(map, exit_data->map_fd, 0, exit_data);
+	if (error_check != 0 || map->colors == NULL || map->coord == NULL)
+	{
+		ft_printf("why parse fail?\n");
+		error_exit(exit_data, PARSE_ERR, 0);
+	}
 	get_max_min_z(map->coord, max_min_z, map->max_x, map->max_y);
 	map->min_z = max_min_z[0];
 	map->max_z = max_min_z[1];

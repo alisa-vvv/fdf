@@ -148,7 +148,6 @@ void			create_window(t_fdf *fdf, char *map_file,
 void			set_exit_data(t_exit_data *exit_data, char *fd_arg);
 t_fdf_param		set_parameters(void);
 t_fdf			*setup_fdf_data(t_exit_data *exit_data);
-int				read_colors(char **values, char **colors, int max_x);
 int				read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data);
 
 /*	Vector/matrix rotations, transformations, projection	*/
