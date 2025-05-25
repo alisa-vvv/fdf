@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 20:04:34 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/22 22:09:16 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/25 17:08:13 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,24 +108,80 @@ static void	alloc_height_color_map(t_map *map, char ***colors,
 	}
 }
 
+char	**read_first_line(t_map *map, int map_fd, t_exit_data *exit_data)
+{
+	char	*first_line;
+	char	*cleaned_line;
+	char	**split_line;
+
+	first_line = get_next_line(map_fd);
+	if (!first_line)
+		error_exit(exit_data, MALLOC_ERR, false);
+	cleaned_line = ft_strtrim(first_line, "\n");
+	free(first_line);
+	if (!cleaned_line)
+		error_exit(exit_data, MALLOC_ERR, false);
+	split_line = ft_split(cleaned_line, ' ');
+	free(cleaned_line);
+	if (!split_line)
+		error_exit(exit_data, MALLOC_ERR, false);
+	while (split_line[map->max_x])
+		map->max_x++;
+	map->max_x--;
+	if (map->max_x >= MAX_MAP_SIZE)
+	{
+		free_2d_arr((void **) split_line);
+		error_exit(exit_data, BIG_MAP_ERR, false);
+	}
+	return (split_line);
+}
+
+void	add_first_line(char **first_line, t_map *map, t_exit_data *exit_data)
+{
+	int	x;
+
+	map->coord[0] = (int *) ft_calloc(map->max_x + 1, sizeof(int));
+	if (!map->coord[0])
+	{
+		free_2d_arr((void **) first_line);
+		error_exit(exit_data, MALLOC_ERR, false);
+	}
+	x = map->max_x;
+	while (x)
+	{
+		map->coord[0][x] = ft_atoi(first_line[x]);
+		x--;
+	}
+	map->colors[0] = (char **) ft_calloc(map->max_x + 2, sizeof(char *));
+	if (!map->colors[0])
+	{
+		free_2d_arr((void **) first_line);
+		error_exit(exit_data, MALLOC_ERR, false);
+	}
+	read_colors(first_line, map->colors[0], map->max_x);
+	free_2d_arr((void **) first_line);
+	if (!map->colors[1])
+		error_exit(exit_data, MALLOC_ERR, false);
+}
+
 void	parse_map(t_exit_data *exit_data)
 {
 	t_map	*map;
 	int		max_min_z[2];
 	int		error_check;
+	char	**first_line;
 
 	map = ft_calloc(1, sizeof(t_map));
 	if (!map)
-		error_exit(exit_data, MALLOC_ERR, 0);
-	map->max_x = -1;
+		error_exit(exit_data, MALLOC_ERR, false);
+	map->max_x = 0;
 	map->max_y = 0;
 	exit_data->fdf->map = map;
-	error_check = read_map(map, exit_data->map_fd, 0, exit_data);
+	first_line = read_first_line(map, exit_data->map_fd, exit_data);
+	error_check = read_map(map, exit_data->map_fd, 1, exit_data);
 	if (error_check != 0 || map->colors == NULL || map->coord == NULL)
-	{
-		ft_printf("why parse fail?\n");
 		error_exit(exit_data, PARSE_ERR, 0);
-	}
+	add_first_line(first_line, map, exit_data);
 	get_max_min_z(map->coord, max_min_z, map->max_x, map->max_y);
 	map->min_z = max_min_z[0];
 	map->max_z = max_min_z[1];

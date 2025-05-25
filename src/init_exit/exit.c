@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/26 14:30:24 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/20 20:58:37 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/25 17:39:50 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,13 @@ void	error_exit(t_exit_data *exit_data, char	*err_msg, int is_mlx)
 	clean_exit(exit_data);
 }
 
-static void	free_color_map(char ***colors, int max_y)
+static void	free_color_map(char ***colors)
 {
 	int	y;
 
 	y = -1;
-	while (++y <= max_y)
-	{
-		if (colors[y])
-			free_2d_arr((void **) colors[y]);
-	}
+	while(colors[++y])
+		free_2d_arr((void **) colors[y]);
 	free(colors);
 }
 
@@ -52,9 +49,9 @@ static void	free_map(t_map *map)
 	if (map->coord)
 		free_2d_arr((void **) map->coord);
 	if (map->colors)
-		free_color_map(map->colors, map->max_y);
+		free_color_map(map->colors);
 	if (map->height_colors)
-		free_color_map(map->height_colors, map->max_y);
+		free_color_map(map->height_colors);
 	free(map);
 }
 
