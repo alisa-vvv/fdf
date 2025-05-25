@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 20:04:34 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/25 17:08:13 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/25 17:59:45 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,19 +146,19 @@ void	add_first_line(char **first_line, t_map *map, t_exit_data *exit_data)
 		free_2d_arr((void **) first_line);
 		error_exit(exit_data, MALLOC_ERR, false);
 	}
-	x = map->max_x;
-	while (x)
-	{
-		map->coord[0][x] = ft_atoi(first_line[x]);
-		x--;
-	}
 	map->colors[0] = (char **) ft_calloc(map->max_x + 2, sizeof(char *));
 	if (!map->colors[0])
 	{
 		free_2d_arr((void **) first_line);
 		error_exit(exit_data, MALLOC_ERR, false);
 	}
-	read_colors(first_line, map->colors[0], map->max_x);
+	x = map->max_x;
+	while (x >= 0)
+	{
+		map->coord[0][x] = ft_atoi(first_line[x]);
+		read_colors(first_line, map->colors[0], x);
+		x--;
+	}
 	free_2d_arr((void **) first_line);
 	if (!map->colors[1])
 		error_exit(exit_data, MALLOC_ERR, false);

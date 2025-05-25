@@ -15,50 +15,46 @@
 #include <fcntl.h>
 #include <limits.h>
 
-int	read_colors(char **values, char **colors, const int max_x)
+int	read_colors(char **values, char **colors, const int x)
 {
-	int		x;
 	char	**color_check;
 
-	x = -1;
-	while (++x <= max_x)
+	if (values[x])
 	{
-		if (values[x])
-		{
-			color_check = ft_split(values[x], ',');
-			if (!color_check)
-				return (1);
-			if (color_check[1] == NULL)
-			{
-				colors[x] = ft_strdup(COLOR_TEAL);
-				if (!colors[x])
-					return (free_2d_arr((void **) color_check), 1);
-			}
-			else
-				colors[x] = color_check[1];
-			free_2d_arr((void **) color_check);
-		}
-		else
+		color_check = ft_split(values[x], ',');
+		if (!color_check)
+			return (1);
+		if (color_check[1] == NULL)
 			colors[x] = ft_strdup(COLOR_TEAL);
+		else
+			colors[x] = color_check[1];
+		free_2d_arr((void **) color_check);
 	}
+	else
+		colors[x] = ft_strdup(COLOR_TEAL);
+	if (!colors[x])
+		return (1);
 	return (0);
 }
 
-static int	*allocate_x(char **values, const int max_x)
+static int	allocate_x(char **values, int *coord,
+					  char **colors, const int max_x)
 {
 	int	x;
-	int	*coord;
+	int	error_check;
 
-	x = 0;
-	coord = (int *) ft_calloc(max_x + 1, sizeof(int));
-	if (!coord)
-		return (NULL);
-	while (x <= max_x && values[x])
+	error_check = 0;
+	x = max_x;
+	while (x >= 0)
 	{
-		coord[x] = ft_atoi(values[x]);
-		x++;
+		if (values[x])
+			coord[x] = ft_atoi(values[x]);
+		error_check = read_colors(values, colors, x);
+		if (error_check != 0)
+			break ;
+		x--;
 	}
-	return (coord);
+	return (error_check);
 }
 
 static int	get_x_z(t_map *map, int **coord, char *line, int y)
@@ -70,8 +66,8 @@ static int	get_x_z(t_map *map, int **coord, char *line, int y)
 	values = ft_split(line, ' ');
 	if (!values)
 		return (1);
-	*coord = allocate_x(values, map->max_x);
-	if (!*coord)
+	*coord = (int *) ft_calloc(map->max_x + 1, sizeof(int));
+	if (!coord)
 	{
 		free_2d_arr((void **) values);
 		return (1);
@@ -82,8 +78,8 @@ static int	get_x_z(t_map *map, int **coord, char *line, int y)
 		free_2d_arr((void **) values);
 		return (1);
 	}
-	error_check = read_colors(values, map->colors[y], map->max_x);
-	free_2d_arr((void **) values);
+	error_check = allocate_x(values, *coord, map->colors[y], map->max_x);
+		free_2d_arr((void **) values);
 	return (error_check);
 }
 
