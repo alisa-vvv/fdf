@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/21 16:22:06 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/22 22:04:09 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/25 20:23:15 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,13 @@ void			create_window(t_fdf *fdf, char *map_file,
 void			set_exit_data(t_exit_data *exit_data, char *fd_arg);
 t_fdf_param		set_parameters(void);
 t_fdf			*setup_fdf_data(t_exit_data *exit_data);
+/*	Parsing	*/
 int				read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data);
 int				read_colors(char **values, char **colors, const int x);
+char			**read_first_line(t_map *map, int map_fd,
+					t_exit_data *exit_data);
+void			add_first_line(char **line, t_map *map,
+					t_exit_data *exit_data);
 
 /*	Vector/matrix rotations, transformations, projection	*/
 void			rotate_along_x(t_fdf_vec *vector, float angle);

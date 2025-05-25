@@ -6,7 +6,7 @@
 #    By: avaliull <avaliull@student.codam.nl>        +#+                       #
 #                                                   +#+                        #
 #    Created: 2025/05/21 19:45:55 by avaliull     #+#    #+#                   #
-#    Updated: 2025/05/25 19:12:42 by avaliull     ########   odam.nl           #
+#    Updated: 2025/05/25 20:27:15 by avaliull     ########   odam.nl           #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ CFILES	=	fdf.c\
 			init.c\
 			exit.c\
 			parsing_starter.c\
+			parsing_first_line.c\
 			parsing_loop.c\
 			loop_hook.c\
 			key_hook.c\
