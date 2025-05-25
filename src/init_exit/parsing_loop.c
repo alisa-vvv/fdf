@@ -19,19 +19,15 @@ int	read_colors(char **values, char **colors, const int x)
 {
 	char	**color_check;
 
-	if (values[x])
-	{
-		color_check = ft_split(values[x], ',');
-		if (!color_check)
-			return (1);
-		if (color_check[1] == NULL)
-			colors[x] = ft_strdup(COLOR_TEAL);
-		else
-			colors[x] = color_check[1];
-		free_2d_arr((void **) color_check);
-	}
-	else
+	color_check = ft_split(values[x], ',');
+	if (!color_check)
+		return (1);
+	if (color_check[1] == NULL)
 		colors[x] = ft_strdup(COLOR_TEAL);
+	else
+		colors[x] = color_check[1];
+	free(color_check[0]);
+	free(color_check);
 	if (!colors[x])
 		return (1);
 	return (0);
@@ -44,15 +40,21 @@ static int	allocate_x(char **values, int *coord,
 	int	error_check;
 
 	error_check = 0;
-	x = max_x;
-	while (x >= 0)
+	x = 0;
+	while (x <= max_x && values[x])
 	{
-		if (values[x])
-			coord[x] = ft_atoi(values[x]);
+		coord[x] = ft_atoi(values[x]);
 		error_check = read_colors(values, colors, x);
 		if (error_check != 0)
-			break ;
-		x--;
+			return (error_check);
+		x++;
+	}
+	while (x <= max_x)
+	{
+		colors[x] = ft_strdup(COLOR_TEAL);
+		if (!colors[x])
+			return (1);
+		x++;
 	}
 	return (error_check);
 }
@@ -79,7 +81,7 @@ static int	get_x_z(t_map *map, int **coord, char *line, int y)
 		return (1);
 	}
 	error_check = allocate_x(values, *coord, map->colors[y], map->max_x);
-		free_2d_arr((void **) values);
+	free_2d_arr((void **) values);
 	return (error_check);
 }
 
@@ -124,7 +126,7 @@ int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 	{
 		if (next_line)
 			free(next_line);
-		if (y == 0 || y >= MAX_MAP_SIZE || err_check != 0)
+		if (y >= MAX_MAP_SIZE || err_check != 0)
 		{
 			return (1);
 		}

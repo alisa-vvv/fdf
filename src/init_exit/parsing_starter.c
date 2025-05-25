@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 20:04:34 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/25 17:59:45 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/25 19:09:22 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ char	**read_first_line(t_map *map, int map_fd, t_exit_data *exit_data)
 
 	first_line = get_next_line(map_fd);
 	if (!first_line)
-		error_exit(exit_data, MALLOC_ERR, false);
+		error_exit(exit_data, PARSE_ERR, false);
 	cleaned_line = ft_strtrim(first_line, "\n");
 	free(first_line);
 	if (!cleaned_line)
@@ -139,6 +139,7 @@ char	**read_first_line(t_map *map, int map_fd, t_exit_data *exit_data)
 void	add_first_line(char **first_line, t_map *map, t_exit_data *exit_data)
 {
 	int	x;
+	int	error_check;
 
 	map->coord[0] = (int *) ft_calloc(map->max_x + 1, sizeof(int));
 	if (!map->coord[0])
@@ -152,15 +153,15 @@ void	add_first_line(char **first_line, t_map *map, t_exit_data *exit_data)
 		free_2d_arr((void **) first_line);
 		error_exit(exit_data, MALLOC_ERR, false);
 	}
-	x = map->max_x;
-	while (x >= 0)
+	x = 0;
+	while (x <= map->max_x)
 	{
 		map->coord[0][x] = ft_atoi(first_line[x]);
-		read_colors(first_line, map->colors[0], x);
-		x--;
+		error_check = read_colors(first_line, map->colors[0], x);
+		x++;
 	}
 	free_2d_arr((void **) first_line);
-	if (!map->colors[1])
+	if (error_check != 0)
 		error_exit(exit_data, MALLOC_ERR, false);
 }
 
@@ -179,9 +180,9 @@ void	parse_map(t_exit_data *exit_data)
 	exit_data->fdf->map = map;
 	first_line = read_first_line(map, exit_data->map_fd, exit_data);
 	error_check = read_map(map, exit_data->map_fd, 1, exit_data);
+	add_first_line(first_line, map, exit_data);
 	if (error_check != 0 || map->colors == NULL || map->coord == NULL)
 		error_exit(exit_data, PARSE_ERR, 0);
-	add_first_line(first_line, map, exit_data);
 	get_max_min_z(map->coord, max_min_z, map->max_x, map->max_y);
 	map->min_z = max_min_z[0];
 	map->max_z = max_min_z[1];
