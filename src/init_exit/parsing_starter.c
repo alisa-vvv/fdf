@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/03/09 20:04:34 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/25 20:28:10 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/25 20:31:47 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,17 +110,11 @@ static void	alloc_height_color_map(t_map *map, char ***colors,
 
 void	parse_map(t_exit_data *exit_data)
 {
-	t_map	*map;
-	int		max_min_z[2];
-	int		error_check;
-	char	**first_line;
+	t_map *map = exit_data->fdf->map;
+	int				max_min_z[2];
+	int				error_check;
+	char			**first_line;
 
-	map = ft_calloc(1, sizeof(t_map));
-	if (!map)
-		error_exit(exit_data, MALLOC_ERR, false);
-	map->max_x = 0;
-	map->max_y = 0;
-	exit_data->fdf->map = map;
 	first_line = read_first_line(map, exit_data->map_fd, exit_data);
 	error_check = read_map(map, exit_data->map_fd, 1, exit_data);
 	add_first_line(first_line, map, exit_data);

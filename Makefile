@@ -54,7 +54,7 @@ INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
 RM	= rm -rf
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/space_mid_line.fdf
+INPUT	= test_maps/size_2500_height.fdf
 
 $(OBJDIR)/%.o: %.c $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
@@ -75,10 +75,10 @@ mlx_build:
 submodules:
 	git submodule update --init --recursive --remote
 libs_clean:
-	$(MAKE) fclean -C $(LIBFT_PRINTF_DIR)
-clean: libs_clean
+	 $(RM) $(MLXDIR)/build ; $(MAKE) fclean -C $(LIBFT_PRINTF_DIR)
+clean:
 	$(RM) $(OFILES) $(MLXDIR)/build
-fclean:	clean
+fclean:	clean libs_clean
 	$(RM) $(NAME)
 re:	fclean all
 
@@ -89,13 +89,16 @@ clangd:
 
 #debugging
 debug: CFLAGS += -g
-debug: re
-gdb: debug
+debug: clean mlx_build $(NAME)
+gdb: fclean debug
 	gdb ./$(NAME)
-test: re run
+test: clean mlx_build $(NAME) run
 run:
 	./fdf $(INPUT)
 leak:	debug
+	valgrind  --suppressions=MLX42.supp -s --leak-check=full \
+	--show-leak-kinds=all --track-fds=yes ./$(NAME) $(INPUT)
+val:
 	valgrind  --suppressions=MLX42.supp -s --leak-check=full \
 	--show-leak-kinds=all --track-fds=yes ./$(NAME) $(INPUT)
 

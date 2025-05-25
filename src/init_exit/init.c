@@ -6,7 +6,7 @@
 /*   By: avaliull <avaliull@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2025/05/13 14:43:21 by avaliull     #+#    #+#                  */
-/*   Updated: 2025/05/21 16:21:16 by avaliull     ########   odam.nl          */
+/*   Updated: 2025/05/25 20:31:03 by avaliull     ########   odam.nl          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,11 @@ t_fdf	*setup_fdf_data(t_exit_data *exit_data)
 	if (!fdf)
 		error_exit(exit_data, MALLOC_ERR, false);
 	fdf->param = set_parameters();
+	fdf->map = ft_calloc(1, sizeof(t_map));
+	if (!fdf->map)
+		error_exit(exit_data, MALLOC_ERR, false);
+	fdf->map->max_x = 0;
+	fdf->map->max_y = 0;
 	exit_data->fdf = fdf;
 	return (fdf);
 }
