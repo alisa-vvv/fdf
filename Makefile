@@ -63,13 +63,16 @@ $(OBJDIR):
 $(OBJDIR)/%.o: %.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
 
+$(SUBMODULES): $(LIBFT_PRINTF_DIR)/Makefile $(MLXDIR)/build
+	$(MAKE) submodules
+
 $(LIBFT_PRINTF):
 	$(MAKE) all -C $(LIBFT_PRINTF_DIR)
 
 $(MLXFILE):
 	$(MAKE) mlx_build
 
-$(NAME): $(LIBFT_PRINTF) $(MLXFILE) $(OFILES)
+$(NAME): $(SUBMODULES) $(LIBFT_PRINTF) $(MLXFILE) $(OFILES)
 	$(CC) $(CFLAGS) -o $@\
 		$(OFILES) $(LIBFT_PRINTF) $(MLXFILE) $(MLX) $(addprefix -I,$(INCLUDE))
 
@@ -79,7 +82,7 @@ mlx_build:
 	mkdir -p $(MLXDIR) ; cd $(MLXDIR) ;\
 	cmake -B build ; cmake --build build  -j4
 	chmod 777 $(MLXDIR)/build/libmlx42.a
-submodules: $(LIBFT_PRINTF)
+submodules:
 	git submodule update --init --recursive --remote
 libs_clean:
 	$(RM) $(MLXDIR)/build ; $(MAKE) fclean -C $(LIBFT_PRINTF_DIR)
