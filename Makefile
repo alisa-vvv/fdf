@@ -43,9 +43,12 @@ SRCDIRS = $(addprefix $(SRCDIR)/, rendering controls init_exit\
 		  coordinate_manipulation map_manipulation) $(SRCDIR)
 $(LIBDIR):
 	mkdir -p $@
+$(INCDIR):
+	mkdir -p $@
 MLXDIR = $(LIBDIR)/mlx42
 MLX	= -L$(MLXDIR)/build/ -lmlx42 -ldl -lglfw -pthread -lm
 MLXFILE = $(MLXDIR)/build/libmlx42.a
+LIBFT	= $(LIBDIR)/libft_printf/libft/libft.a
 LIBFT_PRINTF	= $(LIBDIR)/libft_printf/libftprintf.a
 LIBFT_PRINTF_DIR = $(LIBDIR)/libft_printf
 INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
@@ -57,18 +60,18 @@ INPUT	= test_maps/42.fdf
 
 $(OBJDIR):
 	mkdir -p $@
-$(OBJDIR)/%.o: %.c $(INCLUDE) | $(OBJDIR)
+$(OBJDIR)/%.o: %.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
 
 $(LIBFT_PRINTF):
-	export CFLAGS
 	$(MAKE) all -C $(LIBFT_PRINTF_DIR)
 
 $(MLXFILE):
 	$(MAKE) mlx_build
 
-$(NAME): $(OFILES) $(MLXFILE) $(LIBFT_PRINTF)
-	$(CC) $(CFLAGS) -o $@ $^ $(MLX) $(addprefix -I,$(INCLUDE))
+$(NAME): $(LIBFT_PRINTF) $(MLXFILE) $(OFILES)
+	$(CC) $(CFLAGS) -o $@\
+		$(OFILES) $(LIBFT_PRINTF) $(MLXFILE) $(MLX) $(addprefix -I,$(INCLUDE))
 
 #Base/project requirements
 all: $(NAME)
