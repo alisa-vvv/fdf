@@ -43,10 +43,9 @@ SRCDIRS = $(addprefix $(SRCDIR)/, rendering controls init_exit\
 		  coordinate_manipulation map_manipulation) $(SRCDIR)
 $(LIBDIR):
 	mkdir -p $@
-$(OBJDIR):
-	mkdir -p $@
 MLXDIR = $(LIBDIR)/mlx42
 MLX	= -L$(MLXDIR)/build/ -lmlx42 -ldl -lglfw -pthread -lm
+MLXFILE = $(MLXDIR)/build/libmlx42.a
 LIBFT_PRINTF	= $(LIBDIR)/libft_printf/libftprintf.a
 LIBFT_PRINTF_DIR = $(LIBDIR)/libft_printf
 INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
@@ -56,26 +55,31 @@ CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
 INPUT	= test_maps/42.fdf
 
-$(OBJDIR)/%.o: %.c $(OBJDIR)
+$(OBJDIR):
+	mkdir -p $@
+$(OBJDIR)/%.o: %.c $(INCLUDE) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
 
 $(LIBFT_PRINTF):
 	export CFLAGS
 	$(MAKE) all -C $(LIBFT_PRINTF_DIR)
 
-$(NAME): $(OFILES) $(LIBFT_PRINTF)
+$(MLXFILE):
+	$(MAKE) mlx_build
+
+$(NAME): $(OFILES) $(MLXFILE) $(LIBFT_PRINTF)
 	$(CC) $(CFLAGS) -o $@ $^ $(MLX) $(addprefix -I,$(INCLUDE))
 
 #Base/project requirements
-all: submodules mlx_build $(NAME)
+all: $(NAME)
 mlx_build:
 	mkdir -p $(MLXDIR) ; cd $(MLXDIR) ;\
 	cmake -B build ; cmake --build build  -j4
 	chmod 777 $(MLXDIR)/build/libmlx42.a
-submodules:
+submodules: $(LIBFT_PRINTF)
 	git submodule update --init --recursive --remote
 libs_clean:
-	 $(RM) $(MLXDIR)/build ; $(MAKE) fclean -C $(LIBFT_PRINTF_DIR)
+	$(RM) $(MLXDIR)/build ; $(MAKE) fclean -C $(LIBFT_PRINTF_DIR)
 clean:
 	$(RM) $(OFILES)
 fclean:	clean libs_clean
