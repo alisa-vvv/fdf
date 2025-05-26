@@ -117,9 +117,13 @@ void	parse_map(t_exit_data *exit_data)
 
 	first_line = read_first_line(map, exit_data->map_fd, exit_data);
 	error_check = read_map(map, exit_data->map_fd, 1, exit_data);
-	add_first_line(first_line, map, exit_data);
 	if (error_check != 0 || map->colors == NULL || map->coord == NULL)
+	{
+		panic_free(map->coord, map->colors, 1);
+		free_2d_arr((void **) first_line);
 		error_exit(exit_data, PARSE_ERR, 0);
+	}
+	add_first_line(first_line, map, exit_data);
 	get_max_min_z(map->coord, max_min_z, map->max_x, map->max_y);
 	map->min_z = max_min_z[0];
 	map->max_z = max_min_z[1];

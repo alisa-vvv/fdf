@@ -18,7 +18,7 @@ char	**read_first_line(t_map *map, int map_fd, t_exit_data *exit_data)
 	char	*cleaned_line;
 	char	**split_line;
 
-	first_line = get_next_line(map_fd);
+	first_line =  get_next_line(map_fd);
 	if (!first_line)
 		error_exit(exit_data, PARSE_ERR, false);
 	cleaned_line = ft_strtrim(first_line, "\n");
@@ -46,14 +46,10 @@ void	add_first_line(char **line, t_map *map, t_exit_data *exit_data)
 	int	error_check;
 
 	map->coord[0] = (int *) ft_calloc(map->max_x + 1, sizeof(int));
-	if (!map->coord[0])
-	{
-		free_2d_arr((void **) line);
-		error_exit(exit_data, MALLOC_ERR, false);
-	}
 	map->colors[0] = (char **) ft_calloc(map->max_x + 2, sizeof(char *));
-	if (!map->colors[0])
+	if (!map->colors[0] || !map->coord[0])
 	{
+		panic_free(map->coord, map->colors, 1);
 		free_2d_arr((void **) line);
 		error_exit(exit_data, MALLOC_ERR, false);
 	}
@@ -68,4 +64,3 @@ void	add_first_line(char **line, t_map *map, t_exit_data *exit_data)
 	if (error_check != 0)
 		error_exit(exit_data, MALLOC_ERR, false);
 }
-

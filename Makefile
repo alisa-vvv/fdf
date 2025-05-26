@@ -54,7 +54,7 @@ INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
 RM	= rm -rf
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
-INPUT	= test_maps/size_2500_height.fdf
+INPUT	= test_maps/empty_line.fdf
 
 $(OBJDIR)/%.o: %.c $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
@@ -77,7 +77,7 @@ submodules:
 libs_clean:
 	 $(RM) $(MLXDIR)/build ; $(MAKE) fclean -C $(LIBFT_PRINTF_DIR)
 clean:
-	$(RM) $(OFILES) $(MLXDIR)/build
+	$(RM) $(OFILES)
 fclean:	clean libs_clean
 	$(RM) $(NAME)
 re:	fclean all

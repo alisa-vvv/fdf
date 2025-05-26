@@ -15,6 +15,35 @@
 #include <fcntl.h>
 #include <limits.h>
 
+int	panic_free(int **coord, char ***colors, int y)
+{
+	int	i;
+	int	x;
+
+	i = y;
+	if (coord)
+	{
+		while (coord[i])
+		{
+			free(coord[i]);
+			coord[i++] = NULL;
+		}
+	}
+	i = y;
+	if (colors)
+	{
+		while (colors[i])
+		{
+			x = -1;
+			while (colors[i][++x])
+				free(colors[i][x]);
+			free(colors[i]);
+			colors[i++] = NULL;
+		}
+	}
+	return (1);
+}
+
 int	read_colors(char **values, char **colors, const int x)
 {
 	char	**color_check;
@@ -69,7 +98,7 @@ static int	get_x_z(t_map *map, int **coord, char *line, int y)
 	if (!values)
 		return (1);
 	*coord = (int *) ft_calloc(map->max_x + 1, sizeof(int));
-	if (!coord)
+	if (!*coord)
 	{
 		free_2d_arr((void **) values);
 		return (1);
@@ -85,35 +114,6 @@ static int	get_x_z(t_map *map, int **coord, char *line, int y)
 	return (error_check);
 }
 
-static int	panic_free(int **coord, char ***colors, int y)
-{
-	int	i;
-	int	x;
-
-	i = y;
-	if (coord)
-	{
-		while (coord[i])
-		{
-			free(coord[i]);
-			coord[i++] = NULL;
-		}
-	}
-	i = y;
-	if (colors)
-	{
-		while (colors[i])
-		{
-			x = -1;
-			while (colors[i][++x])
-				free(colors[i][x]);
-			free(colors[i]);
-			colors[i++] = NULL;
-		}
-	}
-	return (1);
-}
-
 int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 {
 	int			err_check;
@@ -127,25 +127,17 @@ int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 		if (next_line)
 			free(next_line);
 		if (y >= MAX_MAP_SIZE || err_check != 0)
-		{
 			return (1);
-		}
 		map->coord = (int **) ft_calloc((y + 1), sizeof(int *));
 		map->colors = (char ***) ft_calloc((y + 1), sizeof(char **));
 		if (!map->coord || !map->colors)
-		{
 			return (1);
-		}
 		map->max_y = y - 1;
 		return (0);
 	}
 	if (err_check != 1)
-	{
 		err_check = get_x_z(map, &map->coord[y], next_line, y);
-	}
 	if (err_check != 0)
-	{
 		err_check = panic_free(map->coord, map->colors, y + 1);
-	}
 	return (free(next_line), err_check);
 }

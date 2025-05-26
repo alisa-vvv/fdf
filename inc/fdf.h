@@ -155,6 +155,7 @@ char			**read_first_line(t_map *map, int map_fd,
 					t_exit_data *exit_data);
 void			add_first_line(char **line, t_map *map,
 					t_exit_data *exit_data);
+int				panic_free(int **coord, char ***colors, int y);
 
 /*	Vector/matrix rotations, transformations, projection	*/
 void			rotate_along_x(t_fdf_vec *vector, float angle);
