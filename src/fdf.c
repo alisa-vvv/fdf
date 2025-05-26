@@ -10,6 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+/* ****************************************************************** */
+/* 							****CONTROLS****						  */
+/* 		WASD - for movement											  */
+/* 		Hold Shift with WASD to move faster							  */
+/* 		Left arrow, Right arrow - rotate							  */
+/* 		Up Arrow, Down arrow - zoom in/out							  */
+/* 		C - switch color mode										  */
+/* 		F - receter image											  */
+/* 		R - recenter and reestore original zoom level				  */
+/* 		ESC - quit													  */
+/* ****************************************************************** */
+
 #include "fdf.h"
 #include "MLX42/MLX42.h"
 
