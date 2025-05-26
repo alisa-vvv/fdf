@@ -34,29 +34,3 @@ uint32_t	hexstr_to_int(char *str, int len)
 	}
 	return (result);
 }
-
-int		ft_issign(int c)
-{
- 	return (c == '-' || c == '+');
-}
-
-#include <stdio.h>
-char	*get_and_trim_next_line(int fd, char *set)
-{
-	char	*tmp;
-	char	*next_line;
-
-	tmp = get_next_line(fd);
-	next_line = ft_strtrim(tmp, set);
-	if (tmp)
-	{
-		printf("next_line ughgufdgdf (%c)\n", next_line[0]);
-		free(tmp);
-		if (!ft_isdigit(next_line[0]) && !ft_issign(next_line[0]))
-		{
-			free(next_line);
-			next_line = NULL;
-		}
-	}
-	return (next_line);
-}

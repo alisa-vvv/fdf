@@ -18,7 +18,7 @@ char	**read_first_line(t_map *map, int map_fd, t_exit_data *exit_data)
 	char	*cleaned_line;
 	char	**split_line;
 
-	first_line =  get_next_line(map_fd);
+	first_line = get_next_line(map_fd);
 	if (!first_line)
 		error_exit(exit_data, PARSE_ERR, false);
 	cleaned_line = ft_strtrim(first_line, "\n");

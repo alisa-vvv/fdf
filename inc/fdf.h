@@ -185,13 +185,11 @@ void			fdf_loop_hook(void *param);
 
 /*	Utils	*/
 uint32_t		hexstr_to_int(char *str, int len);
-char			*get_and_trim_next_line(int fd, char *set);
-int				ft_issign(int c);
 
 /*	TEST (COMMENT THEM OUT)	*/
-void			test_print_map(int **coord, int max_x, int max_y);
-void			test_print_fdf_vec(t_fdf_vec *vector, char *vec_name);
-void			*fake_ft_calloc(size_t nmemb, size_t size);
-void			*fake_malloc(size_t size);
+//void			test_print_map(int **coord, int max_x, int max_y);
+//void			test_print_fdf_vec(t_fdf_vec *vector, char *vec_name);
+//void			*fake_ft_calloc(size_t nmemb, size_t size);
+//void			*fake_malloc(size_t size);
 
 #endif

@@ -19,7 +19,10 @@ int	main(int argc, char *argv[])
 	t_fdf			*fdf;
 
 	if (argc != 2)
-		return (1);
+	{
+		ft_putstr_fd("Error! Wrong argument count\n", STDERR_FILENO);
+		exit(1);
+	}
 	set_exit_data(&exit_data, argv[1]);
 	fdf = setup_fdf_data(&exit_data);
 	parse_map(&exit_data);

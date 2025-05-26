@@ -110,7 +110,7 @@ static void	alloc_height_color_map(t_map *map, char ***colors,
 
 void	parse_map(t_exit_data *exit_data)
 {
-	t_map *map = exit_data->fdf->map;
+	t_map *const	map = exit_data->fdf->map;
 	int				max_min_z[2];
 	int				error_check;
 	char			**first_line;
