@@ -52,6 +52,7 @@ LIBFT	= $(LIBDIR)/libft_printf/libft/libft.a
 LIBFT_PRINTF	= $(LIBDIR)/libft_printf/libftprintf.a
 LIBFT_PRINTF_DIR = $(LIBDIR)/libft_printf
 INCLUDE = $(INCDIR) $(LIBFT_PRINTF_DIR) $(MLXDIR)/include
+SUBMODULES = $(LIBFT_PRINTF_DIR)/Makefile $(MLXDIR)/build
 
 RM	= rm -rf
 CC	= cc
@@ -63,7 +64,7 @@ $(OBJDIR):
 $(OBJDIR)/%.o: %.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
 
-$(SUBMODULES): $(LIBFT_PRINTF_DIR)/Makefile $(MLXDIR)/build
+$(SUBMODULES):
 	submodules
 
 $(LIBFT_PRINTF):
@@ -83,6 +84,8 @@ mlx_build:
 	cmake -B build ; cmake --build build  -j4
 	chmod 777 $(MLXDIR)/build/libmlx42.a
 submodules:
+	git submodule update --init --recursive
+libs_update:
 	git submodule update --init --recursive --remote
 libs_clean:
 	$(RM) $(MLXDIR)/build ; $(MAKE) fclean -C $(LIBFT_PRINTF_DIR)
