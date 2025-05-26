@@ -65,7 +65,7 @@ $(OBJDIR)/%.o: %.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
 
 $(SUBMODULES):
-	submodules
+	$(MAKE) submodules
 
 $(LIBFT_PRINTF):
 	$(MAKE) all -C $(LIBFT_PRINTF_DIR)
