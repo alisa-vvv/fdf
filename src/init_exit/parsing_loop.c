@@ -63,7 +63,7 @@ int	read_colors(char **values, char **colors, const int x)
 }
 
 static int	allocate_x(char **values, int *coord,
-					  char **colors, const int max_x)
+				char **colors, const int max_x)
 {
 	int	x;
 	int	error_check;
@@ -117,7 +117,7 @@ static int	get_x_z(t_map *map, int **coord, char *line, int y)
 int	read_map(t_map *map, int map_fd, int y, t_exit_data *exit_data)
 {
 	int			err_check;
-	char		*const next_line = get_next_line(exit_data->map_fd);
+	char *const	next_line = get_next_line(exit_data->map_fd);
 
 	err_check = 0;
 	if (next_line != NULL && y < MAX_MAP_SIZE)

@@ -32,7 +32,7 @@ void	initial_draw(t_fdf *fdf, t_exit_data *exit_data, t_transformed_map *map)
 	}
 	fdf->param.zoom_max = fdf->param.zoom;
 	while ((map->max_y - map->min_y + fdf->param.zoom > WINDOW_HEIGHT
-		|| map->max_x - map->min_x + fdf->param.zoom > WINDOW_WIDTH)
+			|| map->max_x - map->min_x + fdf->param.zoom > WINDOW_WIDTH)
 		&& fdf->param.zoom > 1)
 	{
 		fdf->param.zoom -= 1;

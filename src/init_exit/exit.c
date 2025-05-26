@@ -39,7 +39,7 @@ static void	free_color_map(char ***colors)
 	int	y;
 
 	y = -1;
-	while(colors[++y])
+	while (colors[++y])
 		free_2d_arr((void **) colors[y]);
 	free(colors);
 }
