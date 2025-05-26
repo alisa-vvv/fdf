@@ -61,7 +61,7 @@ INPUT	= test_maps/42.fdf
 
 $(OBJDIR):
 	mkdir -p $@
-$(OBJDIR)/%.o: %.c $(INCLUDE)
+$(OBJDIR)/%.o: %.c $(INCLUDE) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(addprefix -I,$(INCLUDE))
 
 $(SUBMODULES):
